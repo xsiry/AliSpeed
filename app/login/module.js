@@ -5,64 +5,153 @@
  * Time: 14:28
  */
 
-define(function(require, exports, module) {
+define(function (require, exports, module) {
     $.login_ = $('#login-window');
-    var url = "/login";
+    var url = "/user/login";
 
     module.exports = {
-        init: function() {
+        init: function () {
             // Waves初始化
             Waves.displayEffect();
+            xValidator();
+            checkCookie();
             this._bindUI();
         },
-        _bindUI: function() {
+        _bindUI: function () {
             // 输入框获取焦点后出现下划线
-            $.login_.on("focus", '.form-control', function() {
+            $.login_.on("focus", '.form-control', function () {
                 $(this).parent().addClass('fg-toggled');
             })
-            $.login_.on("blur", '.form-control', function() {
+            $.login_.on("blur", '.form-control', function () {
                 $(this).parent().removeClass('fg-toggled');
             })
             // bind .name_search_btn
-            $.login_.on("click", '#login-bt', function() {
-                login();
+            $.login_.on("click", '#login-bt', function () {
+                $('#loginForm').submit();
             })
             // bind .name_search
-            $.login_.on("keypress", '#username, #password', function(e) {
-                if (e.which == "13") login();
+            $.login_.on("keypress", '#username, #password', function (e) {
+                if (e.which == "13") $('#loginForm').submit();
             })
         }
     };
 
     // 登录
-    function login() {
-        // $.ajax({
-        //     url: url,
-        //     type: 'POST',
-        //     data: {
-        //         username: $('#username').val(),
-        //         password: $('#password').val(),
-        //         rememberMe: $('#rememberMe').is(':checked'),
-        //     },
-        //     beforeSend: function() {
+    function xValidator() {
+        $('.fg-line:first').addClass('fg-toggled');
+        $('#loginForm').formValidation({
+            autoFocus: true,
+            locale: 'zh_CN',
+            message: '该值无效，请重新输入',
+            err: {
+                container: 'tooltip'
+            },
+            icon: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                username: {
+                    validators: {
+                        notEmpty: {
+                            message: '账号不能为空'
+                        },
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9_]+$/
+                        }
+                    }
+                },
+                password: {
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        }
+                    }
+                }
+            }
+        }).on('success.form.fv', function (e) {
+            // if (!validateCode()) {
+            //     return false;
+            // }
+            // Prevent form submission
+            e.preventDefault();
 
-        //     },
-        //     success: function(json) {
-        //         if (json.code == 1) {
+            // Get the form instance
+            var $form = $(e.target);
+
+            // Get the FormValidation instance
+            var bv = $form.data('formValidation');
+
+            // Use Ajax to submit form data
+            $.post(url, $form.serialize(), function (result) {
+                toastr.options = {
+                    closeButton: true,
+                    progressBar: true,
+                    showMethod: 'slideDown',
+                    timeOut: 4000
+                };
+                if (result.success) {
+                    saveUserInfo();
                     location.href = "index.html";
-        //         } else {
-        //             alert(json.data);
-        //             if (10101 == json.code) {
-        //                 $('#username').focus();
-        //             }
-        //             if (10102 == json.code) {
-        //                 $('#password').focus();
-        //             }
-        //         }
-        //     },
-        //     error: function(error) {
-        //         console.log(error);
-        //     }
-        // });
-    }
+                    toastr.success('登录成功！');
+                } else {
+                    toastr.error(result.msg);
+                    return false;
+                }
+            }, 'json');
+        });
+    };
+
+    // 检查Cookie，并设置
+    function checkCookie() {
+        // 记住密码选中时，记住账号则自动选中 反之
+        $('#rmbPassWord').click(function () {
+            $("#rmbPassWord").is(':checked') == true ? $("#rmbUser").prop("checked", 'true') : $("#rmbUser").prop("checked", false);
+        });
+
+        //初始化页面时验证是否记住了帐号
+        if ($.cookie("rmbUser") == "true") {
+            $("#rmbUser").prop("checked", true);
+            $("#username").val($.cookie("userName"));
+        }
+        ;
+
+        //初始化页面时验证是否记住了密码
+        if ($.cookie("rmbPassWord") == "true") {
+            $("#rmbPassWord").prop("checked", true);
+            $("#password").val($.cookie("passWord"));
+        }
+        ;
+    };
+
+    //保存用户信息，存储一个带7天期限的 cookie 或者 清除 cookie
+    function saveUserInfo() {
+        // 保存帐号和密码
+        if ($("#rmbUser").is(':checked') == true && $("#rmbPassWord").is(':checked') == true) {
+            var userName = $("#username").val();
+            var passWord = $("#password").val();
+
+            $.cookie("rmbUser", "true", {expires: 7});
+            $.cookie("rmbPassWord", "true", {expires: 7});
+            $.cookie("userName", userName, {expires: 7});
+            $.cookie("passWord", passWord, {expires: 7});
+
+            // 只保存帐号
+        } else if ($("#rmbUser").is(':checked') == true) {
+            var userName = $("#username").val();
+
+            $.cookie("rmbUser", "true", {expires: 7});
+            $.cookie("userName", userName, {expires: 7});
+
+            $.cookie("rmbPassWord", "false", {expires: -1});
+            $.cookie("passWord", '', {expires: -1});
+            // 清除用户信息的 cookie
+        } else {
+            $.cookie("rmbUser", "false", {expires: -1});
+            $.cookie("rmbPassWord", "false", {expires: -1});
+            $.cookie("userName", '', {expires: -1});
+            $.cookie("passWord", '', {expires: -1});
+        }
+    };
 })
