@@ -1,4 +1,6 @@
-define(function(require) {
-  var module = require('./module');
-  module.init();
+define(function (require) {
+    require('checkbix');
+    Checkbix.init();
+    var module = require('./module');
+    module.init();
 });

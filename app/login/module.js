@@ -6,12 +6,16 @@
  */
 
 define(function (require, exports, module) {
-    $.login_ = $('#login-window');
+    var $ = require('jquery');
+    require('bootstrap');
+
+    var login_ = $('#login-window');
     var url = "/user/login";
 
     module.exports = {
         init: function () {
             // Waves初始化
+            require('waves');
             Waves.displayEffect();
             xValidator();
             checkCookie();
@@ -19,25 +23,29 @@ define(function (require, exports, module) {
         },
         _bindUI: function () {
             // 输入框获取焦点后出现下划线
-            $.login_.on("focus", '.form-control', function () {
+            login_.on("focus", '.form-control', function () {
                 $(this).parent().addClass('fg-toggled');
             })
-            $.login_.on("blur", '.form-control', function () {
+            login_.on("blur", '.form-control', function () {
                 $(this).parent().removeClass('fg-toggled');
             })
             // bind .name_search_btn
-            $.login_.on("click", '#login-bt', function () {
+            login_.on("click", '#login-bt', function () {
                 $('#loginForm').submit();
             })
             // bind .name_search
-            $.login_.on("keypress", '#username, #password', function (e) {
-                if (e.which == "13") $('#loginForm').submit();
+            login_.on("keypress", '#username, #password', function (e) {
+                if (e.which === "13") $('#loginForm').submit();
             })
         }
     };
 
     // 登录
     function xValidator() {
+        require('formValidation');
+        require('fvbootstrap');
+        require('fvzh_CN');
+
         $('.fg-line:first').addClass('fg-toggled');
         $('#loginForm').formValidation({
             autoFocus: true,
@@ -85,6 +93,7 @@ define(function (require, exports, module) {
 
             // Use Ajax to submit form data
             $.post(url, $form.serialize(), function (result) {
+                require('toastr');
                 toastr.options = {
                     closeButton: true,
                     progressBar: true,
@@ -105,20 +114,22 @@ define(function (require, exports, module) {
 
     // 检查Cookie，并设置
     function checkCookie() {
+        require('cookie');
+
         // 记住密码选中时，记住账号则自动选中 反之
-        $('#rmbPassWord').click(function () {
-            $("#rmbPassWord").is(':checked') == true ? $("#rmbUser").prop("checked", 'true') : $("#rmbUser").prop("checked", false);
+        $("#rmbPassWord").click(function () {
+            $("#rmbPassWord").is(':checked') === true ? $("#rmbUser").prop("checked", 'true') : $("#rmbUser").prop("checked", false);
         });
 
         //初始化页面时验证是否记住了帐号
-        if ($.cookie("rmbUser") == "true") {
+        if ($.cookie("rmbUser") === "true") {
             $("#rmbUser").prop("checked", true);
             $("#username").val($.cookie("userName"));
         }
         ;
 
         //初始化页面时验证是否记住了密码
-        if ($.cookie("rmbPassWord") == "true") {
+        if ($.cookie("rmbPassWord") === "true") {
             $("#rmbPassWord").prop("checked", true);
             $("#password").val($.cookie("passWord"));
         }
@@ -128,7 +139,7 @@ define(function (require, exports, module) {
     //保存用户信息，存储一个带7天期限的 cookie 或者 清除 cookie
     function saveUserInfo() {
         // 保存帐号和密码
-        if ($("#rmbUser").is(':checked') == true && $("#rmbPassWord").is(':checked') == true) {
+        if ($("#rmbUser").is(':checked') === true && $("#rmbPassWord").is(':checked') === true) {
             var userName = $("#username").val();
             var passWord = $("#password").val();
 
@@ -138,11 +149,11 @@ define(function (require, exports, module) {
             $.cookie("passWord", passWord, {expires: 7});
 
             // 只保存帐号
-        } else if ($("#rmbUser").is(':checked') == true) {
-            var userName = $("#username").val();
+        } else if ($("#rmbUser").is(':checked') === true) {
+            var username = $("#username").val();
 
             $.cookie("rmbUser", "true", {expires: 7});
-            $.cookie("userName", userName, {expires: 7});
+            $.cookie("userName", username, {expires: 7});
 
             $.cookie("rmbPassWord", "false", {expires: -1});
             $.cookie("passWord", '', {expires: -1});
@@ -153,5 +164,5 @@ define(function (require, exports, module) {
             $.cookie("userName", '', {expires: -1});
             $.cookie("passWord", '', {expires: -1});
         }
-    };
-})
+    }
+});
