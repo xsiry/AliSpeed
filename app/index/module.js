@@ -10,14 +10,19 @@ function changeFrameHeight(ifm) {
 }
 
 define(function(require, exports, module) {
+    var $ = require('jquery');
     $.index_ = $(document);
+
+    require('device');
     var click = device.mobile() ? 'touchstart' : 'click';
 
     module.exports = {
         init: function() {
             // Waves初始化
+            require('waves');
             Waves.displayEffect();
             // 滚动条初始化
+            require('mCustomScrollbar');
             $('#sidebar').mCustomScrollbar({
                 theme: 'minimal-dark',
                 scrollInertia: 100,
@@ -30,6 +35,7 @@ define(function(require, exports, module) {
             });
 
             // 显示cookie菜单
+            require('cookie');
             var systemid = $.cookie('admin-systemid') || 1;
             var systemname = $.cookie('admin-systemname') || 'admin-server';
             var systemtitle = $.cookie('admin-systemtitle') || 'Admin系统';
@@ -121,11 +127,6 @@ define(function(require, exports, module) {
                     initScrollState();
                 });
             });
-
-            // iframe 加载事件
-            $.index_.on('load', '.tab_iframe', function() {
-                console.log($(this));
-            })
             // 初始化箭头状态
         }
     };
@@ -171,6 +172,8 @@ define(function(require, exports, module) {
 
 
     function addTab(title, url) {
+        console.log("Open Tab:=" + url);
+        var x_content_height = document.documentElement.clientHeight - 118;
         var index = url.replace(/\./g, '_').replace(/\//g, '_').replace(/:/g, '_').replace(/\?/g, '_').replace(/,/g, '_').replace(/=/g, '_').replace(/&/g, '_');
         // 如果存在选项卡，则激活，否则创建新选项卡
         if ($('#tab_' + index).length == 0) {
@@ -180,9 +183,9 @@ define(function(require, exports, module) {
             $('.content_tab>ul').append(tab);
             // 添加iframe
             $('.iframe').removeClass('cur');
-            console.log(url)
-            var iframe = '<div id="iframe_' + index + '" class="iframe cur"><iframe class="tab_iframe" src="' + url + '" width="100%" frameborder="0" scrolling="auto" onload="changeFrameHeight(this)"></iframe></div>';
+            var iframe = '<div id="iframe_' + index + '" class="iframe cur"><div data-url="' + url + '" class="tab_iframe x-content" style="height:'+x_content_height+'px;"></div></div>';
             $('.content_main').append(iframe);
+            loadURL(url, index);
             initScrollShow();
             $('.content_tab>ul').animate({ scrollLeft: document.getElementById('tabs').scrollWidth - document.getElementById('tabs').clientWidth }, 200, function() {
                 initScrollState();
@@ -191,7 +194,7 @@ define(function(require, exports, module) {
             $('#tab_' + index).trigger('click');
         }
         // 关闭侧边栏
-        $('#guide').trigger(click);
+        $('#guide').trigger('click');
     }
 
     function closeTab($item) {
@@ -210,6 +213,7 @@ define(function(require, exports, module) {
     }
 
     // 选项卡右键菜单
+    require('BootstrapMenu');
     var menu = new BootstrapMenu('.tabs li', {
         fetchElementData: function(item) {
             return item;
@@ -281,10 +285,44 @@ define(function(require, exports, module) {
                 iconClass: 'zmdi zmdi-refresh',
                 onClick: function(item) {
                     var index = $(item).data('index');
-                    var $iframe = $('#iframe_' + index).find('iframe');
-                    $iframe.attr('src', $iframe.attr('src'));
+                    var $iframe = $('#iframe_' + index).find('.x-content');
+                    loadURL($iframe.data('url'), index);
                 }
             }
         }
     })
+
+
+    function loadURL(url, index) {
+        var b = $('#iframe_'+ index + ' .x-content');
+        // return
+        $.ajax({
+            "type": "GET",
+            "url": url,
+            "dataType": "html",
+            "cache": !0,
+            "beforeSend": function() {
+                b.removeData().html(""),
+                    b.html('<div class="dropload-load"><div class="sk-folding-cube"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div></div>'),
+                    b[0] == $("#content")[0] && ($("body").find("> *").filter(":not(" + ignore_key_elms + ")").empty().remove(),
+                        drawBreadCrumb(),
+                        $("html").animate({
+                            "scrollTop": 0
+                        }, "fast"))
+            },
+            "success": function(url) {
+                b.css({
+                        "opacity": "0.0"
+                    }).html(url).delay(50).animate({
+                        "opacity": "1.0"
+                    }, 300),
+                    url = null,
+                    b = null
+            },
+            "error": function(c, d, e) {
+                b.html('<h4 class="ajax-loading-error"><i class="fa fa-warning txt-color-orangeDark"></i> Error requesting <span class="txt-color-red">' + a + "</span>: " + c.status + ' <span style="text-transform: capitalize;">' + e + "</span></h4>")
+            },
+            "async": !0
+        })
+    }
 })
