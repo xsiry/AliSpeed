@@ -1,3 +1,4 @@
+define(function(require, exports, module) {
 (function ($) {
     /**
      * Simplified Chinese language package
@@ -383,3 +384,4 @@
         }
     });
 }(jQuery));
+});
