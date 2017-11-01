@@ -1,41 +1,35 @@
-﻿<!DOCTYPE HTML>
-<html lang="zh-cn">
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>通用增删改查</title>
-
-	<link href="../plugins/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet"/>
-	<link href="../plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css" rel="stylesheet"/>
-	<link href="../plugins/bootstrap-table-1.11.0/bootstrap-table.min.css" rel="stylesheet"/>
-	<link href="../plugins/waves-0.7.5/waves.min.css" rel="stylesheet"/>
-	<link href="../plugins/jquery-confirm/jquery-confirm.min.css" rel="stylesheet"/>
-
-	<link href="../app/crud/style.css" rel="stylesheet"/>
-</head>
-<body>
+﻿<link href="../plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css" rel="stylesheet"/>
+<link href="../plugins/bootstrap-table-1.11.0/bootstrap-table.min.css" rel="stylesheet"/>
+<link href="../plugins/jquery-confirm/jquery-confirm.min.css" rel="stylesheet"/>
+<!--<link href="../app/crud/style.css" rel="stylesheet"/>-->
 <div id="main" class="crud_main">
-	<div id="toolbar">
-		<a class="waves-effect waves-button create_act" href="javascript:;"><i class="zmdi zmdi-plus"></i> 新增用户</a>
-		<a class="waves-effect waves-button update_act" href="javascript:;"><i class="zmdi zmdi-edit"></i> 编辑用户</a>
-		<a class="waves-effect waves-button delete_act" href="javascript:;"><i class="zmdi zmdi-close"></i> 删除用户</a>
-	</div>
-	<table id="table"></table>
+    <div id="toolbar">
+        <a class="waves-effect waves-button create_act" href="javascript:;"><i class="zmdi zmdi-plus"></i> 新增用户</a>
+        <a class="waves-effect waves-button update_act" href="javascript:;"><i class="zmdi zmdi-edit"></i> 编辑用户</a>
+        <a class="waves-effect waves-button delete_act" href="javascript:;"><i class="zmdi zmdi-close"></i> 删除用户</a>
+    </div>
+    <table id="table"></table>
 </div>
-<script src="../plugins/jquery.1.12.4.min.js"></script>
-<script src="../plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
-<script src="../plugins/bootstrap-table-1.11.0/bootstrap-table.min.js"></script>
-<script src="../plugins/bootstrap-table-1.11.0/locale/bootstrap-table-zh-CN.min.js"></script>
-<script src="../plugins/waves-0.7.5/waves.min.js"></script>
-<script src="../plugins/jquery-confirm/jquery-confirm.min.js"></script>
-<script src="../plugins/select2/js/select2.min.js"></script>
-
-<script type="text/javascript" src="../plugins/seajs/sea.js"></script>
 <script type="text/javascript">
-	$(document).ready(function() {
-	  seajs.use("./crud/main")
-	});
+    seajs.config({
+        base: "/plugins/",
+        alias: {
+//            'jquery': 'jquery.1.12.4.min.js',
+//            'bootstrap': 'bootstrap-3.3.0/js/bootstrap.min.js',
+            // 'formValidation': 'formValidation/formValidation.js',
+            // 'fvbootstrap': 'formValidation/framework/bootstrap.js',
+            // 'fvzh_CN': 'formValidation/language/zh_CN.js',
+//            'waves': 'waves-0.7.5/waves.min.js',
+            'bootstrap-table': 'bootstrap-table-1.11.0/bootstrap-table.min.js',
+            'bootstrap-table-zh-CN': 'bootstrap-table-1.11.0/locale/bootstrap-table-zh-CN.min.js',
+            'jquery-confirm': 'jquery-confirm/jquery-confirm.min.js',
+            'select2': 'select2/js/select2.min.js',
+//            'jdirk': 'fullPage/jquery.jdirk.min.js',
+//            'cookie': 'jquery.cookie.js',
+            // 'checkbix': 'checkbix/js/checkbix.min.js',
+//            'toastr': 'toastr/toastr.min.js'
+            // 'gritter': 'gritter/jquery.gritter.min.js'
+        }
+    });
+    seajs.use("./app/crud/main")
 </script>
-</body>
-</html>

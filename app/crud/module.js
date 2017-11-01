@@ -6,12 +6,17 @@
  */
 
 define(function(require, exports, module) {
-    $.crud_ = $('.crud_main');
+    var $ = require('jquery');
+    require('bootstrap');
+    require('jquery-confirm');
+
+    var crud_ = $('.crud_main');
     var $table = $('#table');
 
     module.exports = {
         init: function() {
             // select2初始化
+            require('select2');
             $('select').select2();
 
             this._loadMain();
@@ -25,20 +30,20 @@ define(function(require, exports, module) {
                 if ($(this).val() == '') {
                     $(this).parent().find('label').removeClass('active');
                 }
-            });
+            })
 
             // 添加
-            $.crud_.on('click', '.create_act', function() {
+            crud_.on('click', '.create_act', function() {
                 createAction();
             })
 
             // 修改
-            $.crud_.on('click', '.update_act', function() {
+            crud_.on('click', '.update_act', function() {
                 updateAction();
             })
 
             // 删除
-            $.crud_.on('click', '.delete_act', function() {
+            crud_.on('click', '.delete_act', function() {
                 deleteAction();
             })
 
@@ -46,7 +51,7 @@ define(function(require, exports, module) {
             $(window).resize(function() {
                 $('#table').bootstrapTable('resetView', {
                     height: getHeight()
-                });
+                })
             })
         },
         _loadMain() {
@@ -57,8 +62,10 @@ define(function(require, exports, module) {
     // bootstrap table初始化
     // http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
     function bsTable() {
+        require('bootstrap-table');
+        require('bootstrap-table-zh-CN');
         $table.bootstrapTable({
-            url: './crud/data1.json',
+            url: './app/crud/data1.json',
             height: getHeight(),
             striped: true,
             search: true,
@@ -79,7 +86,7 @@ define(function(require, exports, module) {
             smartDisplay: false,
             idField: 'id',
             sortName: 'id',
-            sortOrder: 'desc',
+            sortOrder: 'asc',
             escape: true,
             searchOnEnterKey: true,
             idField: 'systemId',
@@ -94,7 +101,7 @@ define(function(require, exports, module) {
 
     // 动态高度
     function getHeight() {
-        return $(window).height() - 20;
+        return $('.x-content').height() - 3;
     }
     // 数据表格展开内容
     function detailFormatter(index, row) {
