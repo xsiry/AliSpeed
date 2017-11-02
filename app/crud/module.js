@@ -16,22 +16,13 @@ define(function(require, exports, module) {
     module.exports = {
         init: function() {
             // select2初始化
-            require('select2');
-            $('select').select2();
+            // require('select2');
+            // $('select').select2();
 
             this._loadMain();
             this._bindUI();
         },
         _bindUI: function() {
-            // 设置input特效
-            $(document).on('focus', 'input[type="text"]', function() {
-                $(this).parent().find('label').addClass('active');
-            }).on('blur', 'input[type="text"]', function() {
-                if ($(this).val() == '') {
-                    $(this).parent().find('label').removeClass('active');
-                }
-            })
-
             // 添加
             crud_.on('click', '.create_act', function() {
                 createAction();
