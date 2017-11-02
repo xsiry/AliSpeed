@@ -6,12 +6,12 @@
  */
 
 define(function(require, exports, module) {
-    var $ = require('jquery');
+    let $ = require('jquery');
     require('bootstrap');
     require('jquery-confirm');
 
-    var crud_ = $('.crud_main');
-    var $table = $('#table');
+    let crud_ = $('.crud_main');
+    let $table = $('#table');
 
     module.exports = {
         init: function() {
@@ -96,7 +96,7 @@ define(function(require, exports, module) {
     }
     // 数据表格展开内容
     function detailFormatter(index, row) {
-        var html = [];
+        let html = [];
         $.each(row, function(key, value) {
             html.push('<p><b>' + key + ':</b> ' + value + '</p>');
         });
@@ -127,7 +127,7 @@ define(function(require, exports, module) {
     };
 
     function detailFormatter(index, row) {
-        var html = [];
+        let html = [];
         $.each(row, function(key, value) {
             html.push('<p><b>' + key + ':</b> ' + value + '</p>');
         });
@@ -157,7 +157,7 @@ define(function(require, exports, module) {
     }
     // 编辑
     function updateAction() {
-        var rows = $table.bootstrapTable('getSelections');
+        let rows = $table.bootstrapTable('getSelections');
         if (rows.length == 0) {
             $.confirm({
                 title: false,
@@ -195,7 +195,7 @@ define(function(require, exports, module) {
     }
     // 删除
     function deleteAction() {
-        var rows = $table.bootstrapTable('getSelections');
+        let rows = $table.bootstrapTable('getSelections');
         if (rows.length == 0) {
             $.confirm({
                 title: false,
@@ -220,8 +220,8 @@ define(function(require, exports, module) {
                         text: '确认',
                         btnClass: 'waves-effect waves-button',
                         action: function() {
-                            var ids = new Array();
-                            for (var i in rows) {
+                            let ids = new Array();
+                            for (let i in rows) {
                                 ids.push(rows[i].systemId);
                             }
                             $.alert('删除：id=' + ids.join("-"));

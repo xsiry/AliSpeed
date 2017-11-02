@@ -6,11 +6,11 @@
  */
 
 define(function (require, exports, module) {
-    var $ = require('jquery');
+    let $ = require('jquery');
     require('bootstrap');
 
-    var login_ = $('#login-window');
-    var url = "/user/login";
+    let login_ = $('#login-window');
+    let url = "/user/login";
 
     module.exports = {
         init: function () {
@@ -25,14 +25,14 @@ define(function (require, exports, module) {
             // 输入框获取焦点后出现下划线
             login_.on("focus", '.form-control', function () {
                 $(this).parent().addClass('fg-toggled');
-            })
+            });
             login_.on("blur", '.form-control', function () {
                 $(this).parent().removeClass('fg-toggled');
-            })
+            });
             // bind .name_search_btn
             login_.on("click", '#login-bt', function () {
                 $('#loginForm').submit();
-            })
+            });
             // bind .name_search
             login_.on("keypress", '#username, #password', function (e) {
                 if (e.which === "13") $('#loginForm').submit();
@@ -86,10 +86,10 @@ define(function (require, exports, module) {
             e.preventDefault();
 
             // Get the form instance
-            var $form = $(e.target);
+            let $form = $(e.target);
 
             // Get the FormValidation instance
-            var bv = $form.data('formValidation');
+            let bv = $form.data('formValidation');
 
             // Use Ajax to submit form data
             $.post(url, $form.serialize(), function (result) {
@@ -140,8 +140,8 @@ define(function (require, exports, module) {
     function saveUserInfo() {
         // 保存帐号和密码
         if ($("#rmbUser").is(':checked') === true && $("#rmbPassWord").is(':checked') === true) {
-            var userName = $("#username").val();
-            var passWord = $("#password").val();
+            let userName = $("#username").val();
+            let passWord = $("#password").val();
 
             $.cookie("rmbUser", "true", {expires: 7});
             $.cookie("rmbPassWord", "true", {expires: 7});
@@ -150,7 +150,7 @@ define(function (require, exports, module) {
 
             // 只保存帐号
         } else if ($("#rmbUser").is(':checked') === true) {
-            var username = $("#username").val();
+            let username = $("#username").val();
 
             $.cookie("rmbUser", "true", {expires: 7});
             $.cookie("userName", username, {expires: 7});

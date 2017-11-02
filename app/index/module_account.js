@@ -1,0 +1,304 @@
+/**
+ * Created by IntelliJ IDEA.
+ * User: xsiry
+ * Date: 2017/11/02
+ * Time: 16:39
+ */
+define(function (require, exports, module) {
+    let $ = require('jquery');
+    require('bootstrap');
+    require('jquery-confirm');
+    require('formValidation');
+    require('fvbootstrap');
+    require('fvzh_CN');
+
+    module.exports = {
+        init: function () {
+        },
+        _showAccount: function () {
+            showAccount();
+        },
+        _editPassword: function () {
+            editPassword();
+        },
+        _logout: function () {
+            logout();
+        }
+    }
+
+    function showAccount() {
+        let title = "个人资料";
+        $.get('/user/info', {}, function (result) {
+            $.confirm({
+                type: 'dark',
+                animationSpeed: 300,
+                title: title,
+                content: 'url:../app/personal_data_dialog.html',
+                buttons: {
+                    confirm: {
+                        text: '确认',
+                        type: 'submit',
+                        btnClass: 'waves-effect waves-button',
+                        action: function () {
+                            let self = this;
+                            self.$content.find('form').submit();
+                            return false;
+                        }
+                    },
+                    cancel: {
+                        text: '取消',
+                        btnClass: 'waves-effect waves-button'
+                    }
+                },
+                onOpen: function () {
+                    let self = this;
+                    setTimeout(function (result) {
+                        $.each(result, function (key, val) {
+                            self.$content.find('label[for="' + key + '"]').addClass('active');
+                            self.$content.find('input[name="' + key + '"]').val(val);
+                        });
+
+                        self.$content.find('form').formValidation({
+                            autoFocus: true,
+                            locale: 'zh_CN',
+                            message: '该值无效，请重新输入',
+                            err: {
+                                container: 'tooltip'
+                            },
+                            icon: {
+                                valid: 'glyphicon glyphicon-ok',
+                                invalid: 'glyphicon glyphicon-remove',
+                                validating: 'glyphicon glyphicon-refresh'
+                            },
+                            fields: {
+                                mobile: {
+                                    validators: {
+                                        notEmpty: {
+                                            message: '手机号不能为空'
+                                        },
+                                        regexp: {
+                                            regexp: /^1\d{10}$/,
+                                            message: '手机号格式不正确'
+                                        }
+                                    }
+                                },
+                                qq: {
+                                    validators: {
+                                        notEmpty: {
+                                            message: 'QQ不能为空'
+                                        },
+                                        regexp: {
+                                            regexp: /^[0-9]+$/,
+                                            message: 'QQ只能由纯数字组成'
+                                        }
+                                    }
+                                },
+                                email: {
+                                    validators: {
+                                        notEmpty: {
+                                            message: '邮箱不能为空'
+                                        },
+                                        regexp: {
+                                            regexp: /^([a-zA-Z0-9]+[_|_|.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|_|.]?)*[a-zA-Z0-9]+\.(?:com|cn)$/,
+                                            message: '邮箱格式不正确'
+                                        }
+                                    }
+                                }
+                            }
+                        }).on('success.form.fv', function (e) {
+                            $(self.$$confirm[0]).prop("disabled", true);
+                            // Prevent form submission
+                            e.preventDefault();
+
+                            // Get the form instance
+                            let $form = $(e.target);
+
+                            let params = {};
+
+                            $.each($form.serializeArray(), function (i, o) {
+                                params[o.name] = o.value;
+                            });
+
+                            $.post('/user/info', params, function (result) {
+                                let msg;
+                                toastr.options = {
+                                    closeButton: true,
+                                    progressBar: true,
+                                    showMethod: 'slideDown',
+                                    timeOut: 4000
+                                };
+                                if (result.success) {
+                                    msg = title + result.msg;
+                                    toastr.success(msg);
+                                    self.close();
+                                } else {
+                                    msg = title + result.msg;
+                                    toastr.error(msg);
+                                    $(self.$$confirm[0]).prop("disabled", false);
+                                }
+                                ;
+
+                            }, 'json');
+                        });
+                    }, 500, result);
+                }
+            });
+        }, 'json')
+    }
+
+    function editPassword() {
+        let title = "密码修改";
+        $.confirm({
+            type: 'red',
+            animationSpeed: 300,
+            title: title,
+            content: 'url:../app/epassword_dialog.html',
+            buttons: {
+                confirm: {
+                    text: '确认',
+                    btnClass: 'waves-effect waves-button',
+                    action: function () {
+                        let self = this;
+                        self.$content.find('form').submit();
+                        return false;
+                    }
+                },
+                cancel: {
+                    text: '取消',
+                    btnClass: 'waves-effect waves-button'
+                }
+            },
+            onOpen: function () {
+                let self = this;
+                setTimeout(function () {
+                    self.$content.find('form').formValidation({
+                        autoFocus: true,
+                        locale: 'zh_CN',
+                        message: '该值无效，请重新输入',
+                        err: {
+                            container: 'tooltip'
+                        },
+                        icon: {
+                            valid: 'glyphicon glyphicon-ok',
+                            invalid: 'glyphicon glyphicon-remove',
+                            validating: 'glyphicon glyphicon-refresh'
+                        },
+                        fields: {
+                            old_password: {
+                                validators: {
+                                    notEmpty: {
+                                        message: '旧密码不能为空'
+                                    },
+                                    stringLength: {
+                                        min: 3,
+                                        max: 16,
+                                        message: '密码长度必须在3~16之间'
+                                    },
+                                    regexp: {
+                                        regexp: /^[a-zA-Z0-9]+$/,
+                                        message: '密码只能由大小写字母和数字组成'
+                                    }
+                                }
+                            },
+                            new_password: {
+                                validators: {
+                                    notEmpty: {
+                                        message: '新密码不能为空'
+                                    },
+                                    stringLength: {
+                                        min: 3,
+                                        max: 16,
+                                        message: '密码长度必须在3~16之间'
+                                    },
+                                    regexp: {
+                                        regexp: /^[a-zA-Z0-9]+$/,
+                                        message: '密码只能由大小写字母和数字组成'
+                                    },
+                                    identical: {
+                                        field: 'confirm_password',
+                                        message: '新密码与确认密码不一致'
+
+                                    },
+                                }
+                            },
+                            confirm_password: {
+                                validators: {
+                                    notEmpty: {
+                                        message: '验证密码不能为空'
+                                    },
+                                    stringLength: {
+                                        min: 3,
+                                        max: 16,
+                                        message: '密码长度必须在3~16之间'
+                                    },
+                                    regexp: {
+                                        regexp: /^[a-zA-Z0-9]+$/,
+                                        message: '密码只能由大小写字母和数字组成'
+                                    },
+                                    identical: {
+                                        field: 'new_password',
+                                        message: '新密码与确认密码不一致'
+
+                                    }
+                                }
+                            }
+                        }
+                    }).on('success.form.fv', function (e) {
+                        $(self.$$confirm[0]).prop("disabled", true);
+                        // Prevent form submission
+                        e.preventDefault();
+
+                        // Get the form instance
+                        let $form = $(e.target);
+
+                        let params = {};
+
+                        $.each($form.serializeArray(), function (i, o) {
+                            params[o.name] = o.value;
+                        });
+
+                        $.post('/user/epassword', params, function (result) {
+                            let msg;
+                            toastr.options = {
+                                closeButton: true,
+                                progressBar: true,
+                                showMethod: 'slideDown',
+                                timeOut: 4000
+                            };
+                            if (result.success) {
+                                msg = title + result.msg;
+                                toastr.success(msg);
+                                self.close();
+                            } else {
+                                msg = title + result.msg;
+                                toastr.error(msg);
+                                $(self.$$confirm[0]).prop("disabled", false);
+                            }
+                            ;
+                        }, 'json');
+                    });
+                }, 500);
+            }
+        });
+    }
+
+    function logout() {
+        $.get('/user/logout', {}, function (result) {
+            let msg;
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                showMethod: 'slideDown',
+                timeOut: 4000
+            };
+            if (result.success) {
+                toastr.success(result.msg);
+                window.location = 'login.html';
+            } else {
+                msg = "退出登录失败！";
+                toastr.error(msg);
+            }
+            ;
+        }, 'json')
+    }
+});
