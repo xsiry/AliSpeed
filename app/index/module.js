@@ -4,11 +4,6 @@
  * Date: 2017/10/30
  * Time: 14:53
  */
-// iframe高度自适应
-function changeFrameHeight(ifm) {
-    ifm.height = document.documentElement.clientHeight - 118;
-}
-
 define(function(require, exports, module) {
     var $ = require('jquery');
     $.index_ = $(document);
@@ -44,6 +39,7 @@ define(function(require, exports, module) {
             });
             $('body').attr('id', systemname);
             $('#system_title').text(systemtitle);
+            this._menusAjax(this, []);
             this._bindUI();
         },
         _bindUI: function() {
@@ -85,10 +81,10 @@ define(function(require, exports, module) {
             });
 
             // 菜单点击
-            $.index_.on('click', '.waves-effect', function() {
+            $.index_.on('click', '.x-menu', function() {
                 var title = $(this).data('title');
                 var url = $(this).data('url');
-                if (title && url) addTab(title, url);
+                if (title && url && url != '#') addTab(title, url);
             })
 
             // 选项卡点击
@@ -128,8 +124,77 @@ define(function(require, exports, module) {
                 });
             });
             // 初始化箭头状态
+        },
+        _menusAjax: function (me, data) {
+            $.get('/menu/userMenus', {}, function (result) {
+                me.menus = menuMap(result.Rows);
+                me._menusGenerate();
+            }, 'json')
+        },
+        _menusGenerate: function () {
+            var lis = this.menus.join('');
+            $('.x-menus').prepend(lis);
+            // $('#side-menu >li:has(a[href="' + window.location.hash + '"])').addClass('active');
+        },
+        _welcomeMsg: function () {
+            setTimeout(function () {
+                toastr.options = {
+                    closeButton: true,
+                    progressBar: true,
+                    showMethod: 'slideDown',
+                    timeOut: 4000
+                };
+                toastr.success('当前时间：' + getNowTime(), '欢迎进入 方格子●广告发布系统');
+            }, 1300);
+        },
+        setProfile: function () {
+            $.get('/user/info', {}, function(result) {
+                // $('ul#side-menu .profile_img').attr('src', user.img);
+                // $('ul#side-menu .profile_name').text(result.username);
+                // $('ul#side-menu .profile_role').text(result.rolename);
+            }, 'json');
         }
+
     };
+
+    /*
+     * 生成菜单
+     */
+    function menuMap(data) {
+        return data.map(function (menu) {
+            return rootMenu(menu);
+        });
+    }
+
+    function rootMenu(menu) {
+        var m = "<li class="+ (menu.children.length > 0?'sub-menu system_menus':'')+">";
+        m += "<a class='waves-effect x-menu' href='javascript:;' data-url=" + menu.href + " data-title=" + menu.name + ">";
+        m += menu.level == 1 ? ("<i class='" + menu.icon + "'></i>" + menu.name) : menu.name;
+
+        if (menu.children.length > 0) {
+            m += childMenu(menu);
+        } else {
+            m += "</a></li>";
+        }
+
+        return m;
+    }
+
+    function childMenu(rootMenu) {
+        var child = "</a><ul style='margin-left:" + 5*rootMenu.level + "px;'>";
+        rootMenu.children.map(function (menu) {
+            child += "<li class="+ (menu.children.length > 0?'sub-menu system_menus':'')+">";
+            child += "<a class='waves-effect x-menu'  data-title='" + menu.name + "' data-url=" + menu.href + ">" + menu.name;
+            if (menu.children.length > 0) {
+                child += childMenu(menu);
+            } else {
+                child += "</a></li>";
+            }
+        })
+        child += "</ul></li>";
+        return child;
+    }
+
 
     function resizeFrameHeight() {
         $('.tab_iframe').css('height', document.documentElement.clientHeight - 118);
@@ -158,7 +223,6 @@ define(function(require, exports, module) {
     }
 
     function fullPage() {
-
         if ($.util.supportsFullScreen) {
             if ($.util.isFullScreen()) {
                 $.util.cancelFullScreen();
