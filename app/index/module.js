@@ -11,7 +11,7 @@ define(function (require, exports, module) {
     require('device');
     require.async('toastr');
 
-    let accoutnModule = require('./module_account');
+    let accountModule = require('./module_account');
 
     let menuModule = require('./module_menu');
     menuModule.init($.index_);
@@ -110,17 +110,17 @@ define(function (require, exports, module) {
 
             // 个人资料
             $.index_.on('click', '.x-account', function () {
-                accoutnModule._showAccount();
+                accountModule._showAccount();
             });
 
             // 修改密码
             $.index_.on('click', '.x-epassword', function () {
-                accoutnModule._editPassword();
+                accountModule._editPassword();
             });
 
             // 退出登录
             $.index_.on('click', '.x-logout', function () {
-                accoutnModule._logout();
+                accountModule._logout();
             });
 
             // 菜单点击

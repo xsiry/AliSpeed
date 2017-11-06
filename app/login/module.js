@@ -8,7 +8,8 @@
 define(function (require, exports, module) {
     let $ = require('jquery');
     require('bootstrap');
-    require('jquery-confirm');
+
+    let accountModule = require('../index/module_account');
 
     let login_ = $('#login-window');
     let url = "/user/login";
@@ -55,7 +56,7 @@ define(function (require, exports, module) {
             });
             // bind register_btn
             $('body').on("click", '.register_btn', function() {
-                register();
+                accountModule._register();
             })
         }
     };
@@ -131,177 +132,6 @@ define(function (require, exports, module) {
             }, 'json');
         });
     };
-
-    function register() {
-        let title = "用户注册";
-        $.confirm({
-            type: 'blue',
-            animationSpeed: 300,
-            title: title,
-            content: 'url:../app/register_dialog.html',
-            buttons: {
-                confirm: {
-                    text: '确认',
-                    btnClass: 'waves-effect waves-button',
-                    action: function () {
-                        let self = this;
-                        self.$content.find('form').submit();
-                        return false;
-                    }
-                },
-                cancel: {
-                    text: '取消',
-                    btnClass: 'waves-effect waves-button'
-                }
-            },
-            onOpen: function () {
-                let self = this;
-                setTimeout(function () {
-                    self.$content.find('form').formValidation({
-                        autoFocus: true,
-                        locale: 'zh_CN',
-                        message: '该值无效，请重新输入',
-                        err: {
-                            container: 'tooltip'
-                        },
-                        icon: {
-                            valid: 'glyphicon glyphicon-ok',
-                            invalid: 'glyphicon glyphicon-remove',
-                            validating: 'glyphicon glyphicon-refresh'
-                        },
-                        fields: {
-                            account: {
-                                validators: {
-                                    notEmpty: {
-                                        message: '用户名不能为空'
-                                    },
-                                    regexp: {
-                                        regexp: /^[a-zA-z0-9_]+$/,
-                                        message: '用户名只能由数字、字母和下划线组成'
-                                    }
-                                }
-                            },
-                            relname: {
-                                validators: {
-                                    notEmpty: {
-                                        message: '真实不能为空'
-                                    }
-                                }
-                            },
-                            pwd: {
-                                validators: {
-                                    notEmpty: {
-                                        message: '新密码不能为空'
-                                    },
-                                    stringLength: {
-                                        min: 3,
-                                        max: 16,
-                                        message: '密码长度必须在3~16之间'
-                                    },
-                                    regexp: {
-                                        regexp: /^[a-zA-Z0-9]+$/,
-                                        message: '密码只能由大小写字母和数字组成'
-                                    },
-                                    identical: {
-                                        field: 'confirm_pwd',
-                                        message: '密码与重复密码不一致'
-
-                                    },
-                                }
-                            },
-                            confirm_pwd: {
-                                validators: {
-                                    notEmpty: {
-                                        message: '验证密码不能为空'
-                                    },
-                                    stringLength: {
-                                        min: 3,
-                                        max: 16,
-                                        message: '密码长度必须在3~16之间'
-                                    },
-                                    regexp: {
-                                        regexp: /^[a-zA-Z0-9]+$/,
-                                        message: '密码只能由大小写字母和数字组成'
-                                    },
-                                    identical: {
-                                        field: 'pwd',
-                                        message: '密码与重复密码不一致'
-
-                                    }
-                                }
-                            },
-                            mobile: {
-                                validators: {
-                                    notEmpty: {
-                                        message: '手机号不能为空'
-                                    },
-                                    regexp: {
-                                        regexp: /^1\d{10}$/,
-                                        message: '手机号格式不正确'
-                                    }
-                                }
-                            },
-                            qq: {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'QQ不能为空'
-                                    },
-                                    regexp: {
-                                        regexp: /^[0-9]+$/,
-                                        message: 'QQ只能由纯数字组成'
-                                    }
-                                }
-                            },
-                            email: {
-                                validators: {
-                                    notEmpty: {
-                                        message: '邮箱不能为空'
-                                    },
-                                    regexp: {
-                                        regexp: /^([a-zA-Z0-9]+[_|_|.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|_|.]?)*[a-zA-Z0-9]+\.(?:com|cn)$/,
-                                        message: '邮箱格式不正确'
-                                    }
-                                }
-                            }
-                        }
-                    }).on('success.form.fv', function (e) {
-                        $(self.$$confirm[0]).prop("disabled", true);
-                        // Prevent form submission
-                        e.preventDefault();
-
-                        // Get the form instance
-                        let $form = $(e.target);
-
-                        let params = {};
-
-                        $.each($form.serializeArray(), function (i, o) {
-                            params[o.name] = o.value;
-                        });
-
-                        $.post('/user/register', params, function (result) {
-                            let msg;
-                            toastr.options = {
-                                closeButton: true,
-                                progressBar: true,
-                                showMethod: 'slideDown',
-                                timeOut: 4000
-                            };
-                            if (result.success) {
-                                msg = title + result.msg;
-                                toastr.success(msg);
-                                self.close();
-                            } else {
-                                msg = title + result.msg;
-                                toastr.error(msg);
-                                $(self.$$confirm[0]).prop("disabled", false);
-                            }
-                            ;
-                        }, 'json');
-                    });
-                }, 500);
-            }
-        });
-    }
 
     // 检查Cookie，并设置
     function checkCookie() {
