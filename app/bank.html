@@ -1,0 +1,33 @@
+<link href="../app/bank/style.css" rel="stylesheet"/>
+<div id="main" class="bank_main">
+    <div id="toolbar">
+        <a class="waves-effect waves-button create_act" href="javascript:;"><i class="zmdi zmdi-plus"></i> 新增</a>
+        <!--<a class="waves-effect waves-button update_act" href="javascript:;"><i class="zmdi zmdi-edit"></i> 编辑</a>-->
+        <!--<a class="waves-effect waves-button delete_act" href="javascript:;"><i class="zmdi zmdi-close"></i> 删除</a>-->
+        <div class="pull-right">
+            <input type="text" class="form-control" name="searchText" placeholder="搜索">
+        </div>
+        <div class="pull-right">
+            <select class="form-control" name="searchWhere">
+                <option value="company">公司名称</option>
+                <option value="rece_name">收款人</option>
+                <option value="bank">开户银行</option>
+                <option value="bank_account">银行账户</option>
+                <option value="bank_branch">开户支行</option>
+                <option value="bank_address">支行地址</option>
+            </select>
+        </div>
+    </div>
+    <table id="table"></table>
+</div>
+<script type="text/javascript">
+    seajs.config({
+        base: "/plugins/",
+        alias: {
+            'bootstrap-table': 'bootstrap-table-1.11.0/bootstrap-table.min.js',
+            'bootstrap-table-zh-CN': 'bootstrap-table-1.11.0/locale/bootstrap-table-zh-CN.min.js',
+            'select2': 'select2/js/select2.min.js'
+        }
+    });
+    seajs.use("./app/bank/main");
+</script>

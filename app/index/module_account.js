@@ -81,7 +81,7 @@ define(function (require, exports, module) {
                             relname: {
                                 validators: {
                                     notEmpty: {
-                                        message: '真实不能为空'
+                                        message: '真实姓名不能为空'
                                     }
                                 }
                             },

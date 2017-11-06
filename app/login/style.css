@@ -1,4 +1,4 @@
-body, html {height: 100%; font-family: 'Microsoft yahei'; font-size: 13px; font-weight: 400;}
+body, html {height: 100%;  font-family: 'Microsoft yahei', sans-serif; font-size: 13px; font-weight: 400;}
 img {vertical-align: middle;}
 a, a:hover, a:active, a:focus {text-decoration: none; -webkit-user-drag: none;}
 a i{font-size: 13px;}
@@ -12,7 +12,7 @@ body:before{height:50%;width:100%;position:absolute;top:0;left:0;background:#29a
 #login-bt i{font-size:23px;color:#fff;}
 
 .input-group-addon{border:none;background:none;font-size:16px;}
-#login-window .form-control{padding: 0 10px;position:relative;font-size:13px;border:1px solid #e0e0e0;border-left:0;border-right:0;border-top:0;border-radius: 0px;padding:0;background:#fff;height:35px;line-height:35px;transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;box-shadow:none;}
+#login-window .form-control{position:relative;font-size:13px;border-bottom:1px solid #e0e0e0;border-left:0;border-right:0;border-top:0;border-radius: 0;padding:0 10px;background:#fff;height:35px;line-height:35px;transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;box-shadow:none;}
 #login-window .form-control:active, .form-control:focus{box-shadow:none;}
 #login-window .fg-line{position:relative;vertical-align:top;display:inline-block;width:100%;}
 #login-window .fg-line:after{position:absolute;z-index:3;bottom:0;left:0;height:2px;width:0;content:"";-webkit-transition:all;-o-transition:all;transition:all;-webkit-transition-duration:.3s;transition-duration:.3s;background:#29a176;}
