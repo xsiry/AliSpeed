@@ -42,7 +42,7 @@ define(function(require, exports, module) {
 
             // 添加
             self_.on('click', '.create_act', function() {
-                createAsUpdateAction({});
+                createAsUpdateAction();
             });
 
             // 数据表格动态高度
@@ -138,7 +138,7 @@ define(function(require, exports, module) {
             type: 'blue',
             animationSpeed: 300,
             title: row? ('修改' + row.company) : '新增',
-            content: 'URL:../app/self_dialog.html',
+            content: 'URL:../app/bank_dialog.html',
             buttons: {
                 confirm: {
                     text: '确认',
