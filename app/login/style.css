@@ -6,24 +6,40 @@ a i{font-size: 13px;}
 body{background:#ECECEC;}
 body:before{height:50%;width:100%;position:absolute;top:0;left:0;background:#29a176;content:"";z-index:0}
 #login-window{position:relative;top:50%;left:50%;width:300px;height:200px;margin-left:-150px;margin-top:-100px;padding:35px 55px 35px 25px;z-index:10;background:#fff;box-shadow:0 1px 11px rgba(0,0,0,.27);border-radius:2px;}
-.m-b-20{margin-bottom:20px !important;}
+#login-window .m-b-20{margin-bottom:20px !important;}
 
 #login-bt{position:absolute;width:50px;height:50px;border-radius:50%;line-height:36px!important;top:50%;margin-top:-25px;right:-25px;background:#FF4F0F;}
 #login-bt i{font-size:23px;color:#fff;}
 
 .input-group-addon{border:none;background:none;font-size:16px;}
-.form-control{position:relative;font-size:13px;border:1px solid #e0e0e0;border-left:0;border-right:0;border-top:0;border-radius: 0px;padding:0;background:#fff;height:35px;line-height:35px;transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;box-shadow:none;}
-.form-control:active, .form-control:focus{box-shadow:none;}
-.fg-line{position:relative;vertical-align:top;display:inline-block;width:100%;}
-.fg-line:after{position:absolute;z-index:3;bottom:0;left:0;height:2px;width:0;content:"";-webkit-transition:all;-o-transition:all;transition:all;-webkit-transition-duration:.3s;transition-duration:.3s;background:#29a176;}
-.fg-line.fg-toggled:after{width:100%}
+#login-window .form-control{padding: 0 10px;position:relative;font-size:13px;border:1px solid #e0e0e0;border-left:0;border-right:0;border-top:0;border-radius: 0px;padding:0;background:#fff;height:35px;line-height:35px;transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;box-shadow:none;}
+#login-window .form-control:active, .form-control:focus{box-shadow:none;}
+#login-window .fg-line{position:relative;vertical-align:top;display:inline-block;width:100%;}
+#login-window .fg-line:after{position:absolute;z-index:3;bottom:0;left:0;height:2px;width:0;content:"";-webkit-transition:all;-o-transition:all;transition:all;-webkit-transition-duration:.3s;transition-duration:.3s;background:#29a176;}
+#login-window .fg-line.fg-toggled:after{width:100%}
 
-input[type=checkbox].checkbix:checked+label>span:before{box-sizing: content-box;}
+#login-window input[type=checkbox].checkbix:checked+label>span:before{box-sizing: content-box;}
 
-.form-control:focus {border-bottom:1px solid #e0e0e0;outline: inherit;-webkit-box-shadow: none;box-shadow: none;}
+#login-window .form-control:focus {border-bottom:1px solid #e0e0e0;outline: inherit;-webkit-box-shadow: none;box-shadow: none;}
 
-.has-error .form-control {border-bottom:1px solid #e0e0e0;-webkit-box-shadow: none;box-shadow: none;}
-.has-error .form-control:focus {border-bottom:1px solid #e0e0e0;-webkit-box-shadow: none;box-shadow: none;}
+#login-window .has-error .form-control {border-bottom:1px solid #e0e0e0;-webkit-box-shadow: none;box-shadow: none;}
+#login-window .has-error .form-control:focus {border-bottom:1px solid #e0e0e0;-webkit-box-shadow: none;box-shadow: none;}
 
-.has-success .form-control {border-bottom:1px solid #e0e0e0;-webkit-box-shadow: none;box-shadow: none;}
-.has-success .form-control:focus {border-bottom:1px solid #e0e0e0;-webkit-box-shadow: none;box-shadow: none;}
+#login-window .has-success .form-control {border-bottom:1px solid #e0e0e0;-webkit-box-shadow: none;box-shadow: none;}
+#login-window .has-success .form-control:focus {border-bottom:1px solid #e0e0e0;-webkit-box-shadow: none;box-shadow: none;}
+
+.register_btn {position: absolute;right: 5px;color: #131ddc;top: 5px;font-size: 16px;text-decoration: underline;}
+
+/* input */
+.jconfirm-content form{margin-top: 10px;}
+.x_dialog{padding: 0 0 2px;}
+.x_dialog .dialog-buttons a{font-weight: bold;}
+.x_dialog .form-group{margin-bottom: 20px;}
+.x_dialog .form-group label{position: absolute; line-height: 2; font-size: 16px; font-weight: normal; transition: all .2s; pointer-events: none; color: #999;}
+.x_dialog .form-group .active{transform: translateY(-65%); font-size: 12px; color: #337ab7;}
+.x_dialog .form-group .form-control{font-size: 14px; box-shadow: none; padding-left: 0; padding-right: 0; border-radius: 0; border: none; border-bottom: 2px solid #eee; outline: none; transition: all .5s;}
+.x_dialog .form-group .form-control:focus{box-shadow: none; border-color: #337ab7;}
+
+.x_dialog .has-feedback label~.form-control-feedback { top: 0;}
+
+.tooltip {z-index: 10000; !important;}
