@@ -14,37 +14,67 @@ define(function(require, exports, module) {
     let self_ = $('.bank_main');
     let $table = self_.find('#table');
 
-    let url = '/user_bank', table = 'sys_user_bank', source_id = 'user_self_id', sort_name = 'company', sort_order = 'asc';
+    let url = '/user_bank',
+        table = 'sys_user_bank',
+        source_id = 'user_self_id',
+        sort_name = 'company',
+        sort_order = 'asc',
+        validationInput = {
+            company: {
+                validators: {
+                    notEmpty: {
+                        message: '该项不能为空'
+                    }
+                }
+            },
+            rece_name: {
+                validators: {
+                    notEmpty: {
+                        message: '该项不能为空'
+                    }
+                }
+            },
+            bank_account: {
+                validators: {
+                    notEmpty: {
+                        message: '该项不能为空'
+                    }
+                }
+            },
+            bank_branch: {
+                validators: {
+                    notEmpty: {
+                        message: '该项不能为空'
+                    }
+                }
+            },
+            bank_address: {
+                validators: {
+                    notEmpty: {
+                        message: '该项不能为空'
+                    }
+                }
+            }
+        };
+
     module.exports = {
         init: function() {
             this._loadMain();
             this._bindUI();
         },
         _bindUI: function() {
-            // 设置input特效
-            $(document).on('focus', 'input[type="text"]', function() {
-                $(this).parent().find('label').addClass('active');
-            }).on('blur', 'input[type="text"]', function() {
-                if ($(this).val() === '') {
-                    $(this).parent().find('label').removeClass('active');
-                }
-            });
-
             // 搜索监听回车
             self_.on("keypress", 'input[name="searchText"]', function(e) {
                 if (e.which === 13) f_search();
             });
-
             // 搜索内容为空时，显示全部
             self_.on('input propertychange', 'input[name="searchText"]', function() {
                 if ($(this).val().length === 0) f_search();
             });
-
-            // 添加
+            // 添加数据
             self_.on('click', '.create_act', function() {
                 createAsUpdateAction();
             });
-
             // 数据表格动态高度
             $(window).resize(function() {
                 self_.find('#table').bootstrapTable('resetView', {
@@ -105,7 +135,6 @@ define(function(require, exports, module) {
             $('[data-toggle="popover"]').popover();
         });
     }
-
     // 搜索
     function f_search() {
         let qjson = {};
@@ -122,7 +151,7 @@ define(function(require, exports, module) {
         };
         $table.bootstrapTable('refresh', {query: gridparms});
     }
-
+    // bs表格按钮事件
     window.actionEvents = {
         'click .edit': function(e, value, row, index) {
             createAsUpdateAction(row)
@@ -131,7 +160,6 @@ define(function(require, exports, module) {
             deleteAction(row);
         }
     };
-
     // 创建或修改
     function createAsUpdateAction(row) {
         $.confirm({
@@ -165,56 +193,7 @@ define(function(require, exports, module) {
                     // select2初始化
                     $('select').select2();
 
-                    self.$content.find('form').formValidation({
-                        autoFocus: true,
-                        locale: 'zh_CN',
-                        message: '该值无效，请重新输入',
-                        err: {
-                            container: 'tooltip'
-                        },
-                        icon: {
-                            valid: 'glyphicon glyphicon-ok',
-                            invalid: 'glyphicon glyphicon-remove',
-                            validating: 'glyphicon glyphicon-refresh'
-                        },
-                        fields: {
-                            company: {
-                                validators: {
-                                    notEmpty: {
-                                        message: '该项不能为空'
-                                    }
-                                }
-                            },
-                            rece_name: {
-                                validators: {
-                                    notEmpty: {
-                                        message: '该项不能为空'
-                                    }
-                                }
-                            },
-                            self_account: {
-                                validators: {
-                                    notEmpty: {
-                                        message: '该项不能为空'
-                                    }
-                                }
-                            },
-                            self_branch: {
-                                validators: {
-                                    notEmpty: {
-                                        message: '该项不能为空'
-                                    }
-                                }
-                            },
-                            self_address: {
-                                validators: {
-                                    notEmpty: {
-                                        message: '该项不能为空'
-                                    }
-                                }
-                            }
-                        }
-                    }).on('success.form.fv', function (e) {
+                    self.$content.find('form').formValidation(formFvConfig).on('success.form.fv', function (e) {
                         $(self.$$confirm[0]).prop("disabled", true);
                         // Prevent form submission
                         e.preventDefault();
@@ -258,7 +237,7 @@ define(function(require, exports, module) {
             type: 'red',
             animationSpeed: 300,
             title: false,
-            autoClose: 'cancel|5000',
+            autoClose: 'cancel|10000',
             content: '确认删除' + row.company + '吗？',
             buttons: {
                 confirm: {
@@ -291,7 +270,23 @@ define(function(require, exports, module) {
             }
         });
     }
-
+    // fv表单控件参数
+    function formFvConfig() {
+        return {
+            autoFocus: true,
+            locale: 'zh_CN',
+            message: '该值无效，请重新输入',
+            err: {
+                container: 'tooltip'
+            },
+            icon: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: validationInput
+        };
+    }
     // 动态高度
     function getHeight() {
         return $('.x-content').height() - 3;
