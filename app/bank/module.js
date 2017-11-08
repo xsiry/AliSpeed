@@ -9,7 +9,10 @@ define(function(require, exports, module) {
     let $ = require('jquery');
     require('bootstrap');
     require('jquery-confirm');
+
     require('select2');
+    // require('select2_zh_CN');
+    require('webuploader');
 
     let self_ = $('.bank_main');
     let $table = self_.find('#table');
@@ -170,7 +173,7 @@ define(function(require, exports, module) {
             buttons: {
                 confirm: {
                     text: '确认',
-                    btnClass: 'waves-effect waves-button',
+                    btnClass: 'waves-effect btn-primary',
                     action: function () {
                         let self = this;
                         self.$content.find('form').submit();
@@ -185,13 +188,16 @@ define(function(require, exports, module) {
             onOpen: function () {
                 let self = this;
                 setTimeout(function () {
+                    let urls = [];
                     $.each(row, function (key, val) {
                         self.$content.find('label[for="' + key + '"]').addClass('active');
                         self.$content.find('input[name="' + key + '"]').val(val);
                     });
 
                     // select2初始化
-                    $('select').select2();
+                    initBank();
+                    // 上传插件初始化
+                    uploadFile(urls);
 
                     self.$content.find('form').formValidation(formFvConfig).on('success.form.fv', function (e) {
                         $(self.$$confirm[0]).prop("disabled", true);
@@ -287,8 +293,42 @@ define(function(require, exports, module) {
             fields: validationInput
         };
     }
+
+    function initBank() {
+        // $.getJSON('/zheng-upms-server/manage/permission/list', {systemId: systemId, type: pidType, limit: 10000}, function(json) {
+        //     let datas = [{id: 0, text: '请选择上级'}];
+        //     for (let i = 0; i < json.rows.length; i ++) {
+        //         let data = {};
+        //         data.id = json.rows[i].permissionId;
+        //         data.text = json.rows[i].name;
+        //         datas.push(data);
+        //     }
+        //     $('#bank').empty();
+            $("select#bank").select2({
+                language: 'zh-CN',
+                placeholder: '请选择开户银行'
+                // data : datas
+            });
+        // });
+    }
+
     // 动态高度
     function getHeight() {
         return $('.x-content').height() - 3;
+    }
+
+    // 上传初始化
+    function uploadFile(urls) {
+        let option = {
+            url: '/file/upload/bank',
+            field: 'url',
+            upload_main: '#x-uploader',
+            list_block: '#x-fileList',
+            upload_btn: '#x-upload',
+            pick_btn: '#x-picker'
+        };
+        let upload = require('upload');
+        upload.init(option);
+        upload._addFilePreview('#x-fileList', urls);
     }
 });

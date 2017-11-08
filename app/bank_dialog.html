@@ -11,7 +11,7 @@
             <input id="rece_name" type="text" name="rece_name" class="form-control">
         </div>
         <div class="form-group">
-            <select class="form-control" name="bank" data-placeholder="请选择开户银行">
+            <select id="bank" name="bank" class="form-control chosen-select">
                 <option value="BOC">中国银行</option>
                 <option value="ICBC">中国工商银行</option>
                 <option value="CCB">中国建设银行</option>
@@ -29,6 +29,14 @@
         <div class="form-group">
             <label for="bank_address">支行地址</label>
             <input id="bank_address" type="text" name="bank_address" class="form-control">
+        </div>
+        <div id="x-uploader">
+            <!--用来存放item-->
+            <div id="x-fileList" class="uploader-list"></div>
+            <div class="bts">
+                <div id="x-picker">选择图片</div>
+                <div id="x-upload" class="btn btn-default">开始上传</div>
+            </div>
         </div>
     </form>
 </div>
