@@ -1,0 +1,13 @@
+#toolbar .pull-right {  margin-left: 10px;  }
+
+legend {
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin-bottom: 0px;
+    font-size: 12px;
+    line-height: inherit;
+    color: #337ab7;
+    border: 0;
+    border-bottom: 2px solid #337ab7;
+}
