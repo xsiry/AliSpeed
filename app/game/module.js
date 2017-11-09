@@ -65,6 +65,10 @@ define(function(require, exports, module) {
             self_.on('click', '.create_act', function() {
                 createAsUpdateAction();
             });
+            // 上架状态查询
+            self_.on('select2:select', 'select[name="status"]', function() {
+                f_search();
+            });
             // 数据表格动态高度
             $(window).resize(function() {
                 self_.find('#table').bootstrapTable('resetView', {
@@ -339,14 +343,17 @@ define(function(require, exports, module) {
     // 搜索
     function f_search() {
         let qjson = {};
-        qjson[self_.find('select[name="searchWhere"]').val()] = self_.find('input[name="searchText"]').val();
         let qjsonkeytype = {};
+
+        qjson[self_.find('select[name="searchWhere"]').val()] = self_.find('input[name="searchText"]').val();
         qjsonkeytype[self_.find('select[name="searchWhere"]').val()] = "LIKE_ALL";
+
+        let status = self_.find('select[name="status"]').val();
 
         let gridparms = {
             source: table,
             qhstr: JSON.stringify({
-                qjson: [qjson],
+                qjson: [qjson, {'status': status}],
                 qjsonkeytype: [qjsonkeytype]
             })
         };
