@@ -114,7 +114,7 @@ define(function(require, exports, module) {
                         if (key === 'showtype') {
                             self.$content.find('input[name="' + key + '"][value="'+ val +'"]').trigger('click');
                         }else if(key === 'parentid'){
-                            initSelect(val);
+                            initSelect(val+'-'+(parseInt(row.level)-1));
                         } else{
                             self.$content.find('label[for="' + key + '"]').addClass('active');
                             self.$content.find('input[name="' + key + '"]').val(val)
@@ -165,6 +165,7 @@ define(function(require, exports, module) {
     }
 
     function initSelect(val) {
+        console.log(val)
         $.getJSON(url + '/leveSelect', {}, function(json) {
             let arr = [{id: '0-0', text: 'root'}];
             for (let i = 0; i < json.length; i ++) {
