@@ -27,7 +27,7 @@ define(function (require, exports, module) {
         _logout: function () {
             logout();
         }
-    }
+    };
 
     function register() {
         let title = "用户注册";

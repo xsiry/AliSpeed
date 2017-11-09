@@ -20,7 +20,7 @@ define(function(require, exports, module) {
         table = 't_game_menu',
         source_id = 'game_menu_id',
         row_name = 'menuname',
-        sort_name = 'level',
+        sort_name = 'menuname',
         sort_order = 'asc',
         validationInput = {
             menuname: {
@@ -113,7 +113,9 @@ define(function(require, exports, module) {
                     $.each(row, function (key, val) {
                         if (key === 'showtype') {
                             self.$content.find('input[name="' + key + '"][value="'+ val +'"]').trigger('click');
-                        }else{
+                        }else if(key === 'parentid'){
+                            initSelect(val);
+                        } else{
                             self.$content.find('label[for="' + key + '"]').addClass('active');
                             self.$content.find('input[name="' + key + '"]').val(val)
                         }
@@ -162,21 +164,22 @@ define(function(require, exports, module) {
         });
     }
 
-    function initSelect() {
+    function initSelect(val) {
         $.getJSON(url + '/leveSelect', {}, function(json) {
             let arr = [{id: '0-0', text: 'root'}];
             for (let i = 0; i < json.length; i ++) {
                 let data = {};
-                data.id = json[i].id + '-' + json[i].level;
+                data.id = json[i].id+'-'+json[i].level;
                 data.text = json[i].text;
                 arr.push(data);
             }
             $('#parent').empty().append("<option></option>");
-            $("select#parent").select2({
+            let select = $("select#parent").select2({
                 language: 'zh-CN',
                 placeholder: '请选择上级菜单',
                 data : arr
             });
+            select.val(val).trigger("change");
         });
     }
 
@@ -248,6 +251,9 @@ define(function(require, exports, module) {
             queryParams: function(params) {
                 let x_params = {};
                 x_params.source = table;
+                x_params.qhstr = JSON.stringify({
+                    qjson: [{parentid: 0}]
+                });
                 x_params.page = params.offset;
                 x_params.pagesize = params.limit;
                 x_params.sortname = params.sort;
@@ -270,7 +276,7 @@ define(function(require, exports, module) {
             minimumCountColumns: 2,
             showPaginationSwitch: true,
             clickToSelect: true,
-            detailView: false,
+            detailView: true,
             detailFormatter: 'detailFormatter',
             pagination: true,
             paginationLoop: false,
@@ -296,7 +302,7 @@ define(function(require, exports, module) {
         let gridparms = {
             source: table,
             qhstr: JSON.stringify({
-                qjson: [qjson],
+                qjson: [qjson, {parentid: 0}],
                 qjsonkeytype: [qjsonkeytype]
             })
         };

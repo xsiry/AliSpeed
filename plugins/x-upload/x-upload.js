@@ -106,7 +106,7 @@ define(function(require, exports, module) {
         uploader.on('uploadSuccess', function (file, result) {
             $('#' + file.id).addClass('upload-state-done');
             if (result.success) {
-                let url = result.result.toString();
+                let url = result.result.join(';');
                 let main = $(option.upload_main);
                 let inputUrl = main.find('input[name="'+option.field+'"]');
                 inputUrl.length>0? inputUrl.val(url): $('<input type="hidden" name='+option.field+' value="'+ url +'">').appendTo(main);
