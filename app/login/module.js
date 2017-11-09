@@ -123,7 +123,7 @@ define(function (require, exports, module) {
                 };
                 if (result.success) {
                     saveUserInfo();
-                    location.href = "index.html";
+                    location.href = "index_.html";
                     toastr.success('登录成功！');
                 } else {
                     toastr.error(result.msg);

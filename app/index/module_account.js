@@ -467,7 +467,7 @@ define(function (require, exports, module) {
             };
             if (result.success) {
                 toastr.success(result.msg);
-                window.location = 'login.html';
+                window.location = 'login_.html';
             } else {
                 msg = "退出登录失败！";
                 toastr.error(msg);

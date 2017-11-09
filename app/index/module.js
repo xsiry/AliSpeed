@@ -40,7 +40,7 @@ define(function (require, exports, module) {
             require('cookie');
             let systemid = $.cookie('admin-systemid') || 1;
             let systemname = $.cookie('admin-systemname') || 'admin-server';
-            let systemtitle = $.cookie('admin-systemtitle') || 'Admin系统';
+            let systemtitle = $.cookie('admin-systemtitle') || '阿里体育竞技后台';
             $('.system_menus').hide(0, function () {
                 $('.system_' + systemid).show();
             });
@@ -181,9 +181,7 @@ define(function (require, exports, module) {
         },
         _setProfile: function () {
             $.get('/user/info', {}, function (result) {
-                // $('ul#side-menu .profile_img').attr('src', user.img);
-                // $('ul#side-menu .profile_name').text(result.username);
-                // $('ul#side-menu .profile_role').text(result.rolename);
+                $('.s-profile .sp-info span').text(result.rolename+' '+result.relname + '，你好！');
             }, 'json');
         }
 
