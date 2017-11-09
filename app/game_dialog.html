@@ -1,0 +1,87 @@
+<!-- 个人资料 -->
+<div id="gameDialog" class="x_dialog">
+    <form>
+        <input type="hidden" name="gameid" value="">
+        <fieldset>
+            <legend>
+                游戏类型
+            </legend>
+            <div class="radio">
+                <div class="radio radio-inline radio-primary">
+                    <input id="r-ico" type="radio" name="category" value="0" checked>
+                    <label for="r-ico">图标</label>
+                </div>
+                <div class="radio radio-inline radio-primary">
+                    <input id="r-btn" type="radio" name="category" value="1">
+                    <label for="r-btn">按钮</label>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset hidden class="x-t-btn">
+            <legend>
+                按钮类型
+            </legend>
+            <div class="radio">
+                <div class="radio radio-inline radio-info">
+                    <input id="r-btn2" type="radio" name="showtype" value="0" checked>
+                    <label for="r-btn2">普通按钮</label>
+                </div>
+                <div class="radio radio-inline radio-info">
+                    <input id="r-png" type="radio" name="showtype" value="1">
+                    <label for="r-png">图片按钮</label>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="x-t-ico">
+            <legend>
+                启动模式
+            </legend>
+            <div class="radio">
+                <div class="radio radio-inline radio-info">
+                    <input id="r-run1" type="radio" name="runtype" value="0" checked>
+                    <label for="r-run1">加速</label>
+                </div>
+                <div class="radio radio-inline radio-info">
+                    <input id="r-run2" type="radio" name="runtype" value="1">
+                    <label for="r-run2">直接</label>
+                </div>
+            </div>
+        </fieldset>
+        <div class="form-group">
+            <label for="gamename">标题(游戏名称)</label>
+            <input id="gamename" type="text" name="gamename" class="form-control">
+        </div>
+        <div class="form-group x-t-ico">
+            <label for="namedes">副标题</label>
+            <input id="namedes" type="text" name="namedes" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="classname">游戏分类</label>
+            <input id="classname" type="text" name="classname" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="searname">游戏目录</label>
+            <input id="searname" type="text" name="searname" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="mainexe">执行文件</label>
+            <input id="mainexe" type="text" name="mainexe" class="form-control">
+        </div>
+        <div class="form-group x-t-ico">
+            <label for="offstarterpath">官方启动相对目录</label>
+            <input id="offstarterpath" type="text" name="offstarterpath" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="url">链接</label>
+            <input id="url" type="text" name="url" class="form-control">
+        </div>
+        <div id="x-uploader" class="x-uploader-main x-t-ico x-t-pngbtn">
+            <!--用来存放item-->
+            <div id="x-fileList" class="uploader-list"></div>
+            <div class="bts">
+                <div id="x-picker" class="x-picker-btn">选择图片</div>
+                <div id="x-upload" class="btn btn-default">开始上传</div>
+            </div>
+        </div>
+    </form>
+</div>

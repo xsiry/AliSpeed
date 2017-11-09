@@ -8,7 +8,7 @@ seajs.use("x-upload/x-upload.css");
 // 图片上传
 define(function(require, exports, module) {
     let $ = require('jquery');
-
+    let $list;
     module.exports = {
         init: function (option) {
             option = option || {};
@@ -20,7 +20,7 @@ define(function(require, exports, module) {
     };
 
     function uploader(option) {
-        let $list = $(option.list_block);   //图片预览列表
+        $list = $(option.list_block);   //图片预览列表
         let $upload = $(option.upload_btn);   //开始上传
         let thumbnailWidth = 100;   //缩略图高度和宽度 （单位是像素），当宽高度是0~1的时候，是按照百分比计算，具体可以看api文档
         let thumbnailHeight = 100;
@@ -133,6 +133,16 @@ define(function(require, exports, module) {
         });
     }
 
-    function addFilePreview(list_block, urls) {
+    function addFilePreview(urls) {
+        $.each(urls, function(i, u) {
+            let $li = $(
+                '<div class="file-item thumbnail">' +
+                '<img src="'+ u +'" />' +
+                '<div class="info">已上传(重传删除)</div>' +
+                '</div>'
+                );
+            // $list为容器
+            $list.append($li);
+        })
     }
 });

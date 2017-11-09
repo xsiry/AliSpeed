@@ -12,25 +12,26 @@ define(function(require, exports, module) {
 
     require('select2');
     // require('select2_zh_CN');
+    require('webuploader');
 
-    let self_ = $('.game_menu');
+    let self_ = $('.game');
     let $table = self_.find('#table');
 
-    let url = '/game_menu',
-        table = 't_game_menu',
-        source_id = 'game_menu_id',
-        row_name = 'menuname',
-        sort_name = 'level',
+    let url = '/game',
+        table = 't_game',
+        source_id = 'gameid',
+        row_name = 'gamename',
+        sort_name = 'gamename',
         sort_order = 'asc',
         validationInput = {
-            menuname: {
+            gamename: {
                 validators: {
                     notEmpty: {
                         message: '该项不能为空'
                     }
                 }
             },
-            level: {
+            url: {
                 validators: {
                     notEmpty: {
                         message: '该项不能为空'
@@ -102,20 +103,38 @@ define(function(require, exports, module) {
             onOpen: function () {
                 let self = this;
                 setTimeout(function () {
-                    // select2初始化
-                    initSelect();
+                    // 上传插件初始化
+                    uploadFile([]);
 
-                    // 添加单选事件
+                    // 添加游戏类型单选事件
+                    self.$content.on('click', 'input[name="category"]', function() {
+                        if ($(this).val() === "1") {
+                            self.$content.find('.x-t-ico').hide();
+                            self.$content.find('.x-t-btn').show();
+                        } else {
+                            self.$content.find('.x-t-btn').hide();
+                            self.$content.find('.x-t-ico').show();
+                        }
+                    });
+
+                    // 添加按钮类型单选事件
                     self.$content.on('click', 'input[name="showtype"]', function() {
-                        $(this).val() === "1"? self.$content.find('.x-url').show():self.$content.find('.x-url').hide();
+                        if ($(this).val() === "1") {
+                            self.$content.find('.x-t-pngbtn').show();
+                        } else {
+                            self.$content.find('.x-t-pngbtn').hide();
+                        }
                     });
 
                     $.each(row, function (key, val) {
-                        if (key === 'showtype') {
+                        if (key === 'category'||key === 'showtype'||key === 'runtype') {
                             self.$content.find('input[name="' + key + '"][value="'+ val +'"]').trigger('click');
                         }else{
                             self.$content.find('label[for="' + key + '"]').addClass('active');
                             self.$content.find('input[name="' + key + '"]').val(val)
+                        }
+                        if (key === 'pngname') {
+                            uploadFile(val.split(';'))
                         }
                     });
 
@@ -133,9 +152,28 @@ define(function(require, exports, module) {
                             params[o.name] = o.value;
                         });
 
-                        params['level'] = parseInt(params['parentid'].split('-')[1])+1;
-                        params['parentid'] = params['parentid'].split('-')[0];
+                        if (params['category'] === "0") {
+                            delete params['showtype'];
+                        } else {
+                            delete params['runtype'];
+                            delete params['namedes'];
+                            delete params['offstarterpath'];
+                        }
 
+                        if ((params['category'] === "0" || params['showtype'] === "1") && !params['pngname']) {
+                            $.alert({
+                                title: '提示',
+                                content: '请先选择或上传图片!',
+                                confirm: {
+                                    text: '确认',
+                                    btnClass: 'waves-effect btn-primary'
+                                }
+                            });
+                            $(self.$$confirm[0]).prop("disabled", false);
+                            return;
+                        } else {
+                            delete params['pngname'];
+                        }
 
                         $.post(url , params, function (result) {
                             let msg;
@@ -164,20 +202,32 @@ define(function(require, exports, module) {
 
     function initSelect() {
         $.getJSON(url + '/leveSelect', {}, function(json) {
-            let arr = [{id: '0-0', text: 'root'}];
-            for (let i = 0; i < json.length; i ++) {
-                let data = {};
-                data.id = json[i].id + '-' + json[i].level;
-                data.text = json[i].text;
-                arr.push(data);
-            }
-            $('#parent').empty().append("<option></option>");
-            $("select#parent").select2({
+            $('#game_menu').empty().append("<option></option>");
+            $("select#game_menu").select2({
                 language: 'zh-CN',
-                placeholder: '请选择上级菜单',
-                data : arr
+                placeholder: '请选择上架菜单',
+                data : json
             });
         });
+    }
+
+    // 上传初始化
+    function uploadFile(urls) {
+        let option = {
+            url: '/file/upload/game',
+            field: 'pngname',
+            upload_main: '#x-uploader',
+            list_block: '#x-fileList',
+            upload_btn: '#x-upload',
+            pick_btn: '#x-picker'
+        };
+        let upload = require('upload');
+        if (urls.length > 0){
+            upload._addFilePreview(urls);
+        } else {
+            upload.init(option)
+        }
+
     }
 
     // 删除
@@ -309,8 +359,91 @@ define(function(require, exports, module) {
         },
         'click .remove': function(e, value, row, index) {
             deleteAction(row);
+        },
+        'click .apply': function(e, value, row, index) {
+            updateStatus(row);
         }
     };
+
+    window.pngnameEvents = {
+        'mouseover .x-pre-img-btn': function(e, value, row, index) {
+            $(this).parent().find('.x-pre-img').show();
+            if (index < 5) $(this).parent().find('.x-pre-img').css({bottom:'-145px', top: '0'});
+        },
+        'mouseout .x-pre-img-btn': function(e, value, row, index) {
+            $(this).parent().find('.x-pre-img').hide();
+        }
+    };
+
+    function updateStatus(row) {
+        let select = '<div style="margin-bottom: 15px;"><select id="game_menu" name="game_menu_id" style="width: 250px;"></select></div>';
+
+        $.confirm({
+            type: row.status === "0"? 'green': 'red',
+            animationSpeed: 300,
+            title: "是否确认"+ (row.status === "0"? '上架': '下架'),
+            // autoClose: 'cancel|10000',
+            content: ((row.category=== "0"&&row.status === "0")? select : ""),
+            buttons: {
+                confirm: {
+                    text: '确认',
+                    btnClass: 'waves-effect waves-button',
+                    action: function() {
+                        let self = this;
+                        let params = {
+                            gameid: row.gameid,
+                            status: row.status === "0"?"1":"0"
+                        };
+
+                        if (row.category === "0") {
+                            let gmid = self.$content.find('select[name="game_menu_id"]').val();
+                            if (gmid) {
+                                params['game_menu_id'] = gmid
+                            } else {
+                                if (row.status === "0") {
+                                    $.alert({
+                                        title: '提示',
+                                        content: '请先选择上架的菜单!',
+                                        confirm: {
+                                            text: '确认',
+                                            btnClass: 'waves-effect btn-primary'
+                                        }
+                                    });
+                                    return false;
+                                }
+                            }
+                        }
+
+                        $.post(url, params, function(result) {
+                            let msg;
+                            toastr.options = {
+                                closeButton: true,
+                                progressBar: true,
+                                showMethod: 'slideDown',
+                                timeOut: 4000
+                            };
+                            if (result.success) {
+                                msg = result.msg;
+                                toastr.success(msg);
+                                $table.bootstrapTable('refresh', {});
+                            } else {
+                                msg = result.msg;
+                                toastr.error(msg);
+                            }
+                        }, 'json');
+                    }
+                },
+                cancel: {
+                    text: '取消',
+                    btnClass: 'waves-effect waves-button'
+                }
+            },
+            onOpen: function () {
+                // select2初始化
+                initSelect();
+            }
+        });
+    }
 
     // 动态高度
     function getHeight() {
