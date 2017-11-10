@@ -28,7 +28,8 @@ body:before{height:50%;width:100%;position:absolute;top:0;left:0;background:#29a
 #login-window .has-success .form-control {border-bottom:1px solid #e0e0e0;-webkit-box-shadow: none;box-shadow: none;}
 #login-window .has-success .form-control:focus {border-bottom:1px solid #e0e0e0;-webkit-box-shadow: none;box-shadow: none;}
 
-.register_btn {position: absolute;right: 5px;color: #131ddc;top: 5px;font-size: 16px;text-decoration: underline;}
+.register_btn {position: absolute;right: 0;color: #428bca;top: 1px;font-size: 13px;font-weight: 400;}
+.register_btn:hover {border-bottom: 1px solid #428bca;}
 
 /* input */
 .jconfirm-content form{margin-top: 10px;}

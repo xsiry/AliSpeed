@@ -265,3 +265,13 @@ body .jconfirm{z-index: 999;}
 .form-group .form-control:focus{box-shadow: none; border-color: #337ab7;}
 
 .x_dialog .has-feedback label~.form-control-feedback { top: 0;}
+
+.x-relogin {
+    color: chartreuse;
+    text-decoration: underline;
+}
+
+.x-relogin:hover {
+    color: #489000;
+    text-decoration: none;
+}

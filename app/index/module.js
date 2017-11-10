@@ -9,6 +9,8 @@ define(function (require, exports, module) {
     $.index_ = $(document);
 
     require('device');
+    require('fullPage');
+    require('jdirk');
     require.async('toastr');
 
     let accountModule = require('./module_account');
@@ -78,23 +80,12 @@ define(function (require, exports, module) {
             });
             // 个人资料
             $.index_.on('click', '.s-profile a', function () {
-                $(this).next().slideToggle(200);
-                $(this).parent().toggleClass('toggled');
-            });
-
-            // 切换系统
-            $.index_.on('click', '.switch-systems', function () {
-                let systemid = $(this).attr('systemid');
-                let systemname = $(this).attr('systemname');
-                let systemtitle = $(this).attr('systemtitle');
-                $('.system_menus').hide(0, function () {
-                    $('.system_' + systemid).show();
-                });
-                $('body').attr("id", systemname);
-                $('#system_title').text(systemtitle);
-                $.cookie('admin-systemid', systemid);
-                $.cookie('admin-systemname', systemname);
-                $.cookie('admin-systemtitle', systemtitle);
+                if ($(this).find('.x-relogin').length === 1) {
+                    location.href = 'login_.html';
+                }else {
+                    $(this).next().slideToggle(200);
+                    $(this).parent().toggleClass('toggled');
+                }
             });
 
             $(window).resize(function () {
@@ -127,7 +118,46 @@ define(function (require, exports, module) {
             $.index_.on('click', '.x-menu', function () {
                 let title = $(this).data('title');
                 let url = $(this).data('url');
-                if (title && url && url != '#') addTab(title, url);
+                if (title && url && url !=='#') addTab(title, url);
+            });
+
+            $.index_.on('click', '.x-dropbox-tooltip', function() {
+                $.confirm({
+                    type: 'red',
+                    theme: 'black',
+                    animationSpeed: 300,
+                    title: false,
+                    autoClose: 'cancel|10000',
+                    content: '确认打包吗？',
+                    buttons: {
+                        confirm: {
+                            text: '确认',
+                            btnClass: 'waves-effect waves-button',
+                            action: function() {
+                                $.post('/open/release/zip', {}, function(result) {
+                                    let msg;
+                                    toastr.options = {
+                                        closeButton: true,
+                                        progressBar: true,
+                                        showMethod: 'slideDown',
+                                        timeOut: 4000
+                                    };
+                                    if (result.success) {
+                                        msg = result.msg;
+                                        toastr.success(msg);
+                                    } else {
+                                        msg = result.msg;
+                                        toastr.error(msg);
+                                    }
+                                }, 'json');
+                            }
+                        },
+                        cancel: {
+                            text: '取消',
+                            btnClass: 'waves-effect waves-button'
+                        }
+                    }
+                });
             });
 
             // 选项卡点击
@@ -180,6 +210,7 @@ define(function (require, exports, module) {
             }, 1000);
         },
         _setProfile: function () {
+            $('.x-dropbox-tooltip').tooltip();
             $.get('/user/info', {}, function (result) {
                 $('.s-profile .sp-info span').text(result.rolename+' '+result.relname + '，你好！');
             }, 'json');

@@ -55,7 +55,7 @@ define(function (require, exports, module) {
                 }
             });
             // bind register_btn
-            $('body').on("click", '.register_btn', function() {
+            $('body').on("click", '.register_btn', function () {
                 accountModule._register();
             })
         }
@@ -137,10 +137,10 @@ define(function (require, exports, module) {
     function checkCookie() {
         require('cookie');
 
-        // 记住密码选中时，记住账号则自动选中 反之
-        $("#rmbPassWord").click(function () {
-            $("#rmbPassWord").is(':checked') === true ? $("#rmbUser").prop("checked", 'true') : $("#rmbUser").prop("checked", false);
-        });
+        // // 记住密码选中时，记住账号则自动选中 反之
+        // $("#rmbPassWord").click(function () {
+        //     $("#rmbPassWord").is(':checked') === true ? $("#rmbUser").prop("checked", 'true') : $("#rmbUser").prop("checked", false);
+        // });
 
         //初始化页面时验证是否记住了帐号
         if ($.cookie("rmbUser") === "true") {
@@ -149,11 +149,11 @@ define(function (require, exports, module) {
         }
         ;
 
-        //初始化页面时验证是否记住了密码
-        if ($.cookie("rmbPassWord") === "true") {
-            $("#rmbPassWord").prop("checked", true);
-            $("#password").val($.cookie("passWord"));
-        }
+        // //初始化页面时验证是否记住了密码
+        // if ($.cookie("rmbPassWord") === "true") {
+        //     $("#rmbPassWord").prop("checked", true);
+        //     $("#password").val($.cookie("passWord"));
+        // }
         ;
     };
 

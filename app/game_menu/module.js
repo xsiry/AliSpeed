@@ -165,7 +165,6 @@ define(function(require, exports, module) {
     }
 
     function initSelect(val) {
-        console.log(val)
         $.getJSON(url + '/leveSelect', {}, function(json) {
             let arr = [{id: '0-0', text: 'root'}];
             for (let i = 0; i < json.length; i ++) {
