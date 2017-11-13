@@ -6,13 +6,13 @@
  */
 
 define(function (require, exports, module) {
-    let $ = require('jquery');
+    var $ = require('jquery');
     require('bootstrap');
 
-    let accountModule = require('../index/module_account');
+    var accountModule = require('../index/module_account');
 
-    let login_ = $('#login-window');
-    let url = "/user/login";
+    var login_ = $('#login-window');
+    var url = "/user/login";
 
     module.exports = {
         init: function () {
@@ -107,10 +107,10 @@ define(function (require, exports, module) {
             e.preventDefault();
 
             // Get the form instance
-            let $form = $(e.target);
+            var $form = $(e.target);
 
             // Get the FormValidation instance
-            let bv = $form.data('formValidation');
+            var bv = $form.data('formValidation');
 
             // Use Ajax to submit form data
             $.post(url, $form.serialize(), function (result) {
@@ -161,8 +161,8 @@ define(function (require, exports, module) {
     function saveUserInfo() {
         // 保存帐号和密码
         if ($("#rmbUser").is(':checked') === true && $("#rmbPassWord").is(':checked') === true) {
-            let userName = $("#username").val();
-            let passWord = $("#password").val();
+            var userName = $("#username").val();
+            var passWord = $("#password").val();
 
             $.cookie("rmbUser", "true", {expires: 7});
             $.cookie("rmbPassWord", "true", {expires: 7});
@@ -171,7 +171,7 @@ define(function (require, exports, module) {
 
             // 只保存帐号
         } else if ($("#rmbUser").is(':checked') === true) {
-            let username = $("#username").val();
+            var username = $("#username").val();
 
             $.cookie("rmbUser", "true", {expires: 7});
             $.cookie("userName", username, {expires: 7});

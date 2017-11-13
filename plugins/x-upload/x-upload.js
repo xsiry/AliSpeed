@@ -7,8 +7,8 @@
 seajs.use("x-upload/x-upload.css");
 // 图片上传
 define(function(require, exports, module) {
-    let $ = require('jquery');
-    let $list;
+    var $ = require('jquery');
+    var $list;
     module.exports = {
         init: function (option) {
             option = option || {};
@@ -21,11 +21,11 @@ define(function(require, exports, module) {
 
     function uploader(option) {
         $list = $(option.list_block);   //图片预览列表
-        let $upload = $(option.upload_btn);   //开始上传
-        let thumbnailWidth = 100;   //缩略图高度和宽度 （单位是像素），当宽高度是0~1的时候，是按照百分比计算，具体可以看api文档
-        let thumbnailHeight = 100;
+        var $upload = $(option.upload_btn);   //开始上传
+        var thumbnailWidth = 100;   //缩略图高度和宽度 （单位是像素），当宽高度是0~1的时候，是按照百分比计算，具体可以看api文档
+        var thumbnailHeight = 100;
         // 初始化Web Uploader
-        let uploader = WebUploader.create({
+        var uploader = WebUploader.create({
 
             // 选完文件后，是否自动上传。
             auto: false,
@@ -59,8 +59,8 @@ define(function(require, exports, module) {
 
         // 当有文件添加进来的时候
         uploader.on('fileQueued', function (file) {
-            let $li = $(
-                '<div id="' + file.id + '" class="file-item thumbnail"><a data-fileid="' + file.id + '" href="javascript:;" class="remove-this">X</a>' +
+            var $li = $(
+                '<div id="' + file.id + '" class="x-upload-num file-item thumbnail"><a data-fileid="' + file.id + '" href="javascript:;" class="remove-this">X</a>' +
                 '<img>' +
                 '<div class="info">' + file.name + '</div>' +
                 '</div>'
@@ -89,7 +89,7 @@ define(function(require, exports, module) {
 
         // 文件上传过程中创建进度条实时显示。
         uploader.on('uploadProgress', function (file, percentage) {
-            let $li = $('#' + file.id),
+            var $li = $('#' + file.id),
                 $percent = $li.find('.progress span');
 
             // 避免重复创建
@@ -106,16 +106,16 @@ define(function(require, exports, module) {
         uploader.on('uploadSuccess', function (file, result) {
             $('#' + file.id).addClass('upload-state-done');
             if (result.success) {
-                let url = result.result.join(';');
-                let main = $(option.upload_main);
-                let inputUrl = main.find('input[name="'+option.field+'"]');
+                var url = result.result.join(';');
+                var main = $(option.upload_main);
+                var inputUrl = main.find('input[name="'+option.field+'"]');
                 inputUrl.length>0? inputUrl.val(url): $('<input type="hidden" name='+option.field+' value="'+ url +'">').appendTo(main);
             }
         });
 
         // 文件上传失败，显示上传出错。
         uploader.on('uploadError', function (file) {
-            let $li = $('#' + file.id),
+            var $li = $('#' + file.id),
                 $error = $li.find('div.error');
 
             // 避免重复创建
@@ -135,7 +135,7 @@ define(function(require, exports, module) {
 
     function addFilePreview(urls) {
         $.each(urls, function(i, u) {
-            let $li = $(
+            var $li = $(
                 '<div class="file-item thumbnail">' +
                 '<img src="'+ u +'" />' +
                 '<div class="info">已上传(重传删除)</div>' +

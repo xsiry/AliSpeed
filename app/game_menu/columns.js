@@ -27,6 +27,7 @@ function showtypeFormatter(value, row, index) {
 // 数据表格展开内容
 function detailFormatter(index, row) {
     let parentid = row.game_menu_id;
+
     let cloumns = [
         { field: 'menuname', title: '菜单名称', sortable: true, halign: 'center' },
         { field: 'level', title: '菜单级别', sortable: true, halign: 'center', formatter: levelFormatter  },
@@ -52,7 +53,7 @@ function detailFormatter(index, row) {
             return x_params;
         },
         idField: 'game_menu_id',
-        sortName: 'menuname',
+        sortName: 'menuorder',
         sortOrder: 'asc',
         pageNumber:1,      //初始化加载第一页，默认第一页
         pageList: [10, 25, 50, 100],  //可供选择的每页的行数（*）

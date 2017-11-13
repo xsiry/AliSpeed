@@ -5,7 +5,7 @@
  * Time: 14:53
  */
 define(function (require, exports, module) {
-    let $ = require('jquery');
+    var $ = require('jquery');
     $.index_ = $(document);
 
     require('device');
@@ -13,12 +13,12 @@ define(function (require, exports, module) {
     require('jdirk');
     require.async('toastr');
 
-    let accountModule = require('./module_account');
+    var accountModule = require('./module_account');
 
-    let menuModule = require('./module_menu');
+    var menuModule = require('./module_menu');
     menuModule.init($.index_);
 
-    let click = device.mobile() ? 'touchstart' : 'click';
+    var click = device.mobile() ? 'touchstart' : 'click';
 
     module.exports = {
         init: function () {
@@ -40,9 +40,9 @@ define(function (require, exports, module) {
 
             // 显示cookie菜单
             require('cookie');
-            let systemid = $.cookie('admin-systemid') || 1;
-            let systemname = $.cookie('admin-systemname') || 'admin-server';
-            let systemtitle = $.cookie('admin-systemtitle') || '阿里体育竞技后台';
+            var systemid = $.cookie('admin-systemid') || 1;
+            var systemname = $.cookie('admin-systemname') || 'admin-server';
+            var systemtitle = $.cookie('admin-systemtitle') || '阿里体育竞技后台';
             $('.system_menus').hide(0, function () {
                 $('.system_' + systemid).show();
             });
@@ -116,8 +116,8 @@ define(function (require, exports, module) {
 
             // 菜单点击
             $.index_.on('click', '.x-menu', function () {
-                let title = $(this).data('title');
-                let url = $(this).data('url');
+                var title = $(this).data('title');
+                var url = $(this).data('url');
                 if (title && url && url !=='#') addTab(title, url);
             });
 
@@ -135,7 +135,7 @@ define(function (require, exports, module) {
                             btnClass: 'waves-effect waves-button',
                             action: function() {
                                 $.post('/open/release/zip', {}, function(result) {
-                                    let msg;
+                                    var msg;
                                     toastr.options = {
                                         closeButton: true,
                                         progressBar: true,
@@ -168,17 +168,17 @@ define(function (require, exports, module) {
                 // 切换iframe
                 $('.iframe').removeClass('cur');
                 $('#iframe_' + $(this).data('index')).addClass('cur');
-                let marginLeft = ($('#tabs').css('marginLeft').replace('px', ''));
+                var marginLeft = ($('#tabs').css('marginLeft').replace('px', ''));
                 // 滚动到可视区域:在左侧
                 if ($(this).position().left < marginLeft) {
-                    let left = $('.content_tab>ul').scrollLeft() + $(this).position().left - marginLeft;
+                    var left = $('.content_tab>ul').scrollLeft() + $(this).position().left - marginLeft;
                     $('.content_tab>ul').animate({scrollLeft: left}, 200, function () {
                         initScrollState();
                     });
                 }
                 // 滚动到可视区域:在右侧
                 if (($(this).position().left + $(this).width() - marginLeft) > document.getElementById('tabs').clientWidth) {
-                    let left = $('.content_tab>ul').scrollLeft() + (($(this).position().left + $(this).width() - marginLeft) - document.getElementById('tabs').clientWidth);
+                    var left = $('.content_tab>ul').scrollLeft() + (($(this).position().left + $(this).width() - marginLeft) - document.getElementById('tabs').clientWidth);
                     $('.content_tab>ul').animate({scrollLeft: left}, 200, function () {
                         initScrollState();
                     });
@@ -261,17 +261,17 @@ define(function (require, exports, module) {
 
     function addTab(title, url) {
         console.log("Open Tab:=" + url);
-        let x_content_height = document.documentElement.clientHeight - 118;
-        let index = url.replace(/\./g, '_').replace(/\//g, '_').replace(/:/g, '_').replace(/\?/g, '_').replace(/,/g, '_').replace(/=/g, '_').replace(/&/g, '_');
+        var x_content_height = document.documentElement.clientHeight - 118;
+        var index = url.replace(/\./g, '_').replace(/\//g, '_').replace(/:/g, '_').replace(/\?/g, '_').replace(/,/g, '_').replace(/=/g, '_').replace(/&/g, '_');
         // 如果存在选项卡，则激活，否则创建新选项卡
         if ($('#tab_' + index).length == 0) {
             // 添加选项卡
             $('.content_tab li').removeClass('cur');
-            let tab = '<li id="tab_' + index + '" data-index="' + index + '" class="cur"><a class="waves-effect waves-light">' + title + '</a></li>'; //<i class="zmdi zmdi-close"></i><
+            var tab = '<li id="tab_' + index + '" data-index="' + index + '" class="cur"><a class="waves-effect waves-light">' + title + '</a></li>'; //<i class="zmdi zmdi-close"></i><
             $('.content_tab>ul').append(tab);
             // 添加iframe
             $('.iframe').removeClass('cur');
-            let iframe = '<div id="iframe_' + index + '" class="iframe cur"><div data-url="' + url + '" class="tab_iframe x-content" style="height:' + x_content_height + 'px;"></div></div>';
+            var iframe = '<div id="iframe_' + index + '" class="iframe cur"><div data-url="' + url + '" class="tab_iframe x-content" style="height:' + x_content_height + 'px;"></div></div>';
             $('.content_main').append(iframe);
             loadURL(url, index);
             initScrollShow();
@@ -286,14 +286,14 @@ define(function (require, exports, module) {
     }
 
     function closeTab($item) {
-        let closeable = $item.data('closeable');
+        var closeable = $item.data('closeable');
         if (closeable != false) {
             // 如果当前时激活状态则关闭后激活左边选项卡
             if ($item.hasClass('cur')) {
                 $item.prev().trigger('click');
             }
             // 关闭当前选项卡
-            let index = $item.data('index');
+            var index = $item.data('index');
             $('#iframe_' + index).remove();
             $item.remove();
         }
@@ -302,7 +302,7 @@ define(function (require, exports, module) {
 
     // 选项卡右键菜单
     require('BootstrapMenu');
-    let menu = new BootstrapMenu('.tabs li', {
+    var menu = new BootstrapMenu('.tabs li', {
         fetchElementData: function (item) {
             return item;
         },
@@ -323,7 +323,7 @@ define(function (require, exports, module) {
                 name: '关闭其他',
                 iconClass: 'zmdi zmdi-arrow-split',
                 onClick: function (item) {
-                    let index = $(item).data('index');
+                    var index = $(item).data('index');
                     $('.content_tab li').each(function () {
                         if ($(this).data('index') != index) {
                             Tab.closeTab($(this));
@@ -344,7 +344,7 @@ define(function (require, exports, module) {
                 name: '关闭右侧所有',
                 iconClass: 'zmdi zmdi-arrow-right',
                 onClick: function (item) {
-                    let index = $(item).data('index');
+                    var index = $(item).data('index');
                     $($('.content_tab li').toArray().reverse()).each(function () {
                         if ($(this).data('index') != index) {
                             closeTab($(this));
@@ -358,7 +358,7 @@ define(function (require, exports, module) {
                 name: '关闭左侧所有',
                 iconClass: 'zmdi zmdi-arrow-left',
                 onClick: function (item) {
-                    let index = $(item).data('index');
+                    var index = $(item).data('index');
                     $('.content_tab li').each(function () {
                         if ($(this).data('index') != index) {
                             closeTab($(this));
@@ -372,8 +372,8 @@ define(function (require, exports, module) {
                 name: '刷新',
                 iconClass: 'zmdi zmdi-refresh',
                 onClick: function (item) {
-                    let index = $(item).data('index');
-                    let $iframe = $('#iframe_' + index).find('.x-content');
+                    var index = $(item).data('index');
+                    var $iframe = $('#iframe_' + index).find('.x-content');
                     loadURL($iframe.data('url'), index);
                 }
             }
@@ -382,7 +382,7 @@ define(function (require, exports, module) {
 
 
     function loadURL(url, index) {
-        let b = $('#iframe_' + index + ' .x-content');
+        var b = $('#iframe_' + index + ' .x-content');
         // return
         $.ajax({
             "type": "GET",
@@ -423,18 +423,18 @@ define(function (require, exports, module) {
             return s < 10 ? '0' + s : s;
         }
 
-        let myDate = new Date();
+        var myDate = new Date();
         //获取当前年
-        let year = myDate.getFullYear();
+        var year = myDate.getFullYear();
         //获取当前月
-        let month = myDate.getMonth() + 1;
+        var month = myDate.getMonth() + 1;
         //获取当前日
-        let date = myDate.getDate();
-        let h = myDate.getHours(); //获取当前小时数(0-23)
-        let m = myDate.getMinutes(); //获取当前分钟数(0-59)
-        let s = myDate.getSeconds();
+        var date = myDate.getDate();
+        var h = myDate.getHours(); //获取当前小时数(0-23)
+        var m = myDate.getMinutes(); //获取当前分钟数(0-59)
+        var s = myDate.getSeconds();
 
-        let now = [year, p(month), p(date)].join('-') + " " + [p(h), p(m), p(s)].join(':');
+        var now = [year, p(month), p(date)].join('-') + " " + [p(h), p(m), p(s)].join(':');
         return now;
     }
 })

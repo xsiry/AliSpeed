@@ -76,7 +76,7 @@ define(function(require, exports, module) {
                 })
             });
         },
-        _loadMain() {
+        _loadMain: function() {
             bsTable();
             $('select').select2();
         }
@@ -138,7 +138,8 @@ define(function(require, exports, module) {
                             self.$content.find('input[name="' + key + '"]').val(val)
                         }
                         if (key === 'pngname') {
-                            uploadFile(val.split(';'))
+                            uploadFile(val.split(';'));
+                            $('#x-picker').focus();
                         }
                     });
 
@@ -164,7 +165,7 @@ define(function(require, exports, module) {
                             delete params['offstarterpath'];
                         }
 
-                        if ((params['category'] === "0" || params['showtype'] === "1") && !params['pngname']) {
+                        if ((params['category'] === "0" || params['showtype'] === "1") && self.$content.find('.x-upload-num').length !== 0 && !params['pngname']) {
                             $.alert({
                                 title: '提示',
                                 content: '请先选择或上传图片!',
@@ -175,8 +176,10 @@ define(function(require, exports, module) {
                             });
                             $(self.$$confirm[0]).prop("disabled", false);
                             return;
-                        } else {
-                            delete params['pngname'];
+                        }
+
+                        if (params['category'] === "1" && params['showtype'] === "0") {
+                            params['pngname'] = 'NULL';
                         }
 
                         $.post(url , params, function (result) {
@@ -420,6 +423,8 @@ define(function(require, exports, module) {
                                 }
                             }
                         }
+
+                        if (row.status === "1") params['game_menu_id'] = 0;
 
                         $.post(url, params, function(result) {
                             let msg;

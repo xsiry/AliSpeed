@@ -85,7 +85,7 @@ define(function(require, exports, module) {
                 })
             });
         },
-        _loadMain() {
+        _loadMain: function() {
             bsTable();
         }
     };

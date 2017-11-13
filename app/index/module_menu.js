@@ -5,7 +5,7 @@
  * Time: 16:39
  */
 define(function (require, exports, module) {
-    let menus = [];
+    var menus = [];
     module.exports = {
         init: function (root) {
             this.root = root;
@@ -15,14 +15,14 @@ define(function (require, exports, module) {
             return menuMap(data);
         },
         _menusAjax: function () {
-            let self = this;
+            var self = this;
             $.get('/menu/userMenus', {}, function (result) {
                 menus = self._menuMap(result.Rows);
                 self._menusGenerate();
             }, 'json')
         },
         _menusGenerate: function () {
-            let lis = menus.join('');
+            var lis = menus.join('');
             this.root.find('.x-menus').prepend(lis);
         },
     };
@@ -34,7 +34,7 @@ define(function (require, exports, module) {
     }
 
     function rootMenu(menu) {
-        let m = "<li class=" + (menu.children.length > 0 ? 'sub-menu system_menus' : '') + ">";
+        var m = "<li class=" + (menu.children.length > 0 ? 'sub-menu system_menus' : '') + ">";
         m += "<a class='waves-effect x-menu' href='javascript:;' data-url=" + menu.href + " data-title=" + menu.name + ">";
         m += menu.level === 1 ? ("<i class='" + menu.icon + "'></i>" + menu.name) : menu.name;
 
@@ -48,7 +48,7 @@ define(function (require, exports, module) {
     }
 
     function childMenu(rootMenu) {
-        let child = "</a><ul style='margin-left:" + 5 * rootMenu.level + "px;'>";
+        var child = "</a><ul style='margin-left:" + 5 * rootMenu.level + "px;'>";
         rootMenu.children.map(function (menu) {
             child += "<li class=" + (menu.children.length > 0 ? 'sub-menu system_menus' : '') + ">";
             child += "<a class='waves-effect x-menu'  data-title='" + menu.name + "' data-url=" + menu.href + ">" + menu.name;

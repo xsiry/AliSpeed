@@ -13,8 +13,8 @@ function actionFormatter(value, row, index) {
 
 // 数据表格展开内容
 function detailFormatter(index, row) {
-    let swit = {menuname: true, level:true, menuorder:true, showtype: true, url:true};
-    let html = [];
+    var swit = {menuname: true, level:true, menuorder:true, showtype: true, url:true};
+    var html = [];
     $.each(row, function(key, value) {
         if (swit[key]) html.push('<p><b>' + key + ':</b> ' + value + '</p>');
     });

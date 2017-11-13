@@ -6,21 +6,21 @@
  */
 
 define(function(require, exports, module) {
-    let $ = require('jquery');
+    var $ = require('jquery');
     require('bootstrap');
     require('jquery-confirm');
 
     require('select2');
     // require('select2_zh_CN');
 
-    let self_ = $('.game_menu');
-    let $table = self_.find('#table');
+    var self_ = $('.game_menu');
+    var $table = self_.find('#table');
 
-    let url = '/game_menu',
+    var url = '/game_menu',
         table = 't_game_menu',
         source_id = 'game_menu_id',
         row_name = 'menuname',
-        sort_name = 'menuname',
+        sort_name = 'menuorder',
         sort_order = 'asc',
         validationInput = {
             menuname: {
@@ -71,7 +71,7 @@ define(function(require, exports, module) {
                 })
             });
         },
-        _loadMain() {
+        _loadMain: function() {
             bsTable();
             $('select').select2();
         }
@@ -89,7 +89,7 @@ define(function(require, exports, module) {
                     text: '确认',
                     btnClass: 'waves-effect btn-primary',
                     action: function () {
-                        let self = this;
+                        var self = this;
                         self.$content.find('form').submit();
                         return false;
                     }
@@ -100,7 +100,7 @@ define(function(require, exports, module) {
                 }
             },
             onOpen: function () {
-                let self = this;
+                var self = this;
                 setTimeout(function () {
                     // select2初始化
                     initSelect();
@@ -127,9 +127,9 @@ define(function(require, exports, module) {
                         e.preventDefault();
 
                         // Get the form instance
-                        let $form = $(e.target);
+                        var $form = $(e.target);
 
-                        let params = {};
+                        var params = {};
 
                         $.each($form.serializeArray(), function (i, o) {
                             params[o.name] = o.value;
@@ -140,7 +140,7 @@ define(function(require, exports, module) {
 
 
                         $.post(url , params, function (result) {
-                            let msg;
+                            var msg;
                             toastr.options = {
                                 closeButton: true,
                                 progressBar: true,
@@ -166,15 +166,15 @@ define(function(require, exports, module) {
 
     function initSelect(val) {
         $.getJSON(url + '/leveSelect', {}, function(json) {
-            let arr = [{id: '0-0', text: 'root'}];
-            for (let i = 0; i < json.length; i ++) {
-                let data = {};
+            var arr = [{id: '0-0', text: 'root'}];
+            for (var i = 0; i < json.length; i ++) {
+                var data = {};
                 data.id = json[i].id+'-'+json[i].level;
                 data.text = json[i].text;
                 arr.push(data);
             }
             $('#parent').empty().append("<option></option>");
-            let select = $("select#parent").select2({
+            var select = $("select#parent").select2({
                 language: 'zh-CN',
                 placeholder: '请选择上级菜单',
                 data : arr
@@ -197,7 +197,7 @@ define(function(require, exports, module) {
                     btnClass: 'waves-effect waves-button',
                     action: function() {
                         $.post(url + '/del', { tid: row[source_id], tname: table }, function(result) {
-                            let msg;
+                            var msg;
                             toastr.options = {
                                 closeButton: true,
                                 progressBar: true,
@@ -249,7 +249,7 @@ define(function(require, exports, module) {
         $table.bootstrapTable({
             url: url,
             queryParams: function(params) {
-                let x_params = {};
+                var x_params = {};
                 x_params.source = table;
                 x_params.qhstr = JSON.stringify({
                     qjson: [{parentid: 0}]
@@ -294,12 +294,12 @@ define(function(require, exports, module) {
     }
     // 搜索
     function f_search() {
-        let qjson = {};
+        var qjson = {};
         qjson[self_.find('select[name="searchWhere"]').val()] = self_.find('input[name="searchText"]').val();
-        let qjsonkeytype = {};
+        var qjsonkeytype = {};
         qjsonkeytype[self_.find('select[name="searchWhere"]').val()] = "LIKE_ALL";
 
-        let gridparms = {
+        var gridparms = {
             source: table,
             qhstr: JSON.stringify({
                 qjson: [qjson, {parentid: 0}],

@@ -5,7 +5,7 @@
  * Time: 16:39
  */
 define(function (require, exports, module) {
-    let $ = require('jquery');
+    var $ = require('jquery');
     require('bootstrap');
     require('jquery-confirm');
     require('formValidation');
@@ -30,7 +30,7 @@ define(function (require, exports, module) {
     };
 
     function register() {
-        let title = "用户注册";
+        var title = "用户注册";
         $.confirm({
             type: 'blue',
             animationSpeed: 300,
@@ -41,7 +41,7 @@ define(function (require, exports, module) {
                     text: '确认',
                     btnClass: 'waves-effect waves-button',
                     action: function () {
-                        let self = this;
+                        var self = this;
                         self.$content.find('form').submit();
                         return false;
                     }
@@ -52,7 +52,7 @@ define(function (require, exports, module) {
                 }
             },
             onOpen: function () {
-                let self = this;
+                var self = this;
                 setTimeout(function () {
                     self.$content.find('form').formValidation({
                         autoFocus: true,
@@ -167,16 +167,16 @@ define(function (require, exports, module) {
                         e.preventDefault();
 
                         // Get the form instance
-                        let $form = $(e.target);
+                        var $form = $(e.target);
 
-                        let params = {};
+                        var params = {};
 
                         $.each($form.serializeArray(), function (i, o) {
                             params[o.name] = o.value;
                         });
 
                         $.post('/user/register', params, function (result) {
-                            let msg;
+                            var msg;
                             toastr.options = {
                                 closeButton: true,
                                 progressBar: true,
@@ -201,7 +201,7 @@ define(function (require, exports, module) {
     }
 
     function showAccount() {
-        let title = "个人资料";
+        var title = "个人资料";
         $.get('/user/info', {}, function (result) {
             $.confirm({
                 type: 'dark',
@@ -214,7 +214,7 @@ define(function (require, exports, module) {
                         type: 'submit',
                         btnClass: 'waves-effect waves-button',
                         action: function () {
-                            let self = this;
+                            var self = this;
                             self.$content.find('form').submit();
                             return false;
                         }
@@ -225,7 +225,7 @@ define(function (require, exports, module) {
                     }
                 },
                 onOpen: function () {
-                    let self = this;
+                    var self = this;
                     setTimeout(function (result) {
                         $.each(result, function (key, val) {
                             self.$content.find('label[for="' + key + '"]').addClass('active');
@@ -285,16 +285,16 @@ define(function (require, exports, module) {
                             e.preventDefault();
 
                             // Get the form instance
-                            let $form = $(e.target);
+                            var $form = $(e.target);
 
-                            let params = {};
+                            var params = {};
 
                             $.each($form.serializeArray(), function (i, o) {
                                 params[o.name] = o.value;
                             });
 
                             $.post('/user/info', params, function (result) {
-                                let msg;
+                                var msg;
                                 toastr.options = {
                                     closeButton: true,
                                     progressBar: true,
@@ -321,7 +321,7 @@ define(function (require, exports, module) {
     }
 
     function editPassword() {
-        let title = "密码修改";
+        var title = "密码修改";
         $.confirm({
             type: 'red',
             animationSpeed: 300,
@@ -332,7 +332,7 @@ define(function (require, exports, module) {
                     text: '确认',
                     btnClass: 'waves-effect waves-button',
                     action: function () {
-                        let self = this;
+                        var self = this;
                         self.$content.find('form').submit();
                         return false;
                     }
@@ -343,7 +343,7 @@ define(function (require, exports, module) {
                 }
             },
             onOpen: function () {
-                let self = this;
+                var self = this;
                 setTimeout(function () {
                     self.$content.find('form').formValidation({
                         autoFocus: true,
@@ -423,16 +423,16 @@ define(function (require, exports, module) {
                         e.preventDefault();
 
                         // Get the form instance
-                        let $form = $(e.target);
+                        var $form = $(e.target);
 
-                        let params = {};
+                        var params = {};
 
                         $.each($form.serializeArray(), function (i, o) {
                             params[o.name] = o.value;
                         });
 
                         $.post('/user/epassword', params, function (result) {
-                            let msg;
+                            var msg;
                             toastr.options = {
                                 closeButton: true,
                                 progressBar: true,
@@ -458,7 +458,7 @@ define(function (require, exports, module) {
 
     function logout() {
         $.get('/user/logout', {}, function (result) {
-            let msg;
+            var msg;
             toastr.options = {
                 closeButton: true,
                 progressBar: true,
