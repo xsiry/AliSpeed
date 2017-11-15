@@ -11,9 +11,13 @@ define([
 ]);
 
 function actionFormatter(value, row, index) {
+    var lock = '<a class="lock ml10" href="javascript:void(0)" data-toggle="tooltip" title="lock"><i class="glyphicon glyphicon-lock"></i></a>　';
+    var del = '<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="Remove"><i class="glyphicon glyphicon-remove"></i></a>　';
+    if (row.account === "root") lock = '',del = '';
     return [
+        lock,
         '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>　',
-        '<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="Remove"><i class="glyphicon glyphicon-remove"></i></a>'
+        del
     ].join('');
 }
 

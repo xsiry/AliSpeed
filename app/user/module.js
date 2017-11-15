@@ -224,6 +224,50 @@ define(function(require, exports, module) {
         });
     }
 
+    // 用户禁用启用
+    function lockAction(row) {
+        $.confirm({
+            type: 'blue',
+            animationSpeed: 300,
+            title: false,
+            autoClose: 'cancel|10000',
+            content: '确认'+ (row.status === '1'? '禁用 ':'启用 ') + row[row_name] + '吗？',
+            buttons: {
+                confirm: {
+                    text: '确认',
+                    btnClass: 'waves-effect waves-button',
+                    action: function() {
+                        var params = {
+                            user_id: row.user_id,
+                            status: row.status === '1'?2:1
+                        };
+                        $.post(url+'/set_status', params, function(result) {
+                            var msg;
+                            toastr.options = {
+                                closeButton: true,
+                                progressBar: true,
+                                showMethod: 'slideDown',
+                                timeOut: 4000
+                            };
+                            if (result.success) {
+                                msg = result.msg;
+                                toastr.success(msg);
+                                $table.bootstrapTable('refresh', {});
+                            } else {
+                                msg = result.msg;
+                                toastr.error(msg);
+                            }
+                        }, 'json');
+                    }
+                },
+                cancel: {
+                    text: '取消',
+                    btnClass: 'waves-effect waves-button'
+                }
+            }
+        });
+    }
+
     // 删除
     function deleteAction(row) {
         $.confirm({
@@ -348,8 +392,11 @@ define(function(require, exports, module) {
     }
     // bs表格按钮事件
     window.actionEvents = {
+        'click .lock': function(e, value, row, index) {
+            lockAction(row);
+        },
         'click .edit': function(e, value, row, index) {
-            createAsUpdateAction(row)
+            createAsUpdateAction(row);
         },
         'click .remove': function(e, value, row, index) {
             deleteAction(row);
