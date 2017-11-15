@@ -245,7 +245,6 @@ encodeURIComponent()    decodeURIComponent()
 
     $sHelper.alert  = function(title) {
         $.confirm({
-            type: 'red',
             animationSpeed: 300,
             title: false,
             columnClass: 'col-md-4 col-md-offset-4',
@@ -253,11 +252,12 @@ encodeURIComponent()    decodeURIComponent()
             buttons: {
                 confirm: {
                     text: '确认',
-                    btnClass: 'waves-effect waves-button'
+                    btnClass: 'waves-effect waves-button jconfirm-x-btn'
                 }
             }
         });
     };
+
 
 
 
