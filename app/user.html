@@ -1,0 +1,27 @@
+<link href="../app/user/style.css" rel="stylesheet"/>
+<div id="main" class="user">
+    <div id="toolbar">
+        <a class="waves-effect waves-button create_act" href="javascript:;"><i class="zmdi zmdi-plus"></i> 新增</a>
+        <div class="pull-right">
+            <input type="text" class="form-control" name="searchText" style="height: 28px;margin-top: 5px;" placeholder="搜索">
+        </div>
+        <div class="pull-right">
+            <select name="searchWhere" title="搜索条件" style="width:150px">
+                <option value="account">账号</option>
+            </select>
+        </div>
+    </div>
+    <table id="table"></table>
+</div>
+<script type="text/javascript">
+    seajs.config({
+        base: "/plugins/",
+        alias: {
+            'bootstrap-table': 'bootstrap-table-1.11.0/bootstrap-table.min.js',
+            'bootstrap-table-zh-CN': 'bootstrap-table-1.11.0/locale/bootstrap-table-zh-CN.min.js',
+            'select2': 'select2/js/select2.full.min.js',
+            'select2_zh_CN': 'select2/js/i18n/zh-CN.js'
+        }
+    });
+    seajs.use("./app/user/main");
+</script>
