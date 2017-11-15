@@ -14,7 +14,7 @@ define(function(require, exports, module) {
             option = option || {};
             uploader(option);
         },
-        _addFilePreview(list_block, urls) {
+        _addFilePreview: function(list_block, urls) {
             addFilePreview(list_block, urls)
         }
     };
