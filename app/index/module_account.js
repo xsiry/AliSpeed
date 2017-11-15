@@ -88,7 +88,7 @@ define(function (require, exports, module) {
                             pwd: {
                                 validators: {
                                     notEmpty: {
-                                        message: '新密码不能为空'
+                                        message: '密码不能为空'
                                     },
                                     stringLength: {
                                         min: 3,
@@ -101,7 +101,7 @@ define(function (require, exports, module) {
                                     },
                                     identical: {
                                         field: 'confirm_pwd',
-                                        message: '密码与重复密码不一致'
+                                        message: '密码与验证密码不一致'
 
                                     },
                                 }
@@ -122,7 +122,7 @@ define(function (require, exports, module) {
                                     },
                                     identical: {
                                         field: 'pwd',
-                                        message: '密码与重复密码不一致'
+                                        message: '验证密码与密码不一致'
 
                                     }
                                 }
@@ -411,7 +411,7 @@ define(function (require, exports, module) {
                                     },
                                     identical: {
                                         field: 'new_password',
-                                        message: '新密码与确认密码不一致'
+                                        message: '确认密码与新密码不一致'
 
                                     }
                                 }
