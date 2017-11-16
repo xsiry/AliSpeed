@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>处理中...</title>
+</head>
+<body>
+请稍等，正在处理中...
+</body>
+<script type="text/javascript" src="/plugins/jquery.1.12.4.min.js"></script>
+<script type="text/javascript" src="/plugins/json2.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var id = getParams("id");
+        var acton = getParams("acton");
+        var method = getParams("method");
+        var PARAMS = JSON.parse(decodeURI(getParams("PARAMS")));
+        $("body").append("<form id='"+id+"'  target='_self'></form>");
+        id = '#'+id;
+        $(id).attr("action", acton);
+        $(id).attr("method", method);
+        $(id).css("display", "none");
+        for (var x in PARAMS) {
+            $(id).append("<input type='text' name='"+x+"' value = '"+PARAMS[x]+"'></input>");
+        }
+        $(id).submit();
+    });
+
+    // url传参数变化类别
+    function getParams(fndname) {
+        var url = location.search; //一般的查询
+        var query = url.substr(url.indexOf("?") + 1);
+        var pairs = query.split("&"); //在逗号处断开
+        for (var i = 0; i < pairs.length; i++) {
+            var pos = pairs[i].indexOf('='); //查找name=value
+            if (pos == -1)
+                continue; //如果没有找到就跳过
+            var argname = pairs[i].substring(0, pos); //提取name
+            var value = pairs[i].substring(pos + 1); //提取value
+            if (argname == fndname)
+                return value;
+        }
+    }
+</script>
+</html>
