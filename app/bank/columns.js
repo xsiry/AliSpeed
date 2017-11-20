@@ -15,12 +15,3 @@ function actionFormatter(value, row, index) {
         '<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="Remove"><i class="glyphicon glyphicon-remove"></i></a>'
     ].join('');
 }
-
-// 数据表格展开内容
-function detailFormatter(index, row) {
-    let html = [];
-    $.each(row, function(key, value) {
-        html.push('<p><b>' + key + ':</b> ' + value + '</p>');
-    });
-    return html.join('');
-}

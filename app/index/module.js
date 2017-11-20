@@ -74,12 +74,12 @@ define(function (require, exports, module) {
                 $('#sidebar').toggleClass('toggled');
             });
             // 侧边栏二级菜单
-            $.index_.on('click', '.sub-menu a', function () {
+            $.index_.on(click, '.sub-menu a', function () {
                 $(this).next().slideToggle(200);
                 $(this).parent().toggleClass('toggled');
             });
             // 个人资料
-            $.index_.on('click', '.s-profile a', function () {
+            $.index_.on(click, '.s-profile a', function () {
                 if ($(this).find('.x-relogin').length === 1) {
                     location.href = 'login_.html';
                 }else {
@@ -95,33 +95,39 @@ define(function (require, exports, module) {
             });
 
             // 全屏
-            $.index_.on('click', '.x-fullscreen', function () {
+            $.index_.on(click, '.x-fullscreen', function () {
                 fullPage();
             });
 
             // 个人资料
-            $.index_.on('click', '.x-account', function () {
+            $.index_.on(click, '.x-account', function () {
                 accountModule._showAccount();
             });
 
             // 修改密码
-            $.index_.on('click', '.x-epassword', function () {
+            $.index_.on(click, '.x-epassword', function () {
                 accountModule._editPassword();
             });
 
             // 退出登录
-            $.index_.on('click', '.x-logout', function () {
+            $.index_.on(click, '.x-logout', function () {
                 accountModule._logout();
             });
 
+            // 系统设置
+            $.index_.on(click, '.x-settings', function () {
+                var settingsModule = require('./module_settings');
+                settingsModule._upSettings();
+            });
+
             // 菜单点击
-            $.index_.on('click', '.x-menu', function () {
+            $.index_.on(click, '.x-menu', function () {
                 var title = $(this).data('title');
                 var url = $(this).data('url');
                 if (title && url && url !=='#') addTab(title, url);
             });
 
-            $.index_.on('click', '.x-dropbox-tooltip', function() {
+            $.index_.on(click, '.x-dropbox-tooltip', function() {
                 $.confirm({
                     type: 'red',
                     theme: 'black',
@@ -160,8 +166,49 @@ define(function (require, exports, module) {
                 });
             });
 
+
+            $.index_.on(click, '.x-download-tooltip', function() {
+                $.confirm({
+                    type: 'red',
+                    theme: 'black',
+                    animationSpeed: 300,
+                    title: false,
+                    autoClose: 'cancel|10000',
+                    content: '确认下载推广包吗？',
+                    buttons: {
+                        confirm: {
+                            text: '确认',
+                            btnClass: 'waves-effect waves-button',
+                            action: function() {
+                                $.post('/open/release/agent/zip', {}, function(result) {
+                                    var msg;
+                                    toastr.options = {
+                                        closeButton: true,
+                                        progressBar: true,
+                                        showMethod: 'slideDown',
+                                        timeOut: 4000
+                                    };
+                                    if (result.success) {
+                                        msg = "操作成功，开始下载";
+                                        toastr.success(msg);
+                                        downloadFile(window.location.protocol+"//"+window.location.host + "/" + result.msg)
+                                    } else {
+                                        msg = result.msg;
+                                        toastr.error(msg);
+                                    }
+                                }, 'json');
+                            }
+                        },
+                        cancel: {
+                            text: '取消',
+                            btnClass: 'waves-effect waves-button'
+                        }
+                    }
+                });
+            });
+
             // 选项卡点击
-            $.index_.on('click', '.content_tab li', function () {
+            $.index_.on(click, '.content_tab li', function () {
                 // 切换选项卡
                 $('.content_tab li').removeClass('cur');
                 $(this).addClass('cur');
@@ -185,13 +232,13 @@ define(function (require, exports, module) {
                 }
             });
             // 控制选项卡滚动位置
-            $.index_.on('click', '.tab_left>a', function () {
+            $.index_.on(click, '.tab_left>a', function () {
                 $('.content_tab>ul').animate({scrollLeft: $('.content_tab>ul').scrollLeft() - 300}, 200, function () {
                     initScrollState();
                 });
             });
             // 向右箭头
-            $.index_.on('click', '.tab_right>a', function () {
+            $.index_.on(click, '.tab_right>a', function () {
                 $('.content_tab>ul').animate({scrollLeft: $('.content_tab>ul').scrollLeft() + 300}, 200, function () {
                     initScrollState();
                 });
@@ -201,13 +248,14 @@ define(function (require, exports, module) {
         _welcomeMsg: function () {
             setTimeout(function () {
                 toastr.options = {
+                    positionClass: "toast-top-center",
                     closeButton: true,
                     progressBar: true,
                     showMethod: 'slideDown',
-                    timeOut: 4000
+                    timeOut: 2000
                 };
-                toastr.success('当前时间：' + getNowTime(), '欢迎进入 ADMIN系统');
-            }, 1000);
+                toastr.success('当前时间：' + getNowTime(), '欢迎进入，阿里体育竞技后台');
+            }, 500);
         },
         _setProfile: function () {
             $('.x-dropbox-tooltip').tooltip();
@@ -437,4 +485,18 @@ define(function (require, exports, module) {
         var now = [year, p(month), p(date)].join('-') + " " + [p(h), p(m), p(s)].join(':');
         return now;
     }
-})
+
+    /*
+     * 文件下载
+     */
+    function downloadFile(url){
+        console.log(url)
+        var form=$("<form>");//定义form表单,通过表单发送请求
+        form.attr("style","display:none");//设置为不显示
+        form.attr("target","");
+        form.attr("method","get");//设置请求类型
+        form.attr("action",url);//设置请求路径
+        $("body").append(form);//添加表单到页面(body)中
+        form.submit();//表单提交
+    }
+});

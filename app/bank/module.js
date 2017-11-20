@@ -87,6 +87,7 @@ define(function(require, exports, module) {
         },
         _loadMain: function() {
             bsTable();
+            $('select').select2();
         }
     };
 
@@ -122,8 +123,8 @@ define(function(require, exports, module) {
             minimumCountColumns: 2,
             showPaginationSwitch: true,
             clickToSelect: true,
-            detailView: true,
-            detailFormatter: 'detailFormatter',
+            detailView: false,
+            detailFormatter: '',
             pagination: true,
             paginationLoop: false,
             classes: 'table table-hover table-no-bordered',
@@ -188,18 +189,23 @@ define(function(require, exports, module) {
             onOpen: function () {
                 let self = this;
                 setTimeout(function () {
-                    let urls = [];
+                    // select2初始化
+                    initSelect();
+                    // 上传插件初始化
+                    uploadFile([]);
+
                     $.each(row, function (key, val) {
-                        self.$content.find('label[for="' + key + '"]').addClass('active');
-                        self.$content.find('input[name="' + key + '"]').val(val);
+                        if(key === 'bank') {
+                            initSelect(val);
+                        }else if (key === 'bank_license') {
+                            uploadFile(val.split(';'));
+                        } else {
+                            self.$content.find('label[for="' + key + '"]').addClass('active');
+                            self.$content.find('input[name="' + key + '"]').val(val);
+                        }
                     });
 
-                    // select2初始化
-                    initBank();
-                    // 上传插件初始化
-                    uploadFile(urls);
-
-                    self.$content.find('form').formValidation(formFvConfig).on('success.form.fv', function (e) {
+                    self.$content.find('form').formValidation(formFvConfig()).on('success.form.fv', function (e) {
                         $(self.$$confirm[0]).prop("disabled", true);
                         // Prevent form submission
                         e.preventDefault();
@@ -212,6 +218,19 @@ define(function(require, exports, module) {
                         $.each($form.serializeArray(), function (i, o) {
                             params[o.name] = o.value;
                         });
+
+                        if ( !params['bank_license'] && self.$content.find('.x-uploaded').length === 0) {
+                            $.alert({
+                                title: '提示',
+                                content: '请先选择或上传图片!',
+                                confirm: {
+                                    text: '确认',
+                                    btnClass: 'waves-effect btn-primary'
+                                }
+                            });
+                            $(self.$$confirm[0]).prop("disabled", false);
+                            return;
+                        }
 
                         $.post(url , params, function (result) {
                             let msg;
@@ -294,21 +313,26 @@ define(function(require, exports, module) {
         };
     }
 
-    function initBank() {
-        // $.getJSON('/zheng-upms-server/manage/permission/list', {systemId: systemId, type: pidType, limit: 10000}, function(json) {
-        //     let datas = [{id: 0, text: '请选择上级'}];
-        //     for (let i = 0; i < json.rows.length; i ++) {
-        //         let data = {};
-        //         data.id = json.rows[i].permissionId;
-        //         data.text = json.rows[i].name;
-        //         datas.push(data);
+    function initSelect(val) {
+        // var params = {
+        //     source: '',
+        //     qtype: ''
+        // };
+        // $.getJSON('/factory', params, function(json) {
+        //     var arr = [];
+        //     for (var i = 0; i < json.length; i ++) {
+        //         var data = {};
+        //         data.id = json[i].factory_id;
+        //         data.text = json[i].factory;
+        //         arr.push(data);
         //     }
-        //     $('#bank').empty();
-            $("select#bank").select2({
+        //     $('#bank').empty().append("<option></option>");
+            var select = $("select#bank").select2({
                 language: 'zh-CN',
-                placeholder: '请选择开户银行'
-                // data : datas
+                placeholder: '请选择开户银行',
+                // data : arr
             });
+            if (val) select.val(val).trigger("change");
         // });
     }
 
@@ -321,14 +345,17 @@ define(function(require, exports, module) {
     function uploadFile(urls) {
         let option = {
             url: '/file/upload/bank',
-            field: 'url',
+            field: 'bank_license',
             upload_main: '#x-uploader',
             list_block: '#x-fileList',
             upload_btn: '#x-upload',
             pick_btn: '#x-picker'
         };
         let upload = require('upload');
-        upload.init(option);
-        upload._addFilePreview('#x-fileList', urls);
+        if (urls.length > 0){
+            upload._addFilePreview(urls);
+        } else {
+            upload.init(option)
+        }
     }
 });

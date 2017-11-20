@@ -37,13 +37,6 @@ define(function(require, exports, module) {
                         message: '该项不能为空'
                     }
                 }
-            },
-            parentid: {
-                validators: {
-                    notEmpty: {
-                        message: '该项不能为空'
-                    }
-                }
             }
         };
 
@@ -165,7 +158,7 @@ define(function(require, exports, module) {
                             delete params['offstarterpath'];
                         }
 
-                        if ((params['category'] === "0" || params['showtype'] === "1") && self.$content.find('.x-upload-num').length !== 0 && !params['pngname']) {
+                        if ((params['category'] === "0" || params['showtype'] === "1") && !params['pngname'] && self.$content.find('.x-uploaded').length === 0) {
                             $.alert({
                                 title: '提示',
                                 content: '请先选择或上传图片!',
@@ -402,7 +395,9 @@ define(function(require, exports, module) {
                         let self = this;
                         let params = {
                             gameid: row.gameid,
-                            status: row.status === "0"?"1":"0"
+                            status: row.status === "0"?"1":"0",
+                            category: row.category,
+                            upstatus: true
                         };
 
                         if (row.category === "0") {

@@ -279,3 +279,8 @@ body .jconfirm{z-index: 999;}
 .x_dialog form .select2 {
     width: 390px !important;
 }
+
+a:focus {
+    outline: none !important;
+    outline-offset: 0;
+}

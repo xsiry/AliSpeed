@@ -60,7 +60,7 @@ define(function(require, exports, module) {
         // 当有文件添加进来的时候
         uploader.on('fileQueued', function (file) {
             var $li = $(
-                '<div id="' + file.id + '" class="x-upload-num file-item thumbnail"><a data-fileid="' + file.id + '" href="javascript:;" class="remove-this">X</a>' +
+                '<div id="' + file.id + '" class="file-item thumbnail"><a data-fileid="' + file.id + '" href="javascript:;" class="remove-this">X</a>' +
                 '<img>' +
                 '<div class="info">' + file.name + '</div>' +
                 '</div>'
@@ -136,7 +136,7 @@ define(function(require, exports, module) {
     function addFilePreview(urls) {
         $.each(urls, function(i, u) {
             var $li = $(
-                '<div class="file-item thumbnail">' +
+                '<div class="file-item thumbnail x-uploaded">' +
                 '<img src="'+ u +'" />' +
                 '<div class="info">已上传(重传删除)</div>' +
                 '</div>'
