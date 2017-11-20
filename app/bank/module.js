@@ -164,6 +164,17 @@ define(function(require, exports, module) {
             deleteAction(row);
         }
     };
+
+    window.licenseEvents = {
+        'mouseover .x-pre-img-btn': function(e, value, row, index) {
+            $(this).parent().find('.x-pre-img').show();
+            if (index < 5) $(this).parent().find('.x-pre-img').css({bottom:'-145px', top: '0'});
+        },
+        'mouseout .x-pre-img-btn': function(e, value, row, index) {
+            $(this).parent().find('.x-pre-img').hide();
+        }
+    };
+
     // 创建或修改
     function createAsUpdateAction(row) {
         $.confirm({

@@ -1,1 +1,9 @@
 #toolbar .pull-right {  margin-left: 10px;  }
+
+.x-pre-img {
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    left: 35px;
+    top: -145px;
+}

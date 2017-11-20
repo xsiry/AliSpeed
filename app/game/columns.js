@@ -54,7 +54,7 @@ function menunameFormatter(value, row, index) {
 }
 
 function pngnameFormatter(value, row, index) {
-    let img = "<div style='position:relative;'><a class='x-pre-img-btn' href='javascript:void(0);'>预览</a><img class='x-pre-img' src="+ value +" hidden/></div>";
+    let img = "<div style='position:relative;'><a class='x-pre-img-btn' target='_blank' href='"+value+"'>预览</a><img class='x-pre-img' src="+ value +" hidden/></div>";
     return value? img: "-";
 }
 
