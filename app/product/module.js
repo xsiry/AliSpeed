@@ -300,7 +300,7 @@ define(function(require, exports, module) {
             queryParams: function(params) {
                 var x_params = {};
                 x_params.source = table;
-                x_params.page = params.offset;
+                x_params.page = params.offset/params.limit+1;
                 x_params.pagesize = params.limit;
                 x_params.sortname = params.sort;
                 x_params.sortorder = params.order;

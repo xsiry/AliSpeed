@@ -247,14 +247,14 @@ define(function (require, exports, module) {
         },
         _welcomeMsg: function () {
             setTimeout(function () {
-                toastr.options = {
-                    positionClass: "toast-top-center",
-                    closeButton: true,
-                    progressBar: true,
-                    showMethod: 'slideDown',
-                    timeOut: 2000
-                };
-                toastr.success('当前时间：' + getNowTime(), '欢迎进入，阿里体育竞技后台');
+                // toastr.options = {
+                //     positionClass: "toast-top-center",
+                //     closeButton: true,
+                //     progressBar: true,
+                //     showMethod: 'slideDown',
+                //     timeOut: 2000
+                // };
+                // toastr.success('当前时间：' + getNowTime(), '欢迎进入，阿里体育竞技后台');
             }, 500);
         },
         _setProfile: function () {

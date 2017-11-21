@@ -46,7 +46,7 @@ function detailFormatter(index, row) {
             x_params.qhstr = JSON.stringify({
                 qjson: [{parentid: parentid}]
             });
-            x_params.page = params.offset;
+            x_params.page = params.offset/params.limit+1;
             x_params.pagesize = params.limit;
             x_params.sortname = params.sort;
             x_params.sortorder = params.order;
