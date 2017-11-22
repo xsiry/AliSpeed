@@ -148,7 +148,7 @@ define(function(require, exports, module) {
             onOpen: function () {
                 var self = this;
                 setTimeout(function () {
-                    initSelect();
+                    if (!row) initSelect();
 
                     $.each(row, function (key, val) {
                         if(key === 'rid'){

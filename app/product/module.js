@@ -111,7 +111,7 @@ define(function(require, exports, module) {
                 var self = this;
                 setTimeout(function () {
                     // select2初始化
-                    initSelect();
+                    if (!row) initSelect();
 
                     initTouchspin();
 

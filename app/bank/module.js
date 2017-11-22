@@ -201,7 +201,7 @@ define(function(require, exports, module) {
                 let self = this;
                 setTimeout(function () {
                     // select2初始化
-                    initSelect();
+                    if (!row) initSelect();
                     // 上传插件初始化
                     uploadFile([]);
 

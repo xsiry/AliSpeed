@@ -103,7 +103,7 @@ define(function(require, exports, module) {
                 var self = this;
                 setTimeout(function () {
                     // select2初始化
-                    initSelect();
+                    if (!row) initSelect();
 
                     // 添加单选事件
                     self.$content.on('click', 'input[name="showtype"]', function() {
