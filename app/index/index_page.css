@@ -1,0 +1,56 @@
+#iframe_home {
+	font-size: 16px;
+}
+
+#iframe_home a {
+	text-decoration: underline;
+}
+
+#iframe_home .panel-body .user_code {
+	border: 1px solid;
+    border-radius: 5px;
+    padding: 3px 15px;
+	color: green;
+	letter-spacing: 2px;
+}
+
+#iframe_home .panel-body>div {
+	margin: 20px 0;
+}
+
+#iframe_home .panel-body>div .x-price,
+#iframe_home .panel-title .x-price{
+	color: red;
+}
+
+#iframe_home .panel-body>div .x-info {
+	color: blue;
+}
+
+#iframe_home .panel-footer ul {
+	list-style-type: decimal;
+	color: #d68130;
+}
+
+#iframe_home .panel-heading.x-heading {
+	position: relative;
+}
+
+#iframe_home .panel-heading.x-heading .x-heading-btn {
+	position: absolute;
+    top: 1px;
+    right: 1px;
+}
+
+#iframe_home .panel-heading.x-heading .x-heading-select,
+#iframe_home .panel-heading.x-heading .select2 {
+	position: absolute;
+    top: 5px;
+    right: 150px;
+}
+
+#mac_container,
+#equity_container {
+	height: 250px;
+	margin: 0 !important;
+}

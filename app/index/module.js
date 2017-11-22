@@ -51,6 +51,7 @@ define(function (require, exports, module) {
             this._welcomeMsg();
             this._setProfile();
             this._bindUI();
+            this._loadMyIndex();
         },
         _bindUI: function () {
             // 设置input特效
@@ -262,6 +263,10 @@ define(function (require, exports, module) {
             $.get('/user/info', {}, function (result) {
                 $('.s-profile .sp-info span').text(result.rolename+' '+result.relname + '，你好！');
             }, 'json');
+        },
+        _loadMyIndex: function() {
+            var myIndexModule = require('./module_myindex');
+            myIndexModule._loadMyIndex();
         }
 
     };
