@@ -45,8 +45,9 @@
 #iframe_home .panel-heading.x-heading .x-heading-select,
 #iframe_home .panel-heading.x-heading .select2 {
 	position: absolute;
-    top: 5px;
+    top: 2px;
     right: 150px;
+    width: 120px;
 }
 
 #mac_container,

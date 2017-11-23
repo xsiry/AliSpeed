@@ -14,6 +14,7 @@
     <link href="plugins/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css" rel="stylesheet" />
     <link href="plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css" rel="stylesheet" />
     <link href="plugins/bootstrap-table-1.11.0/bootstrap-table.min.css" rel="stylesheet" />
+    <link href="plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css" rel="stylesheet" />
     <link href="plugins/formValidation/formValidation.css" rel="stylesheet" />
     <link href="plugins/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
     <link href="plugins/select2/css/select2.min.css" rel="stylesheet" />
@@ -182,12 +183,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading x-heading">
                                 <h3 class="panel-title">每日活跃终端趋势</h3>
-                                <select id="mac_time" name="mac_time" class="x-heading-select">
-                                    <option value="BOC">中国银行</option>
-                                    <option value="ICBC">中国工商银行</option>
-                                    <option value="CCB">中国建设银行</option>
-                                    <option value="ABC">中国农业银行</option>
-                                </select>
+                                <input id="mac_time" class="form-control x-heading-select">
                                 <button class="btn btn-primary x-heading-btn">查看月度终端报表</button>
                             </div>
                             <div class="panel-body">
@@ -196,13 +192,8 @@
                         </div>
                         <div class="panel panel-default">
                             <div class="panel-heading x-heading">
-                                <h3 class="panel-title">每日收益趋势，截至目前为止，本月收益共计：<span class="x-price">532元</span></h3>
-                                <select id="equity_time" name="equity_time" class="x-heading-select">
-                                    <option value="BOC">中国银行</option>
-                                    <option value="ICBC">中国工商银行</option>
-                                    <option value="CCB">中国建设银行</option>
-                                    <option value="ABC">中国农业银行</option>
-                                </select>
+                                <h3 class="panel-title">每日收益趋势，截至目前为止，本月收益共计：<span class="x-price"><span class="x-total-equity"></span>元</span></h3>
+                                <input id="equity_time" class="form-control x-heading-select">
                                 <button class="btn btn-primary x-heading-btn">查看月度收益报表</button>
                             </div>
                             <div class="panel-body">
@@ -223,7 +214,10 @@
         base: "/plugins/",
         alias: {
             'jquery': 'jquery.1.12.4.min.js',
+            'moment': 'moment/moment.min.js',
+            'moment_zh_cn': 'moment/loacle/zh_cn.js',
             'bootstrap': 'bootstrap-3.3.0/js/bootstrap.min.js',
+            'bootstrap-datetimepicker': 'bootstrap-datetimepicker/bootstrap-datetimepicker.min.js',
             'formValidation': 'formValidation/formValidation.js',
             'fvbootstrap': 'formValidation/framework/bootstrap.js',
             'fvzh_CN': 'formValidation/language/zh_CN.js',
@@ -240,7 +234,8 @@
             'toastr': 'toastr/toastr.min.js',
             'select2': 'select2/js/select2.full.min.js',
             'select2_zh_CN': 'select2/js/i18n/zh-CN.js',
-            'highcharts': 'highcharts/highcharts.js'
+            'highcharts': 'highcharts/highcharts.js',
+
         } //,
         // map: [
         //     [/^(.*\/app\/.*\/.*\.(?:css|js))(?:.*)$/i, '$1?x-' + time]

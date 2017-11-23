@@ -3,7 +3,7 @@ define([
     { field: 'category', title: '游戏类型', sortable: true, halign: 'center', formatter: categoryFormatter },
     { field: 'showtype', title: '按钮类型', sortable: true, halign: 'center', formatter: showtypeFormatter },
     { field: 'runtype', title: '启动模式', sortable: true, halign: 'center', formatter: runtypeFormatter },
-    { field: 'menuname', title: '应用菜单', sortable: true, halign: 'center', formatter: menunameFormatter },
+    { field: 'menuname', title: '应用菜单', sortable: false, halign: 'center', formatter: menunameFormatter },
     { field: 'namedes', title: '副标题', sortable: true, halign: 'center'  },
     { field: 'pngname', title: '游戏图标', sortable: true, halign: 'center', formatter: pngnameFormatter, events: 'pngnameEvents' },
     { field: 'url', title: '点击链接', sortable: true, halign: 'center' },

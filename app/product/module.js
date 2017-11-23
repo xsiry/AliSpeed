@@ -45,6 +45,13 @@ define(function(require, exports, module) {
                     }
                 }
             },
+            original_price: {
+                validators: {
+                    notEmpty: {
+                        message: '该项不能为空'
+                    }
+                }
+            },
             days: {
                 validators: {
                     notEmpty: {
@@ -177,6 +184,17 @@ define(function(require, exports, module) {
 
         $("input[name='price']").TouchSpin({
             prefix: "商品价格",
+            min: 0,
+            max: 1000000000,
+            step: 0.01,
+            decimals: 2,
+            boostat: 5,
+            maxboostedstep: 100,
+            postfix: '元'
+        });
+
+        $("input[name='original_price']").TouchSpin({
+            prefix: "商品原价",
             min: 0,
             max: 1000000000,
             step: 0.01,

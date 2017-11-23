@@ -113,7 +113,7 @@ define(function(require, exports, module) {
                         // Get the form instance
                         var $form = $(e.target);
 
-                        var params = {};
+                        var params = {category: 1};
 
                         $.each($form.serializeArray(), function (i, o) {
                             params[o.name] = o.value;

@@ -1,7 +1,8 @@
 define([
     { field: 'product', title: '链接名称', sortable: true, halign: 'center' },
-    { field: 'factory', title: '所属厂商', sortable: true, halign: 'center' },
+    { field: 'factory', title: '所属厂商', sortable: false, halign: 'center' },
     { field: 'price', title: '商品价格', sortable: true, halign: 'center' },
+    { field: 'original_price', title: '商品原价', sortable: true, halign: 'center' },
     { field: 'days', title: '有效天数', sortable: true, halign: 'center' },
     { field: 'factory_rate', title: '上游分成', sortable: true, halign: 'center' },
     { field: 'agent_rate', title: '渠道分成', sortable: true, halign: 'center' },
