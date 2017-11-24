@@ -19,10 +19,8 @@ define(function(require, exports, module) {
     var url = '/product_order',
         table = 'rep_product_order',
         source_id = 'order_code',
-        row_name = 'order_code',
         sort_name = 'order_code',
-        sort_order = 'asc',
-        validationInput = {};
+        sort_order = 'asc';
 
     module.exports = {
         init: function() {
@@ -61,8 +59,12 @@ define(function(require, exports, module) {
             queryParams: function(params) {
                 var x_params = {};
                 x_params.source = table;
-                x_params.page = params.offset/params.limit+1;
-                x_params.pagesize = params.limit;
+                if(params.offset!==null&&params.limit) {
+                    x_params.page = params.offset/params.limit+1;
+                    x_params.pagesize = params.limit;
+                }else {
+                    x_params.qtype = 'select';
+                }
                 x_params.sortname = params.sort;
                 x_params.sortorder = params.order;
                 return x_params;

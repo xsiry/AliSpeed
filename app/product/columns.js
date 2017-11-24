@@ -1,5 +1,6 @@
 define([
-    { field: 'product', title: '链接名称', sortable: true, halign: 'center' },
+    { field: 'product', title: '商品名称', sortable: true, halign: 'center' },
+    { field: 'types', title: '商品类型', sortable: true, halign: 'center', formatter: typesFormatter },
     { field: 'factory', title: '所属厂商', sortable: false, halign: 'center' },
     { field: 'price', title: '商品价格', sortable: true, halign: 'center' },
     { field: 'original_price', title: '商品原价', sortable: true, halign: 'center' },
@@ -16,5 +17,10 @@ function actionFormatter(value, row, index) {
         '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>　',
         '<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="Remove"><i class="glyphicon glyphicon-remove"></i></a>'
     ].join('');
+}
+
+function typesFormatter(value, row, index) {
+    var key = {1:'商品',2:'奖品',3:'新用户'};
+    return key[value];
 }
 

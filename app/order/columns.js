@@ -7,6 +7,7 @@ define([
     { field: 'price', title: '单价（元）', sortable: true, halign: 'center' },
     { field: 'total_fee', title: '总价（元）', sortable: true, halign: 'center' },
     { field: 'pay_type', title: '支付方式', sortable: true, halign: 'center', formatter: payTypeFormatter },
+    { field: 'order_type', title: '订单类型', sortable: true, halign: 'center', formatter: orderTypeStatusFormatter },
     { field: 'pay_status', title: '状态', sortable: true, halign: 'center', formatter: payStatusFormatter },
     { field: 'nickname', title: '付款用户', sortable: false, halign: 'center'}
 ]);
@@ -18,5 +19,10 @@ function payTypeFormatter(value, row, index) {
 
 function payStatusFormatter(value, row, index) {
     var key = {'P': '处理中', 'T': '交易成功', 'E': '交易失败'};
+    return key[value];
+}
+
+function orderTypeStatusFormatter(value, row, index) {
+    var key = {1: '购买', 2: '抽奖', 3: '赠送'};
     return key[value];
 }

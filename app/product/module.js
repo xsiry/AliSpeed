@@ -31,6 +31,13 @@ define(function(require, exports, module) {
                     }
                 }
             },
+            types: {
+                validators: {
+                    notEmpty: {
+                        message: '该项不能为空'
+                    }
+                }
+            },
             factory_id: {
                 validators: {
                     notEmpty: {
@@ -118,13 +125,18 @@ define(function(require, exports, module) {
                 var self = this;
                 setTimeout(function () {
                     // select2初始化
-                    if (!row) initSelect();
+                    if (!row) {
+                        initTypesSelect();
+                        initSelect();
+                    }
 
                     initTouchspin();
 
                     $.each(row, function (key, val) {
                         if(key === 'factory_id'){
                             initSelect(val);
+                        }else if(key === 'types') {
+                            initTypesSelect(val);
                         } else{
                             self.$content.find('label[for="' + key + '"]').addClass('active');
                             self.$content.find('input[name="' + key + '"]').val(val)
@@ -248,6 +260,14 @@ define(function(require, exports, module) {
             });
             if (val) select.val(val).trigger("change");
         });
+    }
+
+    function initTypesSelect(val) {
+        var select = $("select#types").select2({
+            language: 'zh-CN',
+            placeholder: '请选择商品类型'
+        });
+        if (val) select.val(val).trigger("change");
     }
 
     // 删除
