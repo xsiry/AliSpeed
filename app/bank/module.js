@@ -101,8 +101,12 @@ define(function(require, exports, module) {
             queryParams: function(params) {
                 let x_params = {};
                 x_params.source = table;
-                x_params.page = params.offset/params.limit+1;
-                x_params.pagesize = params.limit;
+                if(params.offset!==null&&params.limit) {
+                    x_params.page = params.offset/params.limit+1;
+                    x_params.pagesize = params.limit;
+                }else {
+                    x_params.qtype = 'select';
+                }
                 x_params.sortname = params.sort;
                 x_params.sortorder = params.order;
                 return x_params;

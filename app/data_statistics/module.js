@@ -37,6 +37,10 @@ define(function(require, exports, module) {
             self_.on('input propertychange', 'input[name="searchText"]', function() {
                 if ($(this).val().length === 0) f_search();
             });
+            // 按钮 查看走势图
+            self_.on('click', '.x-heading-btn', function() {
+                chartsConfirm($(this).data('days'));
+            });
             // 数据表格动态高度
             $(window).resize(function() {
                 self_.find('#table').bootstrapTable('resetView', {
@@ -68,6 +72,110 @@ define(function(require, exports, module) {
         return year+'-'+month;
     }
 
+    function chartsConfirm(days) {
+        $.confirm({
+            title: "数据统计走势图",
+            content: 'url:../app/data_statistics_charts_dialog.html',
+            buttons: {
+                cancel: {
+                    text: '关闭',
+                    btnClass: 'waves-effect waves-button'
+                }
+            },
+            onOpen: function () {
+                setTimeout(function (days) {
+                    initCharts(days);
+                }, 500, days);
+            }
+        });
+    }
+
+    function initCharts(days) {
+        $.get('/all_data/q_charts', {date: days? days: 'all'}, function(result) {
+            var option = {
+                global: {
+                    useUTC: false
+                },
+                title: {
+                    text: null
+                },
+                xAxis: {
+                    type: 'datetime',
+                    dateTimeLabelFormats: {
+                        day: '%m月%d日',
+                        week: '%m月%d日',
+                        month: '%Y年%m月',
+                        year: '%Y年'
+                    },
+                    labels: {
+                        rotation: -45
+                    }
+                },
+                legend: {
+                    enabled: true
+                },
+                plotOptions: {
+                    series: {
+                        label: {
+                            connectorAllowed: false
+                        }
+                    }
+                },
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                layout: 'horizontal',
+                                align: 'center',
+                                verticalAlign: 'bottom'
+                            }
+                        }
+                    }]
+                },
+                credits: { enabled: false }
+            };
+
+            var history_users = [],
+                now_new_usrs = [],
+                now_active_users = [];
+
+            $.each(result.data, function(i, o) {
+                var split = o.days.split('-');
+                var date = Date.UTC(split[0], split[1]-1, split[2]);
+
+                history_users.push([date, parseInt(o.history_users)]);
+                now_new_usrs.push([date, parseInt(o.now_new_usrs)]);
+                now_active_users.push([date, parseInt(o.now_active_users)]);
+            });
+
+            option['yAxis'] = {
+                title: {
+                    text: '人数(个)'
+                }
+            };
+            option['series'] = [{
+                name: '历史用户数',
+                data: history_users
+            },{
+                name: '当日新增用户',
+                data: now_new_usrs
+            },{
+                name: '当日活跃用户',
+                data: now_active_users
+            }];
+
+            option['tooltip'] = {
+                headerFormat: '<b>日期：</b>{point.x:%Y年%m月%d日}<br>',
+                pointFormat: '<b>{series.name}：</b>{point.y:.0f}个'
+            };
+
+            Highcharts.chart('data_statistics_charts', option);
+        }, 'json');
+    }
+
     // bootstrap table初始化
     // http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
     function bsTable() {
@@ -76,8 +184,6 @@ define(function(require, exports, module) {
         $table.bootstrapTable({
             url: url,
             queryParams: function(params) {
-                console.log(params)
-                console.log(params)
                 var x_params = {};
                 x_params.source = table;
                 if(params.offset!==null&&params.limit) {
@@ -136,7 +242,7 @@ define(function(require, exports, module) {
                 qjsonkeytype: [qjsonkeytype]
             })
         };
-        $('.x-heading-btn').prop('data-days', date);
+        $('.x-heading-btn').attr('data-days', date);
         $table.bootstrapTable('refresh', {query: gridparms});
     }
 

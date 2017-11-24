@@ -65,7 +65,7 @@ define(function (require, exports, module) {
     }
 
     function initChart(type, date) {
-        $.get('/rep_days_agent_mac', {date: date}, function(result) {
+        $.get('/days_agent_mac', {date: date}, function(result) {
             var option = {
                 global: {
                     useUTC: false
