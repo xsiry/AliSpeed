@@ -1,0 +1,147 @@
+/**
+ * Created by IntelliJ IDEA.
+ * User: xsiry
+ * Date: 2017/11/08
+ * Time: 12:14
+ */
+
+define(function(require, exports, module) {
+    var $ = require('jquery');
+    require('bootstrap');
+    require('jquery-confirm');
+    require('highcharts');
+    require('moment');
+    require('moment_zh_cn');
+    require('bootstrap-datetimepicker');
+
+    var self_ = $('.data_statistics');
+    var $table = self_.find('#table');
+
+    var url = '/all_data',
+        table = 'rep_all_data',
+        source_id = 'days',
+        sort_name = 'days',
+        sort_order = 'asc';
+
+    module.exports = {
+        init: function() {
+            this._loadMain();
+            this._bindUI();
+        },
+        _bindUI: function() {
+            // 搜索监听回车
+            self_.on("keypress", 'input[name="searchText"]', function(e) {
+                if (e.which === 13) f_search();
+            });
+            // 搜索内容为空时，显示全部
+            self_.on('input propertychange', 'input[name="searchText"]', function() {
+                if ($(this).val().length === 0) f_search();
+            });
+            // 数据表格动态高度
+            $(window).resize(function() {
+                self_.find('#table').bootstrapTable('resetView', {
+                    height: getHeight()
+                })
+            });
+        },
+        _loadMain: function() {
+            bsTable();
+            initDays();
+        }
+    };
+
+    function initDays() {
+        $('#days_time').datetimepicker({
+            format: 'YYYY年MM月',
+            locale: 'zh-cn',
+            defaultDate: new Date()
+        }).on('dp.change', function(e) {
+            var date = formatDate(e.date._d.getFullYear(),(e.date._d.getMonth()+1));
+            f_search(date);
+        });
+        // var date = $('#days_time').data("DateTimePicker").date();
+        // f_search(formatDate(date._d.getFullYear(),(date._d.getMonth()+1)));
+    }
+
+    function formatDate(year, month) {
+        month = month<10? ('0'+month): month;
+        return year+'-'+month;
+    }
+
+    // bootstrap table初始化
+    // http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
+    function bsTable() {
+        require('bootstrap-table');
+        require('bootstrap-table-zh-CN');
+        $table.bootstrapTable({
+            url: url,
+            queryParams: function(params) {
+                console.log(params)
+                console.log(params)
+                var x_params = {};
+                x_params.source = table;
+                if(params.offset!==null&&params.limit) {
+                    x_params.page = params.offset/params.limit+1;
+                    x_params.pagesize = params.limit;
+                }else {
+                    x_params.qtype = 'select';
+                }
+                x_params.sortname = params.sort;
+                x_params.sortorder = params.order;
+                return x_params;
+            },
+            idField: source_id,
+            sortName: sort_name,
+            sortOrder: sort_order,
+            pageNumber:1,      //初始化加载第一页，默认第一页
+            pageList: [10, 25, 50, 100],  //可供选择的每页的行数（*）
+            columns: require('./columns'),
+            height: getHeight(),
+            striped: true,
+            search: false,
+            searchOnEnterKey: true,
+            showRefresh: true,
+            showToggle: true,
+            showColumns: true,
+            minimumCountColumns: 2,
+            showPaginationSwitch: true,
+            clickToSelect: true,
+            detailView: false,
+            detailFormatter: 'detailFormatter',
+            pagination: true,
+            paginationLoop: false,
+            classes: 'table table-hover table-no-bordered',
+            sidePagination: 'server',
+            silentSort: false,
+            smartDisplay: false,
+            escape: true,
+            maintainSelected: true,
+            toolbar: self_.find('#toolbar')
+        }).on('all.bs.table', function(e, name, args) {
+            $('[data-toggle="tooltip"]').tooltip();
+            $('[data-toggle="popover"]').popover();
+        });
+    }
+    // 搜索
+    function f_search(date) {
+        var qjson = {};
+        qjson['days'] = date;
+        var qjsonkeytype = {};
+        qjsonkeytype['days'] = "LIKE_ALL";
+
+        var gridparms = {
+            source: table,
+            qhstr: JSON.stringify({
+                qjson: [qjson],
+                qjsonkeytype: [qjsonkeytype]
+            })
+        };
+        $('.x-heading-btn').prop('data-days', date);
+        $table.bootstrapTable('refresh', {query: gridparms});
+    }
+
+    // 动态高度
+    function getHeight() {
+        return $('.x-content').height() - 3;
+    }
+});

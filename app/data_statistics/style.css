@@ -1,0 +1,11 @@
+#toolbar .pull-right {  margin-left: 10px;  }
+
+.x-heading-days {
+    display: inline-block;
+    width: 120px;
+}
+
+.x-heading-btn {
+    margin-top: -4px;
+    margin-left: 10px;
+}
