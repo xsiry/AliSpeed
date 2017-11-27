@@ -246,10 +246,10 @@ define(function(require, exports, module) {
         };
         $.getJSON('/factory', params, function(json) {
             var arr = [];
-            for (var i = 0; i < json.length; i ++) {
+            for (var i = 0; i < json.rows.length; i ++) {
                 var data = {};
-                data.id = json[i].factory_id;
-                data.text = json[i].factory;
+                data.id = json.rows[i].factory_id;
+                data.text = json.rows[i].factory;
                 arr.push(data);
             }
             $('#factory').empty().append("<option></option>");
@@ -336,8 +336,18 @@ define(function(require, exports, module) {
         $table.bootstrapTable({
             url: url,
             queryParams: function(params) {
+                var qjson = {};
+                qjson[self_.find('select[name="searchWhere"]').val()] = self_.find('input[name="searchText"]').val();
+                var qjsonkeytype = {};
+                qjsonkeytype[self_.find('select[name="searchWhere"]').val()] = "LIKE_ALL";
+
                 var x_params = {};
                 x_params.source = table;
+                x_params.qhstr = JSON.stringify({
+                    qjson: [qjson],
+                    qjsonkeytype: [qjsonkeytype]
+                });
+
                 if(params.offset!==null&&params.limit) {
                     x_params.page = params.offset/params.limit+1;
                     x_params.pagesize = params.limit;
@@ -382,19 +392,7 @@ define(function(require, exports, module) {
     }
     // 搜索
     function f_search() {
-        var qjson = {};
-        qjson[self_.find('select[name="searchWhere"]').val()] = self_.find('input[name="searchText"]').val();
-        var qjsonkeytype = {};
-        qjsonkeytype[self_.find('select[name="searchWhere"]').val()] = "LIKE_ALL";
-
-        var gridparms = {
-            source: table,
-            qhstr: JSON.stringify({
-                qjson: [qjson],
-                qjsonkeytype: [qjsonkeytype]
-            })
-        };
-        $table.bootstrapTable('refresh', {query: gridparms});
+        $table.bootstrapTable('refresh', {});
     }
     // bs表格按钮事件
     window.actionEvents = {

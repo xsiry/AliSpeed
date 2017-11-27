@@ -7,11 +7,14 @@
 }
 
 #iframe_home .panel-body .user_code {
+	display: inline-block;
 	border: 1px solid;
     border-radius: 5px;
     padding: 3px 15px;
 	color: green;
 	letter-spacing: 2px;
+	width: 106px;
+	height: 30px;
 }
 
 #iframe_home .panel-body>div {

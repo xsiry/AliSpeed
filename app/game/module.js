@@ -6,7 +6,7 @@
  */
 
 define(function(require, exports, module) {
-    let $ = require('jquery');
+    var $ = require('jquery');
     require('bootstrap');
     require('jquery-confirm');
 
@@ -14,10 +14,10 @@ define(function(require, exports, module) {
     // require('select2_zh_CN');
     require('webuploader');
 
-    let self_ = $('.game');
-    let $table = self_.find('#table');
+    var self_ = $('.game');
+    var $table = self_.find('#table');
 
-    let url = '/game',
+    var url = '/game',
         table = 't_game',
         source_id = 'gameid',
         row_name = 'gamename',
@@ -87,7 +87,7 @@ define(function(require, exports, module) {
                     text: '确认',
                     btnClass: 'waves-effect btn-primary',
                     action: function () {
-                        let self = this;
+                        var self = this;
                         self.$content.find('form').submit();
                         return false;
                     }
@@ -98,7 +98,7 @@ define(function(require, exports, module) {
                 }
             },
             onOpen: function () {
-                let self = this;
+                var self = this;
                 setTimeout(function () {
                     // 上传插件初始化
                     uploadFile([]);
@@ -142,9 +142,9 @@ define(function(require, exports, module) {
                         e.preventDefault();
 
                         // Get the form instance
-                        let $form = $(e.target);
+                        var $form = $(e.target);
 
-                        let params = {};
+                        var params = {};
 
                         $.each($form.serializeArray(), function (i, o) {
                             params[o.name] = o.value;
@@ -176,7 +176,7 @@ define(function(require, exports, module) {
                         }
 
                         $.post(url , params, function (result) {
-                            let msg;
+                            var msg;
                             toastr.options = {
                                 closeButton: true,
                                 progressBar: true,
@@ -213,7 +213,7 @@ define(function(require, exports, module) {
 
     // 上传初始化
     function uploadFile(urls) {
-        let option = {
+        var option = {
             url: '/file/upload/game',
             field: 'pngname',
             upload_main: '#x-uploader',
@@ -221,7 +221,7 @@ define(function(require, exports, module) {
             upload_btn: '#x-upload',
             pick_btn: '#x-picker'
         };
-        let upload = require('upload');
+        var upload = require('upload');
         if (urls.length > 0){
             upload._addFilePreview(urls);
         } else {
@@ -244,7 +244,7 @@ define(function(require, exports, module) {
                     btnClass: 'waves-effect waves-button',
                     action: function() {
                         $.post(url + '/del', { tid: row[source_id], tname: table }, function(result) {
-                            let msg;
+                            var msg;
                             toastr.options = {
                                 closeButton: true,
                                 progressBar: true,
@@ -296,8 +296,21 @@ define(function(require, exports, module) {
         $table.bootstrapTable({
             url: url,
             queryParams: function(params) {
-                let x_params = {};
+                var qjson = {};
+                var qjsonkeytype = {};
+
+                qjson[self_.find('select[name="searchWhere"]').val()] = self_.find('input[name="searchText"]').val();
+                qjsonkeytype[self_.find('select[name="searchWhere"]').val()] = "LIKE_ALL";
+
+                var status = self_.find('select[name="status"]').val();
+
+                var x_params = {};
                 x_params.source = table;
+                x_params.qhstr = JSON.stringify({
+                    qjson: [qjson, {'status': status}],
+                    qjsonkeytype: [qjsonkeytype]
+                });
+
                 if(params.offset!==null&&params.limit) {
                     x_params.page = params.offset/params.limit+1;
                     x_params.pagesize = params.limit;
@@ -342,22 +355,7 @@ define(function(require, exports, module) {
     }
     // 搜索
     function f_search() {
-        let qjson = {};
-        let qjsonkeytype = {};
-
-        qjson[self_.find('select[name="searchWhere"]').val()] = self_.find('input[name="searchText"]').val();
-        qjsonkeytype[self_.find('select[name="searchWhere"]').val()] = "LIKE_ALL";
-
-        let status = self_.find('select[name="status"]').val();
-
-        let gridparms = {
-            source: table,
-            qhstr: JSON.stringify({
-                qjson: [qjson, {'status': status}],
-                qjsonkeytype: [qjsonkeytype]
-            })
-        };
-        $table.bootstrapTable('refresh', {query: gridparms});
+        $table.bootstrapTable('refresh', {});
     }
     // bs表格按钮事件
     window.actionEvents = {
@@ -383,7 +381,7 @@ define(function(require, exports, module) {
     };
 
     function updateStatus(row) {
-        let select = '<div style="margin-bottom: 15px;"><select id="game_menu" name="game_menu_id" style="width: 250px;"></select></div>';
+        var select = '<div style="margin-bottom: 15px;"><select id="game_menu" name="game_menu_id" style="width: 250px;"></select></div>';
 
         $.confirm({
             type: row.status === "0"? 'green': 'red',
@@ -396,8 +394,8 @@ define(function(require, exports, module) {
                     text: '确认',
                     btnClass: 'waves-effect waves-button',
                     action: function() {
-                        let self = this;
-                        let params = {
+                        var self = this;
+                        var params = {
                             gameid: row.gameid,
                             status: row.status === "0"?"1":"0",
                             category: row.category,
@@ -405,7 +403,7 @@ define(function(require, exports, module) {
                         };
 
                         if (row.category === "0") {
-                            let gmid = self.$content.find('select[name="game_menu_id"]').val();
+                            var gmid = self.$content.find('select[name="game_menu_id"]').val();
                             if (gmid) {
                                 params['game_menu_id'] = gmid
                             } else {
@@ -426,7 +424,7 @@ define(function(require, exports, module) {
                         if (row.status === "1") params['game_menu_id'] = 0;
 
                         $.post(url, params, function(result) {
-                            let msg;
+                            var msg;
                             toastr.options = {
                                 closeButton: true,
                                 progressBar: true,

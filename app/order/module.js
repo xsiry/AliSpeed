@@ -36,6 +36,10 @@ define(function(require, exports, module) {
             self_.on('input propertychange', 'input[name="searchText"]', function() {
                 if ($(this).val().length === 0) f_search();
             });
+            // 交易状态查询
+            self_.on('select2:select', 'select[name="pay_status"]', function() {
+                f_search();
+            });
             // 数据表格动态高度
             $(window).resize(function() {
                 self_.find('#table').bootstrapTable('resetView', {
@@ -57,8 +61,20 @@ define(function(require, exports, module) {
         $table.bootstrapTable({
             url: url,
             queryParams: function(params) {
+                var qjson = {};
+                qjson[self_.find('select[name="searchWhere"]').val()] = self_.find('input[name="searchText"]').val();
+                var qjsonkeytype = {};
+                qjsonkeytype[self_.find('select[name="searchWhere"]').val()] = "LIKE_ALL";
+
+                var pay_status = self_.find('select[name="pay_status"]').val();
+
                 var x_params = {};
                 x_params.source = table;
+                x_params.qhstr = JSON.stringify({
+                    qjson: [qjson, {pay_status: pay_status}],
+                    qjsonkeytype: [qjsonkeytype]
+                });
+
                 if(params.offset!==null&&params.limit) {
                     x_params.page = params.offset/params.limit+1;
                     x_params.pagesize = params.limit;
@@ -103,19 +119,7 @@ define(function(require, exports, module) {
     }
     // 搜索
     function f_search() {
-        var qjson = {};
-        qjson[self_.find('select[name="searchWhere"]').val()] = self_.find('input[name="searchText"]').val();
-        var qjsonkeytype = {};
-        qjsonkeytype[self_.find('select[name="searchWhere"]').val()] = "LIKE_ALL";
-
-        var gridparms = {
-            source: table,
-            qhstr: JSON.stringify({
-                qjson: [qjson],
-                qjsonkeytype: [qjsonkeytype]
-            })
-        };
-        $table.bootstrapTable('refresh', {query: gridparms});
+        $table.bootstrapTable('refresh', {});
     }
     // bs表格按钮事件
     window.actionEvents = {

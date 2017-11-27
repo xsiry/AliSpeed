@@ -39,7 +39,7 @@ define(function(require, exports, module) {
             });
             // 按钮 查看走势图
             self_.on('click', '.x-heading-btn', function() {
-                chartsConfirm($(this).data('days'));
+                chartsConfirm();
             });
             // 数据表格动态高度
             $(window).resize(function() {
@@ -49,8 +49,8 @@ define(function(require, exports, module) {
             });
         },
         _loadMain: function() {
-            bsTable();
             initDays();
+            bsTable();
         }
     };
 
@@ -60,11 +60,8 @@ define(function(require, exports, module) {
             locale: 'zh-cn',
             defaultDate: new Date()
         }).on('dp.change', function(e) {
-            var date = formatDate(e.date._d.getFullYear(),(e.date._d.getMonth()+1));
-            f_search(date);
+            f_search();
         });
-        // var date = $('#days_time').data("DateTimePicker").date();
-        // f_search(formatDate(date._d.getFullYear(),(date._d.getMonth()+1)));
     }
 
     function formatDate(year, month) {
@@ -72,7 +69,8 @@ define(function(require, exports, module) {
         return year+'-'+month;
     }
 
-    function chartsConfirm(days) {
+    function chartsConfirm() {
+        var date = $('#days_time').data("DateTimePicker").date();
         $.confirm({
             title: "数据统计走势图",
             content: 'url:../app/data_statistics_charts_dialog.html',
@@ -85,7 +83,7 @@ define(function(require, exports, module) {
             onOpen: function () {
                 setTimeout(function (days) {
                     initCharts(days);
-                }, 500, days);
+                }, 500, formatDate(date._d.getFullYear(),(date._d.getMonth()+1)));
             }
         });
     }
@@ -184,8 +182,18 @@ define(function(require, exports, module) {
         $table.bootstrapTable({
             url: url,
             queryParams: function(params) {
+                var qjson = {};
+                var date = $('#days_time').data("DateTimePicker").date();
+                qjson['days'] = formatDate(date._d.getFullYear(),(date._d.getMonth()+1));
+                var qjsonkeytype = {};
+                qjsonkeytype['days'] = "LIKE_ALL";
+
                 var x_params = {};
                 x_params.source = table;
+                x_params.qhstr = JSON.stringify({
+                    qjson: [qjson],
+                    qjsonkeytype: [qjsonkeytype]
+                })
                 if(params.offset!==null&&params.limit) {
                     x_params.page = params.offset/params.limit+1;
                     x_params.pagesize = params.limit;
@@ -229,21 +237,8 @@ define(function(require, exports, module) {
         });
     }
     // 搜索
-    function f_search(date) {
-        var qjson = {};
-        qjson['days'] = date;
-        var qjsonkeytype = {};
-        qjsonkeytype['days'] = "LIKE_ALL";
-
-        var gridparms = {
-            source: table,
-            qhstr: JSON.stringify({
-                qjson: [qjson],
-                qjsonkeytype: [qjsonkeytype]
-            })
-        };
-        $('.x-heading-btn').attr('data-days', date);
-        $table.bootstrapTable('refresh', {query: gridparms});
+    function f_search() {
+        $table.bootstrapTable('refresh', {});
     }
 
     // 动态高度

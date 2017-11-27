@@ -80,10 +80,10 @@ define(function (require, exports, module) {
         };
         $.getJSON('/dict', params, function(json) {
             var arr = [];
-            for (var i = 0; i < json.length; i ++) {
+            for (var i = 0; i < json.rows.length; i ++) {
                 var data = {};
-                data.id = json[i].ss_key +"-"+ json[i].ss_val;
-                data.text = json[i].remark;
+                data.id = json.rows[i].ss_key +"-"+ json.rows[i].ss_val;
+                data.text = json.rows[i].remark;
                 arr.push(data);
             }
             $('#settings').empty().append("<option></option>");

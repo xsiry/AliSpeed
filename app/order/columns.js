@@ -18,7 +18,7 @@ function payTypeFormatter(value, row, index) {
 }
 
 function payStatusFormatter(value, row, index) {
-    var key = {'P': '处理中', 'T': '交易成功', 'E': '交易失败'};
+    var key = {'P': '处理中', 'T': '交易成功', 'E': '交易失败', 'N': '未付款'};
     return key[value];
 }
 
