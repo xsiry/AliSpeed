@@ -1,7 +1,7 @@
 define([
     { field: 'product', title: '商品名称', sortable: true, halign: 'center' },
     { field: 'order_code', title: '订单号', sortable: true, halign: 'center' },
-    { field: 'order_time', title: '创建时间', sortable: true, halign: 'center' },
+    { field: 'order_time', title: '购买时间', sortable: true, halign: 'center' },
     { field: 'num', title: '数量（个）', sortable: true, halign: 'center' },
     { field: 'days', title: '可用天数', sortable: true, halign: 'center' },
     { field: 'price', title: '单价（元）', sortable: true, halign: 'center' },

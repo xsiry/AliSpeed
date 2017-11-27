@@ -19,8 +19,8 @@ define(function(require, exports, module) {
     var url = '/product_order',
         table = 'rep_product_order',
         source_id = 'order_code',
-        sort_name = 'order_code',
-        sort_order = 'asc';
+        sort_name = 'order_time',
+        sort_order = 'desc';
 
     module.exports = {
         init: function() {

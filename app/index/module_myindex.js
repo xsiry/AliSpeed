@@ -257,14 +257,11 @@ define(function (require, exports, module) {
 
     // bs表格按钮事件
     window.actionEvents = {
-        'click .lock': function(e, value, row, index) {
+        'click .withdrawal': function(e, value, row, index) {
             lockAction(row);
         },
-        'click .edit': function(e, value, row, index) {
+        'click .detail': function(e, value, row, index) {
             createAsUpdateAction(row);
-        },
-        'click .remove': function(e, value, row, index) {
-            deleteAction(row);
         }
     };
 
