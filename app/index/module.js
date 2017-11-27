@@ -18,6 +18,8 @@ define(function (require, exports, module) {
     var menuModule = require('./module_menu');
     menuModule.init($.index_);
 
+    var myIndexModule = require('./module_myindex');
+
     var click = device.mobile() ? 'touchstart' : 'click';
 
     module.exports = {
@@ -119,6 +121,10 @@ define(function (require, exports, module) {
             $.index_.on(click, '.x-settings', function () {
                 var settingsModule = require('./module_settings');
                 settingsModule._upSettings();
+            });
+
+            $.index_.on(click, '.x-heading-btn', function () {
+                myIndexModule._repMonthGrid();
             });
 
             // 菜单点击
@@ -266,7 +272,6 @@ define(function (require, exports, module) {
             }, 'json');
         },
         _loadMyIndex: function() {
-            var myIndexModule = require('./module_myindex');
             myIndexModule._loadMyIndex();
         }
 

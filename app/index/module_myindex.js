@@ -14,11 +14,13 @@ define(function (require, exports, module) {
     require('moment_zh_cn');
     require('bootstrap-datetimepicker');
 
-
     module.exports = {
         init: function () {},
         _loadMyIndex: function () {
             loadMyIndex();
+        },
+        _repMonthGrid: function () {
+            repMonthGrid();
         }
     };
 
@@ -162,5 +164,117 @@ define(function (require, exports, module) {
                 Highcharts.chart('equity_container', option);
             }
         }, 'json');
+    }
+
+    function repMonthGrid() {
+        $.confirm({
+            title: "月度终端收益报表",
+            closeIcon: true,
+            columnClass: 'col-md-8 col-md-offset-2',
+            content: 'url:../app/index_month_agent_mac_dialog.html',
+            // cancelButton: false, // hides the cancel button.
+            // confirmButton: false, // hides the confirm button.
+            buttons: {
+                cancel: {
+                    text: '关闭',
+                    btnClass: 'waves-effect waves-button'
+                }
+            },
+            onOpen: function () {
+                var self = this;
+                setTimeout(function (self_) {
+                    initMonth();
+                    bsTable(self_);
+                    // $('select').select2();
+
+                }, 500, self);
+            }
+        });
+    }
+
+    // bootstrap table初始化
+    // http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
+    function bsTable(self_) {
+        require('bootstrap-table');
+        require('bootstrap-table-zh-CN');
+        self_.$content.find('#mamTable').bootstrapTable({
+            url: "/month_agent_mac",
+            queryParams: function(params) {
+                var qjson = {};
+                qjson['months'] = self_.$content.find('#month_time').data("DateTimePicker").date()._d.getFullYear();
+                var qjsonkeytype = {};
+                qjsonkeytype['months'] = "LIKE_ALL";
+
+                var x_params = {};
+                x_params.source = "rep_month_agent_mac";
+                x_params.qhstr = JSON.stringify({
+                    qjson: [qjson, {agent_id: $('#iframe_home .user_code').text()}],
+                    qjsonkeytype: [qjsonkeytype]
+                });
+
+                if(params.offset!==null&&params.limit) {
+                    x_params.page = params.offset/params.limit+1;
+                    x_params.pagesize = params.limit;
+                }else {
+                    x_params.qtype = 'select';
+                }
+                x_params.sortname = params.sort;
+                x_params.sortorder = params.order;
+                return x_params;
+            },
+            idField: "months",
+            sortName: "months",
+            sortOrder: "asc",
+            pageNumber:1,      //初始化加载第一页，默认第一页
+            pageList: [10, 25, 50, 100],  //可供选择的每页的行数（*）
+            columns: require('./mam_columns'),
+            height: 500,
+            striped: true,
+            search: false,
+            searchOnEnterKey: true,
+            showRefresh: true,
+            showToggle: true,
+            showColumns: true,
+            minimumCountColumns: 2,
+            showPaginationSwitch: true,
+            clickToSelect: true,
+            detailView: false,
+            detailFormatter: 'detailFormatter',
+            pagination: true,
+            paginationLoop: false,
+            classes: 'table table-hover table-no-bordered',
+            sidePagination: 'server',
+            silentSort: false,
+            smartDisplay: false,
+            escape: true,
+            maintainSelected: true,
+            toolbar: self_.$content.find('#toolbar')
+        }).on('all.bs.table', function(e, name, args) {
+            $('[data-toggle="tooltip"]').tooltip();
+            $('[data-toggle="popover"]').popover();
+        });
+    }
+
+    // bs表格按钮事件
+    window.actionEvents = {
+        'click .lock': function(e, value, row, index) {
+            lockAction(row);
+        },
+        'click .edit': function(e, value, row, index) {
+            createAsUpdateAction(row);
+        },
+        'click .remove': function(e, value, row, index) {
+            deleteAction(row);
+        }
+    };
+
+    function initMonth() {
+        $('#month_time').datetimepicker({
+            format: 'YYYY年',
+            locale: 'zh-cn',
+            defaultDate: new Date()
+        }).on('dp.change', function(e) {
+            $(this).parent().parent().parent().parent().find('#mamTable').bootstrapTable('refresh', {});
+        });
     }
 });
