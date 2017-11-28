@@ -268,7 +268,7 @@ define(function (require, exports, module) {
             $('.x-dropbox-tooltip').tooltip();
             $.get('/user/info', {}, function (result) {
                 $('.s-profile .sp-info span').text(result.rolename+' '+result.relname + '，你好！');
-                $('#iframe_home .user_code').text(result.anget_id);
+                $('#iframe_home .user_code').text(result.agent_id);
             }, 'json');
         },
         _loadMyIndex: function() {

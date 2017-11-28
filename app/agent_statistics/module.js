@@ -14,13 +14,13 @@ define(function(require, exports, module) {
     require('moment_zh_cn');
     require('bootstrap-datetimepicker');
 
-    var self_ = $('.data_statistics');
+    var self_ = $('.agent_statistics');
     var $table = self_.find('#table');
 
-    var url = '/all_data',
-        table = 'rep_all_data',
-        source_id = 'days',
-        sort_name = 'days',
+    var url = '/month_agent_mac/anget_statistics',
+        table = 'rep_month_agent_mac',
+        source_id = 'months',
+        sort_name = 'months',
         sort_order = 'asc';
 
     module.exports = {
@@ -37,9 +37,10 @@ define(function(require, exports, module) {
             self_.on('input propertychange', 'input[name="searchText"]', function() {
                 if ($(this).val().length === 0) f_search();
             });
-            // 按钮 查看走势图
-            self_.on('click', '.x-heading-btn', function() {
-                chartsConfirm();
+            // 查看用户详情
+            self_.on('click', '.x-anget-account-detail', function() {
+                var account = $(this).data('value');
+                accountDetail(account);
             });
             // 数据表格动态高度
             $(window).resize(function() {
@@ -49,6 +50,7 @@ define(function(require, exports, module) {
             });
         },
         _loadMain: function() {
+            $('select').select2();
             initDays();
             bsTable();
         }
@@ -69,111 +71,6 @@ define(function(require, exports, module) {
         return year+'-'+month;
     }
 
-    function chartsConfirm() {
-        var date = $('#days_time').data("DateTimePicker").date();
-        $.confirm({
-            title: "数据统计走势图",
-            content: 'url:../app/data_statistics_charts_dialog.html',
-            buttons: {
-                cancel: {
-                    text: '关闭',
-                    btnClass: 'waves-effect waves-button'
-                }
-            },
-            onOpen: function () {
-                setTimeout(function (days) {
-                    initCharts(days);
-                }, 500, formatDate(date._d.getFullYear(),(date._d.getMonth()+1)));
-            }
-        });
-    }
-
-    function initCharts(days) {
-        $.get('/all_data/q_charts', {date: days? days: 'all'}, function(result) {
-            var option = {
-                global: {
-                    useUTC: false
-                },
-                title: {
-                    text: null
-                },
-                xAxis: {
-                    type: 'datetime',
-                    dateTimeLabelFormats: {
-                        day: '%m月%d日',
-                        week: '%m月%d日',
-                        month: '%Y年%m月',
-                        year: '%Y年'
-                    },
-                    labels: {
-                        rotation: -45
-                    }
-                },
-                legend: {
-                    enabled: true
-                },
-                plotOptions: {
-                    series: {
-                        label: {
-                            connectorAllowed: false
-                        }
-                    }
-                },
-                responsive: {
-                    rules: [{
-                        condition: {
-                            maxWidth: 500
-                        },
-                        chartOptions: {
-                            legend: {
-                                layout: 'horizontal',
-                                align: 'center',
-                                verticalAlign: 'bottom'
-                            }
-                        }
-                    }]
-                },
-                credits: { enabled: false }
-            };
-
-            var history_users = [],
-                now_new_users = [],
-                now_active_users = [];
-
-            $.each(result.data, function(i, o) {
-                var split = o.days.split('-');
-                var date = Date.UTC(split[0], split[1]-1, split[2]);
-
-                history_users.push([date, parseInt(o.history_users)]);
-                now_new_users.push([date, parseInt(o.now_new_users)]);
-                now_active_users.push([date, parseInt(o.now_active_users)]);
-            });
-
-            option['yAxis'] = {
-                title: {
-                    text: '人数(个)'
-                }
-            };
-            option['series'] = [{
-                name: '历史用户数',
-                data: history_users
-            },{
-                name: '当日新增用户',
-                data: now_new_users
-            },{
-                name: '当日活跃用户',
-                data: now_active_users
-            }];
-
-            option['tooltip'] = {
-                headerFormat: '<b>日期：</b>{point.x:%Y年%m月%d日}<br>',
-                pointFormat: '<b>{series.name}：</b>{point.y:.0f}个'
-            };
-
-            Highcharts.chart('data_statistics_charts', option);
-        }, 'json');
-    }
-
     // bootstrap table初始化
     // http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
     function bsTable() {
@@ -185,15 +82,30 @@ define(function(require, exports, module) {
                 var qjson = {};
                 var date = $('#days_time').data("DateTimePicker").date();
                 qjson['days'] = formatDate(date._d.getFullYear(),(date._d.getMonth()+1));
+                var queryrt = [];
+                if (self_.find('select[name="searchWhere"]').val() === "account") {
+                    queryrt = [{
+                        reltb: 'sys_user',
+                        reltbfield: 'account',
+                        maintbfield: 'agent_id',
+                        reltbfieldvalue: self_.find('input[name="searchText"]').val(),
+                        qtype: 'LIKE_ALL'
+                    }]
+                } else {
+                    qjson[self_.find('select[name="searchWhere"]').val()] = self_.find('input[name="searchText"]').val();
+                }
+
                 var qjsonkeytype = {};
                 qjsonkeytype['days'] = "LIKE_ALL";
+                qjsonkeytype[self_.find('select[name="searchWhere"]').val()] = "LIKE_ALL";
 
                 var x_params = {};
                 x_params.source = table;
                 x_params.qhstr = JSON.stringify({
                     qjson: [qjson],
-                    qjsonkeytype: [qjsonkeytype]
-                })
+                    qjsonkeytype: [qjsonkeytype],
+                    queryrt: queryrt
+                });
                 if(params.offset!==null&&params.limit) {
                     x_params.page = params.offset/params.limit+1;
                     x_params.pagesize = params.limit;
@@ -236,6 +148,50 @@ define(function(require, exports, module) {
             $('[data-toggle="popover"]').popover();
         });
     }
+
+    function accountDetail(account) {
+        $.confirm({
+            title: "账号 " + account + " 个人资料",
+            closeIcon: true,
+            content: 'url:../app/anget_account_detail_dialog.html',
+            // cancelButton: false, // hides the cancel button.
+            // confirmButton: false, // hides the confirm button.
+            buttons: {
+                cancel: {
+                    text: '关闭',
+                    btnClass: 'waves-effect waves-button'
+                }
+            },
+            onOpen: function () {
+                var self = this;
+                setTimeout(function (self_, account) {
+                    $.get('/user/info_bank', {account: account}, function (result) {
+                        self_.$content.find('.x-agent-account-detail').empty();
+                        var nameKey = {
+                            account: "账号",
+                            qq: "QQ号",
+                            mobile: "手机号",
+                            email: "邮箱地址",
+                            rece_name: "收款人",
+                            bank: "开户行",
+                            bank_branch: "开户支行",
+                            bank_address: "支行地址",
+                            bank_account: "银行账号",
+                            company: "公司名称"};
+                        $.each(result.user, function(k, v) {
+                            var row = $('<tr><td>'+nameKey[k]+'</td><td>'+v+'</td></tr>');
+                            if (nameKey[k]) self_.$content.find('.x-agent-account-detail').append(row);
+                        });
+                        $.each(result.bank, function(k, v) {
+                            var row = $('<tr><td>'+nameKey[k]+'</td><td>'+v+'</td></tr>');
+                            if (nameKey[k]) self_.$content.find('.x-agent-account-detail').append(row);
+                        });
+                    }, 'json')
+                }, 500, self, account);
+            }
+        });
+    }
+
     // 搜索
     function f_search() {
         $table.bootstrapTable('refresh', {});

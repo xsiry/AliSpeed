@@ -261,7 +261,7 @@ define(function (require, exports, module) {
             lockAction(row);
         },
         'click .detail': function(e, value, row, index) {
-            createAsUpdateAction(row);
+            showProfitDetail(row.months);
         }
     };
 
@@ -272,6 +272,35 @@ define(function (require, exports, module) {
             defaultDate: new Date()
         }).on('dp.change', function(e) {
             $(this).parent().parent().parent().parent().find('#mamTable').bootstrapTable('refresh', {});
+        });
+    }
+
+    function showProfitDetail(date) {
+        $.confirm({
+            title: "收益报表 | " + date,
+            closeIcon: true,
+            content: 'url:../app/index_month_profit_detail_dialog.html',
+            // cancelButton: false, // hides the cancel button.
+            // confirmButton: false, // hides the confirm button.
+            buttons: {
+                cancel: {
+                    text: '关闭',
+                    btnClass: 'waves-effect waves-button'
+                }
+            },
+            onOpen: function () {
+                var self = this;
+                setTimeout(function (self_, date) {
+                    $.get('/month_profit_detail', {date: date}, function (result) {
+                        self_.$content.find('.x-profit-detail').empty();
+                        var nameKey = {smasher: "加速器收益（元）", guessing: "游戏竞猜收益（元）", partner_training: "美女陪练收益（元）", steam_recharge: "steam充值收益（元）", total_profit: "共计（元）"};
+                        $.each(result.data, function(k, v) {
+                            var row = $('<tr><td>'+nameKey[k]+'</td><td>'+v+'</td></tr>');
+                            self_.$content.find('.x-profit-detail').append(row);
+                        });
+                    }, 'json')
+                }, 500, self, date);
+            }
         });
     }
 });
