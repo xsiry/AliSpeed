@@ -1,0 +1,233 @@
+   body,
+   html {
+       height: 100%;
+       font-family: 'Microsoft yahei', sans-serif;
+       font-size: 13px;
+       font-weight: 400;
+   }
+
+   img {
+       vertical-align: middle;
+   }
+
+   a,
+   a:hover,
+   a:active,
+   a:focus {
+       text-decoration: none;
+       -webkit-user-drag: none;
+   }
+
+   a i {
+       font-size: 13px;
+   }
+
+   body {
+       background: url(/images/login/背景图案.png);
+   }
+
+   #login-window {
+       position: relative;
+       top: 50%;
+       left: 50%;
+       width: 580px;
+       height: 280px;
+       margin-left: -290px;
+       margin-top: -140px;
+       z-index: 10;
+       background: url(/images/login/登陆框背景.png);
+   }
+
+   #login-window .m-b-20 {
+       margin-bottom: 20px !important;
+   }
+
+   #login-window>div {
+       padding: 50px 0px 50px 40px;
+       width: 50%;
+       height: 100%;
+       float: left;
+   }
+
+   #login-window>div:first-child {
+       padding: 50px 20px
+   }
+
+   #login-window .x-l-head {
+       margin-left: 15px;
+       width: 100%;
+       color: #6c1403;
+       font-size: 17px;
+       font-weight: 500;
+       text-align: center;
+   }
+
+   #login-window .x-r-head {
+       margin: -35px auto 0 auto;
+       width: 190px;
+       height: 40px;
+       background: url(/images/login/快速注册.png);
+   }
+
+   #login-window .col-md-3,
+   .col-md-9 {
+       padding-left: 0;
+       padding-right: 0;
+   }
+
+   #login-window .form-control {
+       width: 155px;
+       height: 24px;
+       padding: 6px 5px;
+   }
+
+   #login-window .form-group {
+       margin-bottom: 10px;
+   }
+
+   #login-window .x-login-block {
+       padding-left: 40px;
+       margin-top: 15px;
+   }
+
+   #login-window .form-horizontal .control-label {
+       padding-top: 3px;
+   }
+
+   #login-window label.checkbix {
+       padding-left: 0px;
+       margin-left: -7px;
+   }
+
+   #login-window input[type=checkbox].checkbix:checked+label>span:before {
+       box-sizing: content-box;
+   }
+
+   #login-window .backpwd_btn {
+       position: absolute;
+       right: 45px;
+       color: #428bca;
+       top: 8px;
+       font-size: 13px;
+       font-weight: 400;
+   }
+
+   #login-window .backpwd_btn:hover {
+       border-bottom: 1px solid #428bca;
+   }
+
+   #login-window .x-login-btns {
+       margin-left: -7px;
+       margin-top: 15px;
+   }
+
+   #login-window .x-login-btns .login_btn {
+       display: inline-block;
+       width: 73px;
+       height: 31px;
+       background: url(/images/login/登录_默认.png);
+   }
+
+   #login-window .x-login-btns .rest_btn {
+       margin-left: 20px;
+       display: inline-block;
+       width: 73px;
+       height: 31px;
+       background: url(/images/login/重置_默认.png);
+   }
+
+   #login-window .x-login-btns .login_btn:active {
+       background: url(/images/login/登录_触发.png);
+   }
+
+   #login-window .x-login-btns .rest_btn:active {
+       background: url(/images/login/重置_触发.png);
+   }
+
+   #login-window .x-register-block {
+       color: #FFF;
+       padding-left: 20px;
+       margin-top: -5px;
+   }
+
+   #login-window .x-register-block .form-control {
+       width: 125px;
+       height: 20px;
+       font-size: 12px;
+       color: #fff;
+       padding: 6px 5px;
+       background-color: #7f1d07;
+       background-image: none;
+       border: 1px solid #753d3d;
+   }
+
+   #login-window .x-login-block .form-control-feedback {
+       right: 20px !important;
+       line-height: 24px;
+   }
+
+   #login-window .x-register-block .form-control:focus {
+       border-color: #dc9080;
+       -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(220, 144, 128, .6);
+       box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(220, 144, 128, .6);
+   }
+
+   #login-window .x-register-block .form-group {
+       margin-bottom: 3px;
+   }
+
+   #login-window .x-register-block .form-control-feedback {
+       right: 70px !important;
+       line-height: 20px;
+   }
+
+   #login-window .x-register-btns {
+       text-align: center;
+       padding-right: 40px;
+   }
+
+   #login-window .x-register-btns .register_btn {
+       display: inline-block;
+       width: 90px;
+       height: 30px;
+       background: url(/images/login/注册_默认.png);
+   }
+
+   #login-window .x-register-btns .register_btn:active {
+       background: url(/images/login/注册_触发.png);
+   }
+
+   .has-success .form-control-feedback {
+       color: #00ff04;
+   }
+
+   .has-error .form-control-feedback {
+       color: #ff0500;
+   }
+
+   .has-success .control-label {
+       color: #00ff04;
+   }
+
+   .has-error .control-label {
+       color: #ff0500;
+   }
+
+   #login-window .x-register-block .has-error .control-label {
+       color: #f9d2d2;
+   }
+
+   .footer {
+       position: absolute;
+       bottom: 10%;
+       left: 50%;
+       margin-left: -88px;
+       height: 65px;
+       padding: 10px;
+       color: #FFF;
+   }
+
+   .footer p {
+       font-size: 16px;
+       text-align: center;
+   }

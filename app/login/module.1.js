@@ -8,7 +8,6 @@
 define(function (require, exports, module) {
     var $ = require('jquery');
     require('bootstrap');
-    require.async('toastr');
 
     var accountModule = require('../index/module_account');
 
@@ -21,7 +20,6 @@ define(function (require, exports, module) {
             require('waves');
             Waves.displayEffect();
             xValidator();
-            accountModule._register();
             checkCookie();
             this._bindUI();
         },
@@ -34,21 +32,12 @@ define(function (require, exports, module) {
                 $(this).parent().removeClass('fg-toggled');
             });
             // bind login
-            login_.on("click", '.login_btn', function () {
+            login_.on("click", '#login-bt', function () {
                 $('#loginForm').submit();
-            });
-            // bind rest
-            login_.on("click", '.rest_btn', function () {
-                $('#loginForm')[0].reset();
-                $('#loginForm').data('formValidation').resetForm();
             });
             // bind login
             login_.on("keypress", '#username, #password', function (e) {
                 if (e.which === "13") $('#loginForm').submit();
-            });
-            // bind login
-            login_.on("click", '.register_btn', function () {
-                $('#registerForm').submit();
             });
             // 设置input特效
             $(document).on('focus', 'input[type="text"]', function () {
@@ -65,10 +54,10 @@ define(function (require, exports, module) {
                     $(this).parent().find('label').removeClass('active');
                 }
             });
-            // // bind register_btn
-            // $('body').on("click", '.register_btn', function () {
-            //     accountModule._register1();
-            // })
+            // bind register_btn
+            $('body').on("click", '.register_btn', function () {
+                accountModule._register();
+            })
         }
     };
 
@@ -125,6 +114,7 @@ define(function (require, exports, module) {
 
             // Use Ajax to submit form data
             $.post(url, $form.serialize(), function (result) {
+                require('toastr');
                 toastr.options = {
                     closeButton: true,
                     progressBar: true,
