@@ -1,0 +1,35 @@
+<link href="../app/withdrawal_record/style.css" rel="stylesheet"/>
+<div id="main" class="withdrawal_record">
+    <div id="toolbar">
+        <div class="pull-right">
+            <input type="text" class="form-control" name="searchText" style="height: 28px;margin-top: 5px;" placeholder="搜索">
+        </div>
+        <div class="pull-right">
+            <select name="searchWhere" title="搜索条件" style="width:150px">
+                <option value="cash_month">月份</option>
+            </select>
+        </div>
+        <div class="pull-right">
+            <select name="status" title="交易状态" style="width:150px">
+                <option value="1">全部</option>
+                <option value="2">申请提现</option>
+                <option value="3">审核通过</option>
+                <option value="4">审核失败</option>
+                <option value="8">已打款</option>
+            </select>
+        </div>
+    </div>
+    <table id="table"></table>
+</div>
+<script type="text/javascript">
+    seajs.config({
+        base: "/plugins/",
+        alias: {
+            'bootstrap-table': 'bootstrap-table-1.11.0/bootstrap-table.min.js',
+            'bootstrap-table-zh-CN': 'bootstrap-table-1.11.0/locale/bootstrap-table-zh-CN.min.js',
+            'select2': 'select2/js/select2.full.min.js',
+            'select2_zh_CN': 'select2/js/i18n/zh-CN.js'
+        }
+    });
+    seajs.use("./app/withdrawal_record/main");
+</script>

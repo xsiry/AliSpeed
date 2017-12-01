@@ -277,6 +277,19 @@ define(function (require, exports, module) {
             $.get('/user/info', {}, function (result) {
                 $('.s-profile .sp-info span').text(result.rolename+' '+result.relname + '，你好！');
                 $('#iframe_home .user_code').text(result.agent_id);
+                if (result.rolename === "超级管理员") {
+                    var dropbox = '<li class="dropdown">'
+                    + '<a class="waves-effect waves-light x-dropbox-tooltip" data-toggle="tooltip" href="javascript:;" data-placement="left" title="配置打包">'
+                    + '<i class="him-icon zmdi zmdi-dropbox"></i></a></li>'
+                    $('.x-avtools').prepend(dropbox);
+                    var sysset = '<li><a class="waves-effect x-settings" href="javascript:;"><i class="zmdi zmdi-settings"></i> 系统设置</a></li>';
+                    $('.x-systools').find('li').eq(0).after(sysset);
+                }else if (result.rolename === "推广用户") {
+                    var dropbox = '<li class="dropdown">'
+                        + '<a class="waves-effect waves-light x-download-tooltip" data-toggle="tooltip" href="javascript:;" data-placement="left" title="推广包下载">'
+                        + '<i class="him-icon zmdi zmdi-download"></i></a></li>'
+                    $('.x-avtools').prepend(dropbox);
+                }
             }, 'json');
         },
         _loadMyIndex: function() {
