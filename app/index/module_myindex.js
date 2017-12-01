@@ -63,7 +63,11 @@ define(function (require, exports, module) {
     }
 
     function initInfo() {
-
+        $.get('/agent_cashapply/q_info', {}, function(result) {
+            $('.now_month_profit').text(result.now_month_profit === "-1"? "0": result.now_month_profit);
+            $('.withdrawal_money').text(result.withdrawal_money === "-1"? "0": result.withdrawal_money);
+            $('.now_withdrawal_money').text(result.now_withdrawal_money === "-1"? "0": result.now_withdrawal_money);
+        }, 'json');
     }
 
     function initChart(type, date) {
@@ -206,7 +210,7 @@ define(function (require, exports, module) {
                 qjsonkeytype['months'] = "LIKE_ALL";
 
                 var x_params = {};
-                x_params.source = "rep_month_agent_mac";
+                x_params.source = "rep_agent_mac_month";
                 x_params.qhstr = JSON.stringify({
                     qjson: [qjson, {agent_id: $('#iframe_home .user_code').text()}],
                     qjsonkeytype: [qjsonkeytype]
@@ -258,7 +262,7 @@ define(function (require, exports, module) {
     // bs表格按钮事件
     window.actionEvents = {
         'click .withdrawal': function(e, value, row, index) {
-            lockAction(row);
+            withdrawalPost(row);
         },
         'click .detail': function(e, value, row, index) {
             showProfitDetail(row.months);
@@ -300,6 +304,52 @@ define(function (require, exports, module) {
                         });
                     }, 'json')
                 }, 500, self, date);
+            }
+        });
+    }
+
+
+    function withdrawalPost(row) {
+        var params = {
+            cash_month: row.months,
+            agent_id: row.agent_id,
+            cash_money: row.total_profit,
+            status: 1
+        }
+        $.confirm({
+            type: 'blue',
+            animationSpeed: 300,
+            title: false,
+            autoClose: 'cancel|10000',
+            content: '确认提现吗？',
+            buttons: {
+                confirm: {
+                    text: '确认',
+                    btnClass: 'waves-effect waves-button',
+                    action: function() {
+                        $.post('/agent_cashapply/withdrawal', params, function(result) {
+                            var msg;
+                            toastr.options = {
+                                closeButton: true,
+                                progressBar: true,
+                                showMethod: 'slideDown',
+                                timeOut: 4000
+                            };
+                            if (result.success) {
+                                msg = result.msg;
+                                toastr.success(msg);
+                                $('#mamTable').bootstrapTable('refresh', {});
+                            } else {
+                                msg = result.msg;
+                                toastr.error(msg);
+                            }
+                        }, 'json');
+                    }
+                },
+                cancel: {
+                    text: '取消',
+                    btnClass: 'waves-effect waves-button'
+                }
             }
         });
     }

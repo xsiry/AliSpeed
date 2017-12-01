@@ -210,7 +210,7 @@ define(function(require, exports, module) {
                     $.each(row, function (key, val) {
                         if(key === 'bank') {
                             initSelect(val);
-                        }else if (key === 'bank_license') {
+                        }else if (key === 'buslic_img') {
                             uploadFile(val.split(';'));
                         } else {
                             self.$content.find('label[for="' + key + '"]').addClass('active');
@@ -232,7 +232,7 @@ define(function(require, exports, module) {
                             params[o.name] = o.value;
                         });
 
-                        if ( !params['bank_license'] && self.$content.find('.x-uploaded').length === 0) {
+                        if ( !params['buslic_img'] && self.$content.find('.x-uploaded').length === 0) {
                             $.alert({
                                 title: '提示',
                                 content: '请先选择或上传图片!',
@@ -358,7 +358,7 @@ define(function(require, exports, module) {
     function uploadFile(urls) {
         let option = {
             url: '/file/upload/bank',
-            field: 'bank_license',
+            field: 'buslic_img',
             upload_main: '#x-uploader',
             list_block: '#x-fileList',
             upload_btn: '#x-upload',

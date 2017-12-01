@@ -136,11 +136,11 @@
        background: url(/images/login/重置_默认.png);
    }
 
-   #login-window .x-login-btns .login_btn:active {
+   #login-window .x-login-btns .login_btn:hover {
        background: url(/images/login/登录_触发.png);
    }
 
-   #login-window .x-login-btns .rest_btn:active {
+   #login-window .x-login-btns .rest_btn:hover {
        background: url(/images/login/重置_触发.png);
    }
 
@@ -193,7 +193,7 @@
        background: url(/images/login/注册_默认.png);
    }
 
-   #login-window .x-register-btns .register_btn:active {
+   #login-window .x-register-btns .register_btn:hover {
        background: url(/images/login/注册_触发.png);
    }
 

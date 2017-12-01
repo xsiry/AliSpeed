@@ -5,7 +5,7 @@ define([
     { field: 'bank_account', title: '银行账户', sortable: true, halign: 'center' },
     { field: 'bank_branch', title: '开户支行', sortable: true, halign: 'center' },
     { field: 'bank_address', title: '支行地址', sortable: true, halign: 'center' },
-    { field: 'bank_license', title: '营业执照', sortable: true, halign: 'center', formatter: licenseFormatter, events: 'licenseEvents' },
+    { field: 'buslic_img', title: '营业执照', sortable: true, halign: 'center', formatter: licenseFormatter, events: 'licenseEvents' },
     { field: 'createtime', title: '添加时间', sortable: true, halign: 'center', align: 'center' },
     { field: 'action', title: '操作', halign: 'center', align: 'center', formatter: actionFormatter, events: 'actionEvents', clickToSelect: false }
 ]);

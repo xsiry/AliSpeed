@@ -127,6 +127,14 @@ define(function (require, exports, module) {
                 myIndexModule._repMonthGrid();
             });
 
+            $.index_.on(click, '.x-withdrawal', function () {
+                myIndexModule._repMonthGrid();
+            });
+
+            $.index_.on(click, '.x-withdrawal-record', function () {
+                $('.x-menu[data-title="提现记录"]').trigger('click');
+            });
+
             // 菜单点击
             $.index_.on(click, '.x-menu', function () {
                 var title = $(this).data('title');
