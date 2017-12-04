@@ -160,16 +160,16 @@ define(function (require, exports, module) {
                     timeOut: 4000
                 };
                 if (result.success) {
-                    msg = '注册' + result.msg;
+                    msg = result.msg;
                     toastr.success(msg);
                     $('#registerForm')[0].reset();
                     $('#registerForm').data('formValidation').resetForm();
                 } else {
-                    msg = '注册' + result.msg;
+                    msg = result.msg;
                     toastr.error(msg);
-                    $('.register_btn').prop("disabled", false);
                 }
-                ;
+                $('.register_btn').removeClass('disabled');
+                $('.register_btn').attr("disabled", false);
             }, 'json');
         });
     }
@@ -455,8 +455,8 @@ define(function (require, exports, module) {
                                     toastr.error(msg);
                                     $(self.$$confirm[0]).prop("disabled", false);
                                 }
-                                ;
-
+                                $(self.$$confirm[0]).removeClass('disabled');
+                                $(self.$$confirm[0]).attr("disabled", false);
                             }, 'json');
                         });
                     }, 500, result);
@@ -591,9 +591,9 @@ define(function (require, exports, module) {
                             } else {
                                 msg = title + result.msg;
                                 toastr.error(msg);
-                                $(self.$$confirm[0]).prop("disabled", false);
                             }
-                            ;
+                            $(self.$$confirm[0]).removeClass('disabled');
+                            $(self.$$confirm[0]).attr("disabled", false);
                         }, 'json');
                     });
                 }, 500);

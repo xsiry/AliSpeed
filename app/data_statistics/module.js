@@ -18,7 +18,7 @@ define(function(require, exports, module) {
     var $table = self_.find('#table');
 
     var url = '/all_data',
-        table = 'rep_all_data',
+        table = 'rep_all_data_days',
         source_id = 'days',
         sort_name = 'days',
         sort_order = 'asc';
@@ -38,7 +38,7 @@ define(function(require, exports, module) {
                 if ($(this).val().length === 0) f_search();
             });
             // 按钮 查看走势图
-            self_.on('click', '.x-heading-btn', function() {
+            self_.on('click', '.x-data-stat-btn', function() {
                 chartsConfirm();
             });
             // 数据表格动态高度
@@ -136,33 +136,65 @@ define(function(require, exports, module) {
                 credits: { enabled: false }
             };
 
-            var history_users = [],
-                now_new_users = [],
-                now_active_users = [];
+            var history_mac = [],
+                new_mac = [],
+                active_mac = [],
+                history_users = [],
+                new_users = [],
+                active_users = [],
+                sales_amount = [],
+                agent_amount = [],
+                agent_total = [];
 
             $.each(result.data, function(i, o) {
                 var split = o.days.split('-');
                 var date = Date.UTC(split[0], split[1]-1, split[2]);
 
+                history_mac.push([date, parseInt(o.history_mac)]);
+                new_mac.push([date, parseInt(o.new_mac)]);
+                active_mac.push([date, parseInt(o.active_mac)]);
+
                 history_users.push([date, parseInt(o.history_users)]);
-                now_new_users.push([date, parseInt(o.now_new_users)]);
-                now_active_users.push([date, parseInt(o.now_active_users)]);
+                new_users.push([date, parseInt(o.new_users)]);
+                active_users.push([date, parseInt(o.active_users)]);
+
+                sales_amount.push([date, parseInt(o.sales_amount)]);
+                agent_amount.push([date, parseInt(o.agent_amount)]);
+                agent_total.push([date, parseInt(o.agent_total)]);
             });
 
             option['yAxis'] = {
                 title: {
-                    text: '人数(个)'
+                    text: '数值(台、个、元)'
                 }
             };
             option['series'] = [{
+                name: '历史终端数',
+                data: history_mac
+            },{
+                name: '当日新增终端',
+                data: new_mac
+            },{
+                name: '当日活跃终端',
+                data: active_mac
+            },{
                 name: '历史用户数',
                 data: history_users
             },{
                 name: '当日新增用户',
-                data: now_new_users
+                data: new_users
             },{
                 name: '当日活跃用户',
-                data: now_active_users
+                data: active_users
+            },{
+                name: '日销售金额',
+                data: sales_amount
+            },{
+                name: '日渠道分成金额',
+                data: agent_amount
+            },{
+                name: '日渠道数量',
+                data: agent_total
             }];
 
             option['tooltip'] = {

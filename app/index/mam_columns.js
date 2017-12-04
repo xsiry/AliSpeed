@@ -1,6 +1,8 @@
 define([
     { field: 'months', title: '月份', sortable: true, halign: 'center' },
-    { field: 'total_mac', title: '活跃终端(台)', sortable: true, halign: 'center' },
+    { field: 'active_mac', title: '活跃终端(台)', sortable: true, halign: 'center' },
+    { field: 'total_mac', title: '总终端(台)', sortable: true, halign: 'center' },
+    { field: 'total_money', title: '月销售金额(元)', sortable: true, halign: 'center' },
     { field: 'total_profit', title: '月收益(元)', sortable: true, halign: 'center' },
     { field: 'status', title: '申请提现', halign: 'center', align: 'center', formatter: withdrawalFormatter, events: 'actionEvents', clickToSelect: false },
     { field: 'remarks', title: '备注', sortable: true, halign: 'center' },

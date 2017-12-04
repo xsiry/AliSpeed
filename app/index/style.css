@@ -284,3 +284,11 @@ a:focus {
     outline: none !important;
     outline-offset: 0;
 }
+
+#x-index {
+    display: none;
+}
+
+.x-error {
+    color: red;
+}

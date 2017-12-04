@@ -1,22 +1,63 @@
 <link href="../app/bank/style.css" rel="stylesheet"/>
 <div id="main" class="bank_main">
-    <div id="toolbar">
-        <a class="waves-effect waves-button create_act" href="javascript:;"><i class="zmdi zmdi-plus"></i> 新增</a>
-        <div class="pull-right">
-            <input type="text" class="form-control" name="searchText" style="height: 28px;margin-top: 5px;" placeholder="搜索">
+    <form style="padding-top: 20px;">
+        <input type="hidden" name="user_bank_id">
+        <div class="form-group">
+            <label for="company">公司名称</label>
+            <input id="company" type="text" name="company" class="form-control">
         </div>
-        <div class="pull-right">
-            <select name="searchWhere" title="搜索条件" style="width:150px">
-                <option value="company">公司名称</option>
-                <option value="rece_name">收款人</option>
-                <option value="bank">开户银行</option>
-                <option value="bank_account">银行账户</option>
-                <option value="bank_branch">开户支行</option>
-                <option value="bank_address">支行地址</option>
+        <div class="form-group">
+            <label for="rece_name">收款人</label>
+            <input id="rece_name" type="text" name="rece_name" class="form-control">
+        </div>
+        <div class="form-group">
+            <select id="bank" name="bank" class="form-control chosen-select">
+                <option value="BOC">中国银行</option>
+                <option value="ICBC">中国工商银行</option>
+                <option value="CCB">中国建设银行</option>
+                <option value="ABC">中国农业银行</option>
             </select>
         </div>
-    </div>
-    <table id="table"></table>
+        <div class="form-group">
+            <label for="bank_account">银行账户</label>
+            <input id="bank_account" type="text" name="bank_account" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="bank_branch">开户支行</label>
+            <input id="bank_branch" type="text" name="bank_branch" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="bank_address">支行地址</label>
+            <input id="bank_address" type="text" name="bank_address" class="form-control">
+        </div>
+        <div id="x-uploader" class="x-uploader-main">
+            <!--用来存放item-->
+            <div id="x-fileList" class="uploader-list"></div>
+            <div class="bts">
+                <div id="x-picker" class="x-picker-btn">选择图片</div>
+                <div id="x-upload" class="btn btn-default">开始上传</div>
+            </div>
+        </div>
+        <hr />
+        <button class="btn btn btn-primary x-submit" type="submit">应用</button>
+    </form>
+    <!--<div id="toolbar">-->
+        <!--<a class="waves-effect waves-button create_act" href="javascript:;"><i class="zmdi zmdi-plus"></i> 新增</a>-->
+        <!--<div class="pull-right">-->
+            <!--<input type="text" class="form-control" name="searchText" style="height: 28px;margin-top: 5px;" placeholder="搜索">-->
+        <!--</div>-->
+        <!--<div class="pull-right">-->
+            <!--<select name="searchWhere" title="搜索条件" style="width:150px">-->
+                <!--<option value="company">公司名称</option>-->
+                <!--<option value="rece_name">收款人</option>-->
+                <!--<option value="bank">开户银行</option>-->
+                <!--<option value="bank_account">银行账户</option>-->
+                <!--<option value="bank_branch">开户支行</option>-->
+                <!--<option value="bank_address">支行地址</option>-->
+            <!--</select>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<table id="table"></table>-->
 </div>
 <script type="text/javascript">
     seajs.config({

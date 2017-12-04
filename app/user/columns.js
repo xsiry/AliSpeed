@@ -13,7 +13,7 @@ define([
 function actionFormatter(value, row, index) {
     var lock = '<a class="lock ml10" href="javascript:void(0)" data-toggle="tooltip" title="lock"><i class="glyphicon glyphicon-lock"></i></a>　';
     var del = '<a class="remove ml10" href="javascript:void(0)" data-toggle="tooltip" title="Remove"><i class="glyphicon glyphicon-remove"></i></a>　';
-    if (row.account === "root") lock = '',del = '';
+    if (row.account === "admin") lock = '',del = '';
     return [
         lock,
         '<a class="edit ml10" href="javascript:void(0)" data-toggle="tooltip" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>　',
@@ -22,7 +22,7 @@ function actionFormatter(value, row, index) {
 }
 
 function ridFormatter(value, row, index) {
-    var text = {1: '普通用户', 2: '公司内部用户', 9: '管理员用户'};
+    var text = {1: '超级管理员', 2: '渠道部', 3: '财务部', 4: '推广用户'};
     return text[value];
 }
 

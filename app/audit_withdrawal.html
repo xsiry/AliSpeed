@@ -1,16 +1,21 @@
-<link href="../app/agent_statistics/style.css" rel="stylesheet"/>
-<div id="main" class="agent_statistics">
+<link href="../app/audit_withdrawal/style.css" rel="stylesheet"/>
+<div id="main" class="audit_withdrawal">
     <div id="toolbar">
-        <div class="pull-left">
-            <input id="agent_month_time" class="form-control x-heading-days" />
-        </div>
         <div class="pull-right">
             <input type="text" class="form-control" name="searchText" style="height: 28px;margin-top: 5px;" placeholder="搜索">
         </div>
         <div class="pull-right">
             <select name="searchWhere" title="搜索条件" style="width:150px">
-                <option value="account">渠道账号</option>
-                <option value="agent_id">推广码</option>
+                <option value="account">账号名称</option>
+            </select>
+        </div>
+        <div class="pull-right">
+            <select name="status" title="交易状态" style="width:150px">
+                <option value="1">全部</option>
+                <option value="2">申请提现</option>
+                <option value="3">审核通过</option>
+                <option value="4">审核失败</option>
+                <option value="8">已打款</option>
             </select>
         </div>
     </div>
@@ -26,5 +31,5 @@
             'select2_zh_CN': 'select2/js/i18n/zh-CN.js'
         }
     });
-    seajs.use("./app/agent_statistics/main");
+    seajs.use("./app/audit_withdrawal/main");
 </script>

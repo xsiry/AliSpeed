@@ -118,14 +118,18 @@ define(function (require, exports, module) {
                 credits: { enabled: false }
             };
 
-            var mac = [];
+            var total_mac = [];
+            var active_mac = [];
             var equity = [];
+            var total_money = [];
             var total_equity = 0;
             $.each(result.data, function(i, o) {
                 var split = o.days.split('-');
                 var date = Date.UTC(split[0], split[1]-1, split[2]);
-                mac.push([date, o.total_mac.toFloat()]);
+                active_mac.push([date, o.active_mac.toFloat()]);
+                total_mac.push([date, o.total_mac.toFloat()]);
                 equity.push([date, o.total_profit.toFloat()]);
+                total_money.push([date, o.total_money.toFloat()]);
                 total_equity += o.total_profit.toFloat();
             });
 
@@ -136,13 +140,16 @@ define(function (require, exports, module) {
                     }
                 };
                 option['series'] = [{
-                    name: '终端数',
-                    data: mac
+                    name: '日活跃终端数',
+                    data: active_mac
+                }, {
+                    name: '总终端数',
+                    data: total_mac
                 }];
 
                 option['tooltip'] = {
                     headerFormat: '<b>日期：</b>{point.x:%Y年%m月%d日}<br>',
-                    pointFormat: '<b>终端：</b>{point.y:.0f}台'
+                    pointFormat: '<b>{series.name}：</b>{point.y:.0f}台'
                 };
 
                 Highcharts.chart('mac_container', option);
@@ -156,13 +163,16 @@ define(function (require, exports, module) {
                     }
                 };
                 option['series'] = [{
-                    name: '权益值',
+                    name: '月销售金额',
+                    data: total_money
+                }, {
+                    name: '月收益',
                     data: equity
                 }];
 
                 option['tooltip'] = {
                     headerFormat: '<b>日期：</b>{point.x:%Y年%m月%d日}<br>',
-                    pointFormat: '<b>权益：</b>{point.y:.2f}元'
+                    pointFormat: '<b>{series.name}：</b>{point.y:.2f}元'
                 };
 
                 Highcharts.chart('equity_container', option);

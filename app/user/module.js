@@ -208,10 +208,10 @@ define(function(require, exports, module) {
         };
         $.getJSON('/user', params, function(json) {
             var arr = [];
-            for (var i = 0; i < json.length; i ++) {
+            for (var i = 0; i < json.rows.length; i ++) {
                 var data = {};
-                data.id = json[i].rid;
-                data.text = json[i].rolename;
+                data.id = json.rows[i].rid;
+                data.text = json.rows[i].rolename;
                 arr.push(data);
             }
             $('#rid').empty().append("<option></option>");

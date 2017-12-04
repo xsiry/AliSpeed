@@ -18,7 +18,7 @@ define(function(require, exports, module) {
     var $table = self_.find('#table');
 
     var url = '/month_agent_mac/anget_statistics',
-        table = 'rep_month_agent_mac',
+        table = 'rep_agent_mac_month',
         source_id = 'months',
         sort_name = 'months',
         sort_order = 'asc';
@@ -57,7 +57,7 @@ define(function(require, exports, module) {
     };
 
     function initDays() {
-        $('#days_time').datetimepicker({
+        $('#agent_month_time').datetimepicker({
             format: 'YYYY年MM月',
             locale: 'zh-cn',
             defaultDate: new Date()
@@ -80,8 +80,8 @@ define(function(require, exports, module) {
             url: url,
             queryParams: function(params) {
                 var qjson = {};
-                var date = $('#days_time').data("DateTimePicker").date();
-                qjson['days'] = formatDate(date._d.getFullYear(),(date._d.getMonth()+1));
+                var date = $('#agent_month_time').data("DateTimePicker").date();
+                qjson['months'] = formatDate(date._d.getFullYear(),(date._d.getMonth()+1));
                 var queryrt = [];
                 if (self_.find('select[name="searchWhere"]').val() === "account") {
                     queryrt = [{
@@ -96,7 +96,7 @@ define(function(require, exports, module) {
                 }
 
                 var qjsonkeytype = {};
-                qjsonkeytype['days'] = "LIKE_ALL";
+                qjsonkeytype['months'] = "LIKE_ALL";
                 qjsonkeytype[self_.find('select[name="searchWhere"]').val()] = "LIKE_ALL";
 
                 var x_params = {};
