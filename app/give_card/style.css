@@ -1,0 +1,34 @@
+#toolbar .pull-right {  margin-left: 10px;  }
+
+legend {
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin-bottom: 0px;
+    font-size: 12px;
+    line-height: inherit;
+    color: #337ab7;
+    border: 0;
+    border-bottom: 2px solid #337ab7;
+}
+
+.x-generate-btn {
+    display: inline-block;
+}
+
+.x-card-info ul {
+    padding-left: 10px;
+    margin: 0;
+    font-size: 16px;
+}
+
+.x-card-info ul li {
+    float: left;
+    margin-right: 20px;
+    list-style-type: none;
+}
+
+.x-card-info ul li span {
+    color: red;
+}
+

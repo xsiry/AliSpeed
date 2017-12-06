@@ -1,0 +1,47 @@
+<link href="../app/give_card/style.css" rel="stylesheet"/>
+<div id="main" class="give_card">
+    <div id="toolbar">
+        <div class="row">
+            <div class="pull-right">
+                <button class="btn btn-primary x-export-btn" style="height: 28px;line-height: 1.12;">导出excel</button>
+            </div>
+            <div class="pull-right">
+                <input type="text" class="form-control" name="searchText" style="height: 28px;margin-top: 5px;" placeholder="搜索">
+            </div>
+            <div class="pull-right">
+                <select name="searchWhere" title="搜索条件" style="width:150px">
+                    <option value="card_no">卡号</option>
+                    <option value="uuid">激活账号</option>
+                </select>
+            </div>
+            <div class="pull-right">
+                <select name="card_type" title="类型" style="width:150px">
+                </select>
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-primary x-generate-btn" style="height: 28px;line-height: 1.12;">生成赠送卡</button>
+            </div>
+        </div>
+        <div class="row x-card-info">
+            <ul>
+                <li>共计生成赠送卡：<span class="x-card-total"></span>张</li>
+                <li>已激活：<span class="x-card-act"></span>张</li>
+                <li>未激活：<span class="x-card-noact"></span>张</li>
+            </ul>
+        </div>
+    </div>
+    <table id="table"></table>
+</div>
+<script type="text/javascript">
+    seajs.config({
+        base: "/plugins/",
+        alias: {
+            'bootstrap-table': 'bootstrap-table-1.11.0/bootstrap-table.min.js',
+            'bootstrap-table-zh-CN': 'bootstrap-table-1.11.0/locale/bootstrap-table-zh-CN.min.js',
+            'select2': 'select2/js/select2.full.min.js',
+            'select2_zh_CN': 'select2/js/i18n/zh-CN.js',
+            'bootstrap-touchspin': 'bootstrap-touchspin/jquery.bootstrap-touchspin.min.js'
+        }
+    });
+    seajs.use("./app/give_card/main");
+</script>
