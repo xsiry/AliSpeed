@@ -11,6 +11,7 @@ define([
     { field: 'searname', title: '游戏目录', sortable: true, halign: 'center' },
     { field: 'mainexe', title: '执行文件', sortable: true, halign: 'center' },
     { field: 'offstarterpath', title: '官方启动相对目录', sortable: true, halign: 'center' },
+    { field: 'gameorder', title: '排序', sortable: true, halign: 'center' },
     { field: 'status', title: '状态', sortable: true, halign: 'center', formatter: statusFormatter },
     { field: 'createtime', title: '添加时间', sortable: true, halign: 'center' },
     { field: 'action', title: '操作', halign: 'center', align: 'center', formatter: actionFormatter, events: 'actionEvents', clickToSelect: false }

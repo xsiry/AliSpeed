@@ -194,8 +194,17 @@ define(function (require, exports, module) {
                             text: '确认',
                             btnClass: 'waves-effect waves-button',
                             action: function() {
+                                var msg;
+                                toastr.options = {
+                                    closeButton: false,
+                                    progressBar: true,
+                                    showMethod: 'slideDown',
+                                    timeOut: 0
+                                };
+                                msg = "正在生成专属推广包，请稍等...";
+                                toastr.info(msg);
                                 $.post('/open/release/agent/zip', {}, function(result) {
-                                    var msg;
+                                    toastr.clear();
                                     toastr.options = {
                                         closeButton: true,
                                         progressBar: true,
@@ -203,7 +212,7 @@ define(function (require, exports, module) {
                                         timeOut: 4000
                                     };
                                     if (result.success) {
-                                        msg = "操作成功，开始下载";
+                                        msg = "推广包生成成功，开始下载";
                                         toastr.success(msg);
                                         downloadFile(window.location.protocol+"//"+window.location.host + "/" + result.msg)
                                     } else {
