@@ -1,0 +1,22 @@
+<link href="../app/game_statistics/style.css" rel="stylesheet"/>
+<div id="main" class="game_statistics">
+    <div id="toolbar">
+        <div class="pull-left">
+            <input id="game_days_time" class="form-control x-game-days" />
+            <button class="btn btn-primary x-game-stat-btn">查看日走势图</button>
+        </div>
+    </div>
+    <table id="table"></table>
+</div>
+<script type="text/javascript">
+    seajs.config({
+        base: "/plugins/",
+        alias: {
+            'bootstrap-table': 'bootstrap-table-1.11.0/bootstrap-table.min.js',
+            'bootstrap-table-zh-CN': 'bootstrap-table-1.11.0/locale/bootstrap-table-zh-CN.min.js',
+            'select2': 'select2/js/select2.full.min.js',
+            'select2_zh_CN': 'select2/js/i18n/zh-CN.js'
+        }
+    });
+    seajs.use("./app/game_statistics/main");
+</script>
