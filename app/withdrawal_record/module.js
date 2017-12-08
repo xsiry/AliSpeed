@@ -48,10 +48,25 @@ define(function(require, exports, module) {
             });
         },
         _loadMain: function() {
+            initDays();
             bsTable();
             $('select').select2();
         }
     };
+
+    function initDays() {
+        $('#withdrawal_days_time').datetimepicker({
+            format: 'YYYY年MM月',
+            locale: 'zh-cn'
+        }).on('dp.change', function(e) {
+            f_search();
+        });
+    }
+
+    function formatDate(year, month) {
+        month = month<10? ('0'+month): month;
+        return year+'-'+month;
+    }
 
     // bootstrap table初始化
     // http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
@@ -62,9 +77,10 @@ define(function(require, exports, module) {
             url: url,
             queryParams: function(params) {
                 var qjson = {};
-                qjson[self_.find('select[name="searchWhere"]').val()] = self_.find('input[name="searchText"]').val();
+                var date = $('#withdrawal_days_time').data("DateTimePicker").date();
+                if (!!date) qjson['cash_month'] = formatDate(date._d.getFullYear(),(date._d.getMonth()+1));
                 var qjsonkeytype = {};
-                qjsonkeytype[self_.find('select[name="searchWhere"]').val()] = "LIKE_ALL";
+                qjsonkeytype['cash_month'] = "LIKE_ALL";
 
                 var status = self_.find('select[name="status"]').val();
                 var noStatus = status === "1" ? {status: "NotEquery"}:{};

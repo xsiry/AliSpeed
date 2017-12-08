@@ -44,7 +44,7 @@ define(function (require, exports, module) {
             require('cookie');
             var systemid = $.cookie('admin-systemid') || 1;
             var systemname = $.cookie('admin-systemname') || 'admin-server';
-            var systemtitle = $.cookie('admin-systemtitle') || '阿里体育竞技后台';
+            var systemtitle = $.cookie('admin-systemtitle') || '阿里体育Beyond电竞平台管理后台';
             $('.system_menus').hide(0, function () {
                 $('.system_' + systemid).show();
             });
@@ -286,14 +286,14 @@ define(function (require, exports, module) {
                 $('.s-profile .sp-info span').text(result.rolename+' '+result.relname + '，你好！');
                 $('.s-profile .sp-info span').append('<input type="hidden" class="x-rolename-hidden" value="'+ result.rolename +'"/>');
                 if (result.rolename === "超级管理员") {
-                    $('#x-index').text("欢迎登陆-阿里体育Beyond电竞菜单管理后台");
+                    $('#x-index').text("欢迎登陆-阿里体育Beyond电竞平台管理后台");
                     var dropbox = '<li class="dropdown">'
                     + '<a class="waves-effect waves-light x-dropbox-tooltip" data-toggle="tooltip" href="javascript:;" data-placement="left" title="配置打包">'
                     + '<i class="him-icon zmdi zmdi-dropbox"></i></a></li>'
                     $('.x-avtools').prepend(dropbox);
                     var sysset = '<li><a class="waves-effect x-settings" href="javascript:;"><i class="zmdi zmdi-settings"></i> 系统设置</a></li>';
                     $('.x-systools').find('li').eq(0).after(sysset);
-                }else if (result.rolename === "推广用户") {
+                }else if (result.rolename === "阿里体育推广员") {
                     myIndexModule._loadMyIndex();
                     $('#iframe_home #x-index .user_code').text(result.agent_id);
                     $('#iframe_home #x-index .user_code').append("<input type='hidden' class='x-user-id' value='"+ result.user_id +"'/>");

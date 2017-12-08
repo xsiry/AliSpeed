@@ -292,3 +292,18 @@ a:focus {
 .x-error {
     color: red;
 }
+
+.x-uploader-title {
+    font-size: 16px;
+    color: #337ab7;
+    margin-bottom: 10px;
+    display: block;
+    width: 100%;
+    line-height: 30px;
+    border-bottom: 2px solid #eee;
+}
+
+.x-uploader-title>span {
+    font-size: 12px;
+    color: red;
+}
