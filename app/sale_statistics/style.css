@@ -1,13 +1,8 @@
 #toolbar .pull-right {  margin-left: 10px;  }
 
-.x-game-days {
+.x-sale-days {
     display: inline-block;
     width: 120px;
     height: 28px;
     margin-top: 5px;
-}
-
-.x-game-stat-btn {
-    margin-top: -4px;
-    margin-left: 10px;
 }

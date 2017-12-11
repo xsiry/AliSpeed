@@ -14,11 +14,11 @@ define(function(require, exports, module) {
     require('moment_zh_cn');
     require('bootstrap-datetimepicker');
 
-    var self_ = $('.game_statistics');
+    var self_ = $('.button_statistics');
     var $table = self_.find('#table');
 
     var url = '/click_statistics',
-        table = 'rep_game_click_month',
+        table = 'rep_button_click_month',
         source_id = 'rep_month',
         sort_name = 'rep_month',
         sort_order = 'desc';
@@ -52,7 +52,7 @@ define(function(require, exports, module) {
     };
 
     function initDays() {
-        $('#game_days_time').datetimepicker({
+        $('#button_days_time').datetimepicker({
             format: 'YYYY年MM月',
             locale: 'zh-cn',
             defaultDate: new Date()
@@ -75,7 +75,7 @@ define(function(require, exports, module) {
             url: url,
             queryParams: function(params) {
                 var qjson = {};
-                var date = $('#game_days_time').data("DateTimePicker").date();
+                var date = $('#button_days_time').data("DateTimePicker").date();
                 qjson['rep_month'] = formatDate(date._d.getFullYear(),(date._d.getMonth()+1));
                 qjson[self_.find('select[name="searchWhere"]').val()] = self_.find('input[name="searchText"]').val();
                 var qjsonkeytype = {};

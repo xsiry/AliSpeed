@@ -1,16 +1,17 @@
-<link href="../app/game_statistics/style.css" rel="stylesheet"/>
-<div id="main" class="game_statistics">
+<link href="../app/sale_statistics/style.css" rel="stylesheet"/>
+<div id="main" class="sale_statistics">
     <div id="toolbar">
         <div class="pull-right">
             <input type="text" class="form-control" name="searchText" style="height: 28px;margin-top: 5px;" placeholder="搜索">
         </div>
         <div class="pull-right">
             <select name="searchWhere" title="搜索条件" style="width:150px">
-                <option value="game_name">游戏名称</option>
+                <option value="product">商品名称</option>
+                <option value="factory">上游名称</option>
             </select>
         </div>
         <div class="pull-left">
-            <input id="game_days_time" class="form-control x-game-days" />
+            <input id="sale_days_time" class="form-control x-sale-days" />
         </div>
     </div>
     <table id="table"></table>
@@ -25,5 +26,5 @@
             'select2_zh_CN': 'select2/js/i18n/zh-CN.js'
         }
     });
-    seajs.use("./app/game_statistics/main");
+    seajs.use("./app/sale_statistics/main");
 </script>

@@ -1,6 +1,6 @@
 define([
     { field: 'rep_month', title: '月份', sortable: true, halign: 'center' },
-    { field: 'game_name', title: '游戏名称', sortable: true, halign: 'center' },
+    { field: 'button_name', title: '功能名称', sortable: true, halign: 'center' },
     { field: 'click_total', title: '总点击', sortable: false, halign: 'center' },
     { field: 'click', title: '当月点击', sortable: true, halign: 'center' },
     { field: 'click_month', title: '上月点击', sortable: false, halign: 'center' },

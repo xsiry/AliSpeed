@@ -70,8 +70,8 @@ define(function(require, exports, module) {
             });
         },
         _loadMain: function() {
-            bsTable();
             $('select').select2();
+            bsTable();
         }
     };
 

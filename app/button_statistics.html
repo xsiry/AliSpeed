@@ -1,16 +1,16 @@
-<link href="../app/game_statistics/style.css" rel="stylesheet"/>
-<div id="main" class="game_statistics">
+<link href="../app/button_statistics/style.css" rel="stylesheet"/>
+<div id="main" class="button_statistics">
     <div id="toolbar">
         <div class="pull-right">
             <input type="text" class="form-control" name="searchText" style="height: 28px;margin-top: 5px;" placeholder="搜索">
         </div>
         <div class="pull-right">
             <select name="searchWhere" title="搜索条件" style="width:150px">
-                <option value="game_name">游戏名称</option>
+                <option value="button_name">功能名称</option>
             </select>
         </div>
         <div class="pull-left">
-            <input id="game_days_time" class="form-control x-game-days" />
+            <input id="button_days_time" class="form-control x-button-days" />
         </div>
     </div>
     <table id="table"></table>
@@ -25,5 +25,5 @@
             'select2_zh_CN': 'select2/js/i18n/zh-CN.js'
         }
     });
-    seajs.use("./app/game_statistics/main");
+    seajs.use("./app/button_statistics/main");
 </script>
