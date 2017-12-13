@@ -1,0 +1,16 @@
+<link href="../app/echarts_statistcs/style.css" rel="stylesheet"/>
+<div id="main" class="echarts_statistcs">
+    <div>
+        <div id="map_main" style="float:left;height:700px;width:60%;padding:0"></div>
+        <div id="pc" style="float:right;height:700px;width:40%;padding:20px;"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    seajs.config({
+        base: "/plugins/",
+        alias: {
+            'echarts': 'echarts/echarts.min.js'
+        }
+    });
+    seajs.use("./app/echarts_statistcs/main");
+</script>
