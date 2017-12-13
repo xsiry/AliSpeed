@@ -40,6 +40,10 @@ define(function(require, exports, module) {
             self_.on('select2:select', 'select[name="pay_status"]', function() {
                 f_search();
             });
+            // 订单类型查询
+            self_.on('select2:select', 'select[name="order_type"]', function() {
+                f_search();
+            });
             // 数据表格动态高度
             $(window).resize(function() {
                 self_.find('#table').bootstrapTable('resetView', {
@@ -68,10 +72,12 @@ define(function(require, exports, module) {
 
                 var pay_status = self_.find('select[name="pay_status"]').val();
 
+                var order_type = self_.find('select[name="order_type"]').val();
+
                 var x_params = {};
                 x_params.source = table;
                 x_params.qhstr = JSON.stringify({
-                    qjson: [qjson, {pay_status: pay_status}],
+                    qjson: [qjson, {pay_status: pay_status}, {order_type: order_type}],
                     qjsonkeytype: [qjsonkeytype]
                 });
 

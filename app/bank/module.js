@@ -153,24 +153,21 @@ define(function(require, exports, module) {
             params['user_id'] = $('.x-user-id').val();
 
             $.post(url , params, function (result) {
-                let msg;
-                toastr.options = {
-                    closeButton: true,
-                    progressBar: true,
-                    showMethod: 'slideDown',
-                    timeOut: 4000
-                };
+                var msg = result.msg;
+                $.alert({
+                    type: result.success ? 'blue':'red',
+                    animationSpeed: 300,
+                    title: '提示',
+                    icon:'glyphicon glyphicon-info-sign',
+                    content: msg
+                });
                 if (result.success) {
-                    msg = result.msg;
-                    toastr.success(msg);
                     var uimg = $('.remove-this').parent();
                     $('.x-uploaded img').prop('src', uimg.find('img').prop('src'));
                     if($('.x-uploaded img').length > 0) uimg.remove();
                     self_.find('button.x-submit').removeClass('disabled');
                     self_.find('button.x-submit').attr("disabled", false);
                 } else {
-                    msg = result.msg;
-                    toastr.error(msg);
                     self_.find('button.x-submit').removeClass('disabled');
                     self_.find('button.x-submit').attr("disabled", false);
                 }

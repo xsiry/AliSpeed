@@ -8,7 +8,7 @@ define(function (require, exports, module) {
     var $ = require('jquery');
     require('bootstrap');
     require('jquery-confirm');
-    require('select2');
+    require.async('select2');
 
     module.exports = {
         init: function () {},
@@ -38,20 +38,14 @@ define(function (require, exports, module) {
                         };
 
                         $.post('/dict', params, function(result) {
-                            var msg;
-                            toastr.options = {
-                                closeButton: true,
-                                progressBar: true,
-                                showMethod: 'slideDown',
-                                timeOut: 4000
-                            };
-                            if (result.success) {
-                                msg = result.msg;
-                                toastr.success(msg);
-                            } else {
-                                msg = result.msg;
-                                toastr.error(msg);
-                            }
+                            var msg = result.msg;
+                            $.alert({
+                                type: result.success ? 'blue':'red',
+                                animationSpeed: 300,
+                                title: '提示',
+                                icon:'glyphicon glyphicon-info-sign',
+                                content: msg
+                            });
                         }, 'json');
                     }
                 },

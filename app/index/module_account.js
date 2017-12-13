@@ -12,8 +12,13 @@ define(function (require, exports, module) {
     require('fvbootstrap');
     require('fvzh_CN');
 
+    var countdown = 60;
+
     module.exports = {
         init: function () {
+        },
+        _retrievePwd: function () {
+            retrievePwd();
         },
         _register: function () {
             register();
@@ -152,25 +157,232 @@ define(function (require, exports, module) {
             });
 
             $.post('/user/register', params, function (result) {
-                var msg;
-                toastr.options = {
-                    closeButton: true,
-                    progressBar: true,
-                    showMethod: 'slideDown',
-                    timeOut: 4000
-                };
+                var msg = result.msg;
+                $.alert({
+                    type: result.success ? 'blue':'red',
+                    animationSpeed: 300,
+                    title: '提示',
+                    icon:'glyphicon glyphicon-info-sign',
+                    content: msg
+                });
                 if (result.success) {
-                    msg = result.msg;
-                    toastr.success(msg);
                     $('#registerForm')[0].reset();
                     $('#registerForm').data('formValidation').resetForm();
-                } else {
-                    msg = result.msg;
-                    toastr.error(msg);
                 }
                 $('.register_btn').removeClass('disabled');
                 $('.register_btn').attr("disabled", false);
             }, 'json');
+        });
+    }
+
+    function retrievePwd() {
+        var title = "密码找回";
+        $.confirm({
+            title: title,
+            content: 'url:../app/retrieve_pwd_dialog.html',
+            buttons: {
+                confirm: {
+                    text: '确认',
+                    btnClass: 'waves-effect waves-button x-hide',
+                    action: function () {
+                        var self = this;
+                        self.$content.find('form').submit();
+                        return false;
+                    }
+                },
+                cancel: {
+                    text: '取消',
+                    btnClass: 'waves-effect waves-button'
+                }
+            },
+            onOpen: function () {
+                var self = this;
+                setTimeout(function () {
+                    // 设置input特效
+                    self.$content.on('focus', 'input[type="text"]', function () {
+                        $(this).parent().find('label').addClass('active');
+                    }).on('blur', 'input[type="text"]', function () {
+                        if ($(this).val() === '') {
+                            $(this).parent().find('label').removeClass('active');
+                        }
+                    });
+                    // 输入四位验证码后显示密码框
+                    self.$content.on('input propertychange', 'input[name="rp_code"]', function() {
+                        if ($(this).val().length === 4) {
+                            self.$content.find('.x-retrieve-pwd-block').show();
+                            $(self.$$confirm[0]).removeClass('x-hide');
+                        }else {
+                            self.$content.find('.x-retrieve-pwd-block').hide();
+                            $(self.$$confirm[0]).addClass('x-hide');
+                        }
+                    });
+
+                    self.$content.on('click', '.x-get-code', function() {
+                        var account = self.$content.find('input[name="account"]').val();
+                        var email = self.$content.find('input[name="email"]').val();
+                        if (account === '') {
+                            $.alert({
+                                title: '提示',
+                                icon:'glyphicon glyphicon-info-sign',
+                                content: '用户名不能为空'
+                            });
+                            return false;
+                        }
+                        if (email === '') {
+                            $.alert({
+                                title: '提示',
+                                icon:'glyphicon glyphicon-info-sign',
+                                content: '邮箱不能为空'
+                            });
+                            return false;
+                        }
+                        setSendCodeTime($(this));
+
+                        var params = {
+                            account: account,
+                            email: email
+                        };
+                        $.post('/retrieve_pwd/send_code', params, function(result) {
+                            var msg = result.msg;
+                            $.alert({
+                                type: result.success ? 'blue':'red',
+                                animationSpeed: 300,
+                                title: '提示',
+                                icon:'glyphicon glyphicon-info-sign',
+                                content: msg
+                            });
+                            if (!result.success) {
+                                countdown = 0;
+                            }
+                        }, 'json')
+                    });
+
+                    self.$content.find('form').formValidation({
+                        autoFocus: true,
+                        locale: 'zh_CN',
+                        message: '该值无效，请重新输入',
+                        err: {
+                            container: 'tooltip'
+                        },
+                        icon: {
+                            valid: 'glyphicon glyphicon-ok',
+                            invalid: 'glyphicon glyphicon-remove',
+                            validating: 'glyphicon glyphicon-refresh'
+                        },
+                        fields: {
+                            account: {
+                                validators: {
+                                    notEmpty: {
+                                        message: '用户名不能为空'
+                                    },
+                                    regexp: {
+                                        regexp: /^[a-zA-z0-9_]+$/,
+                                        message: '用户名只能由数字、字母和下划线组成'
+                                    }
+                                }
+                            },
+                            new_pwd: {
+                                validators: {
+                                    notEmpty: {
+                                        message: '密码不能为空'
+                                    },
+                                    stringLength: {
+                                        min: 3,
+                                        max: 16,
+                                        message: '密码长度必须在3~16之间'
+                                    },
+                                    regexp: {
+                                        regexp: /^[a-zA-Z0-9]+$/,
+                                        message: '密码只能由大小写字母和数字组成'
+                                    },
+                                    identical: {
+                                        field: 'confirm_pwd',
+                                        message: '密码与验证密码不一致'
+
+                                    },
+                                }
+                            },
+                            confirm_pwd: {
+                                validators: {
+                                    notEmpty: {
+                                        message: '验证密码不能为空'
+                                    },
+                                    stringLength: {
+                                        min: 3,
+                                        max: 16,
+                                        message: '密码长度必须在3~16之间'
+                                    },
+                                    regexp: {
+                                        regexp: /^[a-zA-Z0-9]+$/,
+                                        message: '密码只能由大小写字母和数字组成'
+                                    },
+                                    identical: {
+                                        field: 'pwd',
+                                        message: '验证密码与密码不一致'
+
+                                    }
+                                }
+                            },
+                            email: {
+                                validators: {
+                                    notEmpty: {
+                                        message: '邮箱不能为空'
+                                    },
+                                    regexp: {
+                                        regexp: /^([a-zA-Z0-9]+[_|_|.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|_|.]?)*[a-zA-Z0-9]+\.(?:com|cn)$/,
+                                        message: '邮箱格式不正确'
+                                    }
+                                }
+                            },
+                            rp_code: {
+                                validators: {
+                                    notEmpty: {
+                                        message: '验证码不能为空'
+                                    },
+                                    stringLength: {
+                                        min: 4,
+                                        max: 4,
+                                        message: '验证码必须为四位'
+                                    },
+                                    regexp: {
+                                        regexp: /^[a-zA-z0-9]+$/,
+                                        message: '验证码只能由数字、字母组成'
+                                    }
+                                }
+                            }
+                        }
+                    }).on('success.form.fv', function (e) {
+                        $(self.$$confirm[0]).prop("disabled", true);
+                        // Prevent form submission
+                        e.preventDefault();
+
+                        // Get the form instance
+                        var $form = $(e.target);
+
+                        var params = {};
+
+                        $.each($form.serializeArray(), function (i, o) {
+                            params[o.name] = o.value;
+                        });
+
+                        $.post('/retrieve_pwd/verify_and_up_pwd', params, function (result) {
+                            var msg = result.msg;
+                            $.alert({
+                                type: result.success ? 'blue':'red',
+                                animationSpeed: 300,
+                                title: '提示',
+                                icon:'glyphicon glyphicon-info-sign',
+                                content: msg
+                            });
+                            if (result.success) {
+                                self.close();
+                            } else {
+                                $(self.$$confirm[0]).prop("disabled", false);
+                            }
+                        }, 'json');
+                    });
+                }, 500);
+            }
         });
     }
 
@@ -439,20 +651,17 @@ define(function (require, exports, module) {
                             });
 
                             $.post('/user/info', params, function (result) {
-                                var msg;
-                                toastr.options = {
-                                    closeButton: true,
-                                    progressBar: true,
-                                    showMethod: 'slideDown',
-                                    timeOut: 4000
-                                };
+                                var msg = title + result.msg;;
+                                $.alert({
+                                    type: result.success ? 'blue':'red',
+                                    animationSpeed: 300,
+                                    title: '提示',
+                                    icon:'glyphicon glyphicon-info-sign',
+                                    content: msg
+                                });
                                 if (result.success) {
-                                    msg = title + result.msg;
-                                    toastr.success(msg);
                                     self.close();
                                 } else {
-                                    msg = title + result.msg;
-                                    toastr.error(msg);
                                     $(self.$$confirm[0]).prop("disabled", false);
                                 }
                                 $(self.$$confirm[0]).removeClass('disabled');
@@ -577,20 +786,16 @@ define(function (require, exports, module) {
                         });
 
                         $.post('/user/epassword', params, function (result) {
-                            var msg;
-                            toastr.options = {
-                                closeButton: true,
-                                progressBar: true,
-                                showMethod: 'slideDown',
-                                timeOut: 4000
-                            };
+                            var msg = title + result.msg;;
+                            $.alert({
+                                type: result.success ? 'blue':'red',
+                                animationSpeed: 300,
+                                title: '提示',
+                                icon:'glyphicon glyphicon-info-sign',
+                                content: msg
+                            });
                             if (result.success) {
-                                msg = title + result.msg;
-                                toastr.success(msg);
                                 self.close();
-                            } else {
-                                msg = title + result.msg;
-                                toastr.error(msg);
                             }
                             $(self.$$confirm[0]).removeClass('disabled');
                             $(self.$$confirm[0]).attr("disabled", false);
@@ -619,5 +824,23 @@ define(function (require, exports, module) {
             }
             ;
         }, 'json')
+    }
+
+    function setSendCodeTime(val) {
+        if (countdown === 0) {
+            val.removeClass('disabled');
+            val.attr("disabled", false);
+            val.text("获取验证码");
+            countdown = 60;
+            return false;
+        } else {
+            val.addClass('disabled');
+            val.attr("disabled", true);
+            val.text("重新发送(" + countdown + ")");
+            countdown--;
+        }
+        setTimeout(function() {
+            setSendCodeTime(val);
+        },1000);
     }
 });

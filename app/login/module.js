@@ -65,6 +65,10 @@ define(function (require, exports, module) {
                     $(this).parent().find('label').removeClass('active');
                 }
             });
+            // bind retrieve_pwd_btn
+            $('body').on("click", '.retrieve_pwd_btn', function () {
+                accountModule._retrievePwd();
+            })
             // // bind register_btn
             // $('body').on("click", '.register_btn', function () {
             //     accountModule._register1();

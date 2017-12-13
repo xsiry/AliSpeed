@@ -8,11 +8,11 @@ define(function (require, exports, module) {
     var $ = require('jquery');
     require('bootstrap');
     require('jquery-confirm');
-    require('select2');
     require('highcharts');
     require('moment');
     require('moment_zh_cn');
     require('bootstrap-datetimepicker');
+    require.async('select2');
 
     module.exports = {
         init: function () {},
@@ -163,10 +163,10 @@ define(function (require, exports, module) {
                     }
                 };
                 option['series'] = [{
-                    name: '月销售金额',
+                    name: '日销售金额',
                     data: total_money
                 }, {
-                    name: '月收益',
+                    name: '日收益',
                     data: equity
                 }];
 
@@ -338,20 +338,16 @@ define(function (require, exports, module) {
                     btnClass: 'waves-effect waves-button',
                     action: function() {
                         $.post('/agent_cashapply/withdrawal', params, function(result) {
-                            var msg;
-                            toastr.options = {
-                                closeButton: true,
-                                progressBar: true,
-                                showMethod: 'slideDown',
-                                timeOut: 4000
-                            };
+                            var msg = result.msg;
+                            $.alert({
+                                type: result.success ? 'blue':'red',
+                                animationSpeed: 300,
+                                title: '提示',
+                                icon:'glyphicon glyphicon-info-sign',
+                                content: msg
+                            });
                             if (result.success) {
-                                msg = result.msg;
-                                toastr.success(msg);
                                 $('#mamTable').bootstrapTable('refresh', {});
-                            } else {
-                                msg = result.msg;
-                                toastr.error(msg);
                             }
                         }, 'json');
                     }
