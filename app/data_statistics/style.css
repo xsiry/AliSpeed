@@ -3,6 +3,7 @@
 .x-heading-days {
     display: inline-block;
     width: 120px;
+    margin-top: 2px;
 }
 
 .x-heading-btn {

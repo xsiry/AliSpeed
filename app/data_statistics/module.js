@@ -41,6 +41,12 @@ define(function(require, exports, module) {
             self_.on('click', '.x-data-stat-btn', function() {
                 chartsConfirm();
             });
+            // 导出
+            self_.on('click', '.x-export-btn', function() {
+                var date = $('#days_time').data("DateTimePicker").date();
+                var dateStr = formatDate(date._d.getFullYear(),(date._d.getMonth()+1));
+                window.open("/all_data/export?where=days&text="+dateStr);
+            });
             // 数据表格动态高度
             $(window).resize(function() {
                 self_.find('#table').bootstrapTable('resetView', {
