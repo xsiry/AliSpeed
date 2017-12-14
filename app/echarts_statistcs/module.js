@@ -61,6 +61,7 @@ define(function (require, exports, module) {
             // );
             // console.log(echarts)
             // myChart = echarts.init(document.getElementById('map_main'));
+            self_.find('#map_main').css('height', getHeight());
             $.get('../plugins/echarts/china.json', function (chinaJson) {
                 echarts.registerMap('china', chinaJson);
                 var chart = echarts.init(document.getElementById('map_main'));
@@ -94,7 +95,7 @@ define(function (require, exports, module) {
             },
             dataRange: {
                 min: 0,
-                max: 10000,   //此处由于echarts的bug 默认的max最小值为100且为100的整数倍
+                max: 100000,   //此处由于echarts的bug 默认的max最小值为100且为100的整数倍
                 color: ['#bf444c', '#f5e9a3'],
                 text: ['高', '低'], // 文本，默认为数值文本
                 calculable: true
@@ -124,7 +125,7 @@ define(function (require, exports, module) {
                 map: 'china',
                 mapLocation: {
                     x: 'left',
-                    width: 700
+                    width: getHeight(),
                 },
                 selectedMode: 'single',
                 itemStyle: {
@@ -146,77 +147,77 @@ define(function (require, exports, module) {
             animation: false
         };
     }
-
-    function mapSelected(param) {
-        var len = mapType.length;
-        var mt = mapType[curIndx % len];
-        var selected = param.selected;
-        for (var i in selected) {
-            if (selected[i]) {
-                mt = i;
-                while (len--) {
-                    if (mapType[len] == mt) {
-                        curIndx = len;
-                    }
-                }
-                break;
-            }
-        }
-        $.post('${pageContext.request.contextPath}/usermanager!ajaxUserAreaJson.action', {'provinceName': mt},
-            function (data) {
-                datas = eval('(' + data + ')');
-                var option = {
-                    title: {
-                        text: '江苏',
-                    },
-                    tooltip: {
-                        trigger: 'item',
-                        //formatter: '{b}'
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        x: 'right',
-                        data: ['系统用户数量']
-                    },
-                    dataRange: {
-                        min: 0,
-                        max: 100,   //此处由于echarts的bug 默认的max最小值为100且为100的整数倍
-                        color: ['orange', 'yellow'],
-                        text: ['高', '低'], // 文本，默认为数值文本
-                        calculable: true
-                    },
-                    toolbox: {
-                        show: false,
-                        orient: 'vertical',
-                        x: 'right',
-                        y: 'center',
-                        feature: {
-                            mark: true,
-                            dataView: {readOnly: true},
-                            restore: true,
-                            saveAsImage: true
-                        }
-                    },
-                    series: [
-                        {
-                            name: '系统用户数量',
-                            type: 'map',
-                            mapType: 'china',
-                            selectedMode: 'single',
-                            itemStyle: {
-                                normal: {label: {show: true}},
-                                emphasis: {label: {show: true}}
-                            },
-                            data: datas
-                        }
-                    ]
-                };
-                option.tooltip.formatter = '{b}：{c}';
-                option.series[0].mapType = mt;
-                option.title.text = mt + "-系统用户分布";
-                pcChart.setOption(option, true);
-            });
-    }
+    // 市级显示
+    // function mapSelected(param) {
+    //     var len = mapType.length;
+    //     var mt = mapType[curIndx % len];
+    //     var selected = param.selected;
+    //     for (var i in selected) {
+    //         if (selected[i]) {
+    //             mt = i;
+    //             while (len--) {
+    //                 if (mapType[len] == mt) {
+    //                     curIndx = len;
+    //                 }
+    //             }
+    //             break;
+    //         }
+    //     }
+    //     $.post('${pageContext.request.contextPath}/usermanager!ajaxUserAreaJson.action', {'provinceName': mt},
+    //         function (data) {
+    //             datas = eval('(' + data + ')');
+    //             var option = {
+    //                 title: {
+    //                     text: '江苏',
+    //                 },
+    //                 tooltip: {
+    //                     trigger: 'item',
+    //                     //formatter: '{b}'
+    //                 },
+    //                 legend: {
+    //                     orient: 'vertical',
+    //                     x: 'right',
+    //                     data: ['系统用户数量']
+    //                 },
+    //                 dataRange: {
+    //                     min: 0,
+    //                     max: 100,   //此处由于echarts的bug 默认的max最小值为100且为100的整数倍
+    //                     color: ['orange', 'yellow'],
+    //                     text: ['高', '低'], // 文本，默认为数值文本
+    //                     calculable: true
+    //                 },
+    //                 toolbox: {
+    //                     show: false,
+    //                     orient: 'vertical',
+    //                     x: 'right',
+    //                     y: 'center',
+    //                     feature: {
+    //                         mark: true,
+    //                         dataView: {readOnly: true},
+    //                         restore: true,
+    //                         saveAsImage: true
+    //                     }
+    //                 },
+    //                 series: [
+    //                     {
+    //                         name: '系统用户数量',
+    //                         type: 'map',
+    //                         mapType: 'china',
+    //                         selectedMode: 'single',
+    //                         itemStyle: {
+    //                             normal: {label: {show: true}},
+    //                             emphasis: {label: {show: true}}
+    //                         },
+    //                         data: datas
+    //                     }
+    //                 ]
+    //             };
+    //             option.tooltip.formatter = '{b}：{c}';
+    //             option.series[0].mapType = mt;
+    //             option.title.text = mt + "-系统用户分布";
+    //             pcChart.setOption(option, true);
+    //         });
+    // }
 
 
     // 动态高度
