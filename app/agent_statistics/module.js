@@ -42,6 +42,10 @@ define(function(require, exports, module) {
                 var account = $(this).data('value');
                 accountDetail(account);
             });
+            // 按钮 查看日报表
+            self_.on('click', '.x-agent-stat-btn', function() {
+                tableDayConfirm();
+            });
             // 数据表格动态高度
             $(window).resize(function() {
                 self_.find('#table').bootstrapTable('resetView', {
@@ -69,6 +73,112 @@ define(function(require, exports, module) {
     function formatDate(year, month) {
         month = month<10? ('0'+month): month;
         return year+'-'+month;
+    }
+
+    function tableDayConfirm() {
+        var date = $('#agent_month_time').data("DateTimePicker").date();
+        var date_str = formatDate(date._d.getFullYear(),(date._d.getMonth()+1));
+        $.confirm({
+            title: "渠道数据|日报表|" + date_str,
+            content: 'url:../app/agent_statistics_table_dialog.html',
+            columnClass: 'col-md-8 col-md-offset-2',
+            buttons: {
+                cancel: {
+                    text: '关闭',
+                    btnClass: 'waves-effect waves-button'
+                }
+            },
+            onOpen: function () {
+                var self = this;
+                setTimeout(function (days) {
+                    initTable(self.$content, self.$content.find('#days_table'), days);
+                    $('select').select2();
+                    // 搜索监听回车
+                    self.$content.on("keypress", 'input[name="searchTextDay"]', function(e) {
+                        if (e.which === 13)  self.$content.find('#days_table').bootstrapTable('refresh', {});
+                    });
+                    // 搜索内容为空时，显示全部
+                    self.$content.on('input propertychange', 'input[name="searchTextDay"]', function() {
+                        if ($(this).val().length === 0)  self.$content.find('#days_table').bootstrapTable('refresh', {});
+                    });
+                }, 500, date_str);
+            }
+        });
+    }
+
+    function initTable(me, object, days) {
+        require('bootstrap-table');
+        require('bootstrap-table-zh-CN');
+        object.bootstrapTable({
+            url: "/days_agent_mac/anget_statistics",
+            queryParams: function(params) {
+                var qjson = {};
+                qjson['days'] = days;
+                var queryrt = [];
+                if (me.find('select[name="searchWhereDay"]').val() === "account") {
+                    queryrt = [{
+                        reltb: 'sys_user',
+                        reltbfield: 'account',
+                        maintbfield: 'agent_id',
+                        reltbfieldvalue: me.find('input[name="searchTextDay"]').val(),
+                        qtype: 'LIKE_ALL'
+                    }]
+                } else {
+                    qjson[me.find('select[name="searchWhereDay"]').val()] = me.find('input[name="searchTextDay"]').val();
+                }
+
+                var qjsonkeytype = {};
+                qjsonkeytype['days'] = "LIKE_ALL";
+                qjsonkeytype[me.find('select[name="searchWhereDay"]').val()] = "LIKE_ALL";
+
+                var x_params = {};
+                x_params.source = "rep_agent_mac_days";
+                x_params.qhstr = JSON.stringify({
+                    qjson: [qjson],
+                    qjsonkeytype: [qjsonkeytype],
+                    queryrt: queryrt
+                });
+                if(params.offset!==null&&params.limit) {
+                    x_params.page = params.offset/params.limit+1;
+                    x_params.pagesize = params.limit;
+                }else {
+                    x_params.qtype = 'select';
+                }
+                x_params.sortname = params.sort;
+                x_params.sortorder = params.order;
+                return x_params;
+            },
+            idField: "days",
+            sortName: "days",
+            sortOrder: sort_order,
+            pageNumber:1,      //初始化加载第一页，默认第一页
+            pageList: [10, 25, 50, 100],  //可供选择的每页的行数（*）
+            columns: require('./columns_day'),
+            height: 500,
+            striped: true,
+            search: false,
+            searchOnEnterKey: true,
+            showRefresh: true,
+            showToggle: true,
+            showColumns: true,
+            minimumCountColumns: 2,
+            showPaginationSwitch: true,
+            clickToSelect: true,
+            detailView: false,
+            detailFormatter: 'detailFormatter',
+            pagination: true,
+            paginationLoop: false,
+            classes: 'table table-hover table-no-bordered',
+            sidePagination: 'server',
+            silentSort: false,
+            smartDisplay: false,
+            escape: true,
+            maintainSelected: true,
+            toolbar: self_.find('#day_toolbar')
+        }).on('all.bs.table', function(e, name, args) {
+            $('[data-toggle="tooltip"]').tooltip();
+            $('[data-toggle="popover"]').popover();
+        });
     }
 
     // bootstrap table初始化
