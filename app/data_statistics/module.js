@@ -204,8 +204,18 @@ define(function(require, exports, module) {
             }];
 
             option['tooltip'] = {
-                headerFormat: '<b>日期：</b>{point.x:%Y年%m月%d日}<br>',
-                pointFormat: '<b>{series.name}：</b>{point.y:.0f}个'
+                headerFormat: '',
+                formatter: function() {
+                    var date = '<b>日期：</b>'+ Highcharts.dateFormat('%Y年%m月%d日', this.point.x) +'<br>';
+                    var val = '<b>'+this.series.name+'：</b>'+this.point.y;
+                    var com_hash = {
+                        '历史终端数': '台', '当日新增终端': '台', '当日活跃终端': '台',
+                        '历史用户数': '个', '当日新增用户': '个', '当日活跃用户': '个',
+                        '日销售金额': '元', '日渠道分成金额': '元', '日渠道数量': '元'
+                    };
+                    var company = com_hash[this.series.name];
+                    return date + val + company;
+                }
             };
 
             Highcharts.chart('data_statistics_charts', option);
