@@ -108,28 +108,28 @@ define(function (require, exports, module) {
                         }
                     }
                 },
-                mobile: {
-                    validators: {
-                        notEmpty: {
-                            message: '手机号不能为空'
-                        },
-                        regexp: {
-                            regexp: /^1\d{10}$/,
-                            message: '手机号格式不正确'
-                        }
-                    }
-                },
-                qq: {
-                    validators: {
-                        notEmpty: {
-                            message: 'QQ不能为空'
-                        },
-                        regexp: {
-                            regexp: /^[0-9]+$/,
-                            message: 'QQ只能由纯数字组成'
-                        }
-                    }
-                },
+                // mobile: {
+                //     validators: {
+                //         notEmpty: {
+                //             message: '手机号不能为空'
+                //         },
+                //         regexp: {
+                //             regexp: /^1\d{10}$/,
+                //             message: '手机号格式不正确'
+                //         }
+                //     }
+                // },
+                // qq: {
+                //     validators: {
+                //         notEmpty: {
+                //             message: 'QQ不能为空'
+                //         },
+                //         regexp: {
+                //             regexp: /^[0-9]+$/,
+                //             message: 'QQ只能由纯数字组成'
+                //         }
+                //     }
+                // },
                 email: {
                     validators: {
                         notEmpty: {
@@ -817,7 +817,7 @@ define(function (require, exports, module) {
             };
             if (result.success) {
                 toastr.success(result.msg);
-                window.location = 'login_.html';
+                location.reload();
             } else {
                 msg = "退出登录失败！";
                 toastr.error(msg);

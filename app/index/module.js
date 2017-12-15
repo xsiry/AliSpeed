@@ -281,30 +281,32 @@ define(function (require, exports, module) {
             }, 500);
         },
         _setProfile: function () {
-            $('.x-dropbox-tooltip').tooltip();
             $.get('/user/info', {}, function (result) {
                 $('.s-profile .sp-info span').text(result.rolename+' '+result.relname + '，你好！');
                 $('.s-profile .sp-info span').append('<input type="hidden" class="x-rolename-hidden" value="'+ result.rolename +'"/>');
                 if (result.rolename === "超级管理员") {
                     $('#x-index').text("欢迎登陆-阿里体育Beyond电竞平台管理后台");
                     var dropbox = '<li class="dropdown">'
-                    + '<a class="waves-effect waves-light x-dropbox-tooltip" data-toggle="tooltip" href="javascript:;" data-placement="left" title="配置打包">'
-                    + '<i class="him-icon zmdi zmdi-dropbox"></i></a></li>'
+                    + '<a class="waves-effect waves-light x-tooltip x-dropbox-tooltip" data-toggle="tooltip" href="javascript:;" data-placement="bottom" title="配置打包">'
+                    + '<i class="him-icon zmdi zmdi-dropbox"></i></a></li>';
+                    var sysset = '<li class="dropdown">'
+                        + '<a class="waves-effect waves-light x-tooltip x-settings" data-toggle="tooltip" href="javascript:;" data-placement="bottom" title="系统设置">'
+                        + '<i class="him-icon zmdi zmdi-settings"></i></a></li>';
+                    $('.x-avtools').prepend(sysset);
                     $('.x-avtools').prepend(dropbox);
-                    var sysset = '<li><a class="waves-effect x-settings" href="javascript:;"><i class="zmdi zmdi-settings"></i> 系统设置</a></li>';
-                    $('.x-systools').find('li').eq(0).after(sysset);
                 }else if (result.rolename === "阿里体育推广员") {
                     myIndexModule._loadMyIndex();
                     $('#iframe_home #x-index .user_code').text(result.agent_id);
                     $('#iframe_home #x-index .user_code').append("<input type='hidden' class='x-user-id' value='"+ result.user_id +"'/>");
                     var dropbox = '<li class="dropdown">'
-                        + '<a class="waves-effect waves-light x-download-tooltip" data-toggle="tooltip" href="javascript:;" data-placement="left" title="推广包下载">'
+                        + '<a class="waves-effect waves-light x-tooltip x-download-tooltip" data-toggle="tooltip" href="javascript:;" data-placement="bottom" title="推广下载">'
                         + '<i class="him-icon zmdi zmdi-download"></i></a></li>'
                     $('.x-avtools').prepend(dropbox);
                 }else if(result.rolename === "渠道部" || result.rolename === "财务部") {
                     $('#x-index').text("欢迎登陆-阿里体育Beyond电竞菜单管理后台");
                 }
                 $('#x-index').show();
+                $('.x-tooltip').tooltip();
             }, 'json');
         }
     };

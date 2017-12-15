@@ -171,8 +171,8 @@ define(function(require, exports, module) {
                 var x_params = {};
                 x_params.source = table;
                 x_params.qhstr = JSON.stringify({
-                    qjson: [qjson],
-                    qjsonkeytype: [qjsonkeytype]
+                    qjson: [qjson, {status: 1}],
+                    qjsonkeytype: [qjsonkeytype, {status: "NotEquery"}]
                 });
 
                 if(params.offset!==null&&params.limit) {

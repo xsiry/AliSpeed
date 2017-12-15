@@ -137,8 +137,8 @@ define(function (require, exports, module) {
                 };
                 if (result.success) {
                     saveUserInfo();
-                    location.href = "index_.html";
-                    toastr.success('登录成功！');
+                    toastr.success('登录成功！正在跳转...');
+                    location.replace("index_.html");
                 } else {
                     toastr.error(result.msg);
                     return false;
