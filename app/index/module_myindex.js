@@ -318,45 +318,60 @@ define(function (require, exports, module) {
         });
     }
 
+    // 判断是否在提现日期内 每月1~10号
+    function isPost() {
+        return new Date().getDate() < 11;
+    }
 
+    // 提现申请
     function withdrawalPost(row) {
         var params = {
             cash_month: row.months,
             agent_id: row.agent_id,
             cash_money: row.total_profit,
             status: 1
-        }
-        $.confirm({
-            type: 'blue',
-            animationSpeed: 300,
-            title: false,
-            autoClose: 'cancel|10000',
-            content: '确认提现吗？',
-            buttons: {
-                confirm: {
-                    text: '确认',
-                    btnClass: 'waves-effect waves-button',
-                    action: function() {
-                        $.post('/agent_cashapply/withdrawal', params, function(result) {
-                            var msg = result.msg;
-                            $.alert({
-                                type: result.success ? 'blue':'red',
-                                animationSpeed: 300,
-                                title: '提示',
-                                icon:'glyphicon glyphicon-info-sign',
-                                content: msg
-                            });
-                            if (result.success) {
-                                $('#mamTable').bootstrapTable('refresh', {});
-                            }
-                        }, 'json');
+        };
+        if (isPost()) {
+            $.confirm({
+                type: 'blue',
+                animationSpeed: 300,
+                title: false,
+                autoClose: 'cancel|10000',
+                content: '确认提现吗？',
+                buttons: {
+                    confirm: {
+                        text: '确认',
+                        btnClass: 'waves-effect waves-button',
+                        action: function() {
+                            $.post('/agent_cashapply/withdrawal', params, function(result) {
+                                var msg = result.msg;
+                                $.alert({
+                                    type: result.success ? 'blue':'red',
+                                    animationSpeed: 300,
+                                    title: '提示',
+                                    icon:'glyphicon glyphicon-info-sign',
+                                    content: msg
+                                });
+                                if (result.success) {
+                                    $('#mamTable').bootstrapTable('refresh', {});
+                                }
+                            }, 'json');
+                        }
+                    },
+                    cancel: {
+                        text: '取消',
+                        btnClass: 'waves-effect waves-button'
                     }
-                },
-                cancel: {
-                    text: '取消',
-                    btnClass: 'waves-effect waves-button'
                 }
-            }
-        });
+            });
+        } else {
+            $.alert({
+                type: 'red',
+                animationSpeed: 300,
+                title: '提示',
+                icon:'glyphicon glyphicon-info-sign',
+                content: "未到提现日期，提现只能在每月的1~10号申请"
+            });
+        }
     }
 });
