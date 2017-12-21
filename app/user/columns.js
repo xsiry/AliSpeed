@@ -22,7 +22,7 @@ function actionFormatter(value, row, index) {
 }
 
 function ridFormatter(value, row, index) {
-    var text = {1: '超级管理员', 2: '渠道部', 3: '财务部', 4: '推广用户'};
+    var text = {1: '超级管理员', 2: '渠道部', 3: '财务部', 4: '推广用户', 5: '管理员'};
     return text[value];
 }
 

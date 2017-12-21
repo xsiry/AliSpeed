@@ -21,7 +21,7 @@ define(function(require, exports, module) {
         table = 'rep_all_data_days',
         source_id = 'days',
         sort_name = 'days',
-        sort_order = 'asc';
+        sort_order = 'desc';
 
     module.exports = {
         init: function() {
@@ -40,6 +40,11 @@ define(function(require, exports, module) {
             // 按钮 查看走势图
             self_.on('click', '.x-data-stat-btn', function() {
                 chartsConfirm();
+            });
+            // 查看日详情
+            self_.on('click', '.x-day-alldata-detail', function() {
+                var day = $(this).data('value');
+                dayDataDetail(day);
             });
             // 导出
             self_.on('click', '.x-export-btn', function() {
@@ -75,6 +80,7 @@ define(function(require, exports, module) {
         return year+'-'+month;
     }
 
+    // 走势图模态窗
     function chartsConfirm() {
         var date = $('#days_time').data("DateTimePicker").date();
         $.confirm({
@@ -94,6 +100,7 @@ define(function(require, exports, module) {
         });
     }
 
+    // 走势图
     function initCharts(days) {
         $.get('/all_data/q_charts', {date: days? days: 'all'}, function(result) {
             var option = {
@@ -222,6 +229,54 @@ define(function(require, exports, module) {
         }, 'json');
     }
 
+    // 日详情
+    function dayDataDetail(day) {
+        $.confirm({
+            title: "全国数据统计|" + day,
+            closeIcon: true,
+            content: 'url:../app/data_statistics_detail_dialog.html',
+            // cancelButton: false, // hides the cancel button.
+            // confirmButton: false, // hides the confirm button.
+            buttons: {
+                cancel: {
+                    text: '关闭',
+                    btnClass: 'waves-effect waves-button'
+                }
+            },
+            onOpen: function () {
+                var self = this;
+                setTimeout(function (self_, account) {
+                    var params = {
+                        source: table,
+                        qtype: 'select',
+                        qhstr: JSON.stringify({
+                            qjson: [{days: day}],
+                            qjsonkeytype: [{'days': 'LIKE_ALL'}]
+                        })
+                    }
+                    $.get('/all_data', params, function (result) {
+                        self_.$content.find('.x-data-statistics-detail').empty();
+                        var nameKey = {
+                            history_mac: "历史终端数(台)",
+                            new_mac: "日新增终端(台)",
+                            active_mac: "日活跃终端(台)",
+                            history_users: "历史用户数(个)",
+                            new_users: "当日新增用户(个)",
+                            active_users: "当日活跃用户(个)",
+                            sales_amount: "日销售金额(元)",
+                            agent_amount: "日渠道分成金额(元)",
+                            agent_total: "日渠道数量(个)"
+                        };
+                        $.each(result.rows[0], function(k, v) {
+                            var row = $('<tr><td>'+nameKey[k]+'</td><td>'+v+'</td></tr>');
+                            if (nameKey[k]) self_.$content.find('.x-data-statistics-detail').append(row);
+                        });
+                    }, 'json')
+                }, 500, self, day);
+            }
+        });
+    }
+
     // bootstrap table初始化
     // http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
     function bsTable() {
@@ -266,7 +321,7 @@ define(function(require, exports, module) {
             showToggle: true,
             showColumns: true,
             minimumCountColumns: 2,
-            showPaginationSwitch: true,
+            showPaginationSwitch: false,
             clickToSelect: true,
             detailView: false,
             detailFormatter: 'detailFormatter',
@@ -286,6 +341,7 @@ define(function(require, exports, module) {
     }
     // 搜索
     function f_search() {
+        $table.bootstrapTable('selectPage', 1);
         $table.bootstrapTable('refresh', {});
     }
 

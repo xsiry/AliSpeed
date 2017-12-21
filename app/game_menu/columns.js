@@ -65,7 +65,7 @@ function detailFormatter(index, row) {
         showToggle: true,
         showColumns: true,
         minimumCountColumns: 2,
-        showPaginationSwitch: true,
+        showPaginationSwitch: false,
         clickToSelect: true,
         detailView: true,
         detailFormatter: 'detailFormatter',

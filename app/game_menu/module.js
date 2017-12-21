@@ -151,6 +151,7 @@ define(function(require, exports, module) {
                                 msg = result.msg;
                                 toastr.success(msg);
                                 self.close();
+                                $table.bootstrapTable('selectPage', 1);
                                 $table.bootstrapTable('refresh', {});
                             } else {
                                 msg = result.msg;
@@ -284,7 +285,7 @@ define(function(require, exports, module) {
             showToggle: true,
             showColumns: true,
             minimumCountColumns: 2,
-            showPaginationSwitch: true,
+            showPaginationSwitch: false,
             clickToSelect: true,
             detailView: true,
             detailFormatter: 'detailFormatter',
@@ -304,6 +305,7 @@ define(function(require, exports, module) {
     }
     // 搜索
     function f_search() {
+        $table.bootstrapTable('selectPage', 1);
         $table.bootstrapTable('refresh', {});
     }
     // bs表格按钮事件

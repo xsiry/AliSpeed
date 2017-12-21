@@ -95,11 +95,17 @@ define(function(require, exports, module) {
                     $('select').select2();
                     // 搜索监听回车
                     self.$content.on("keypress", 'input[name="searchTextDay"]', function(e) {
-                        if (e.which === 13)  self.$content.find('#days_table').bootstrapTable('refresh', {});
+                        if (e.which === 13) {
+                            self.$content.find('#days_table').bootstrapTable('selectPage', 1);
+                            self.$content.find('#days_table').bootstrapTable('refresh', {});
+                        }
                     });
                     // 搜索内容为空时，显示全部
                     self.$content.on('input propertychange', 'input[name="searchTextDay"]', function() {
-                        if ($(this).val().length === 0)  self.$content.find('#days_table').bootstrapTable('refresh', {});
+                        if ($(this).val().length === 0) {
+                            self.$content.find('#days_table').bootstrapTable('selectPage', 1);
+                            self.$content.find('#days_table').bootstrapTable('refresh', {});
+                        }
                     });
                 }, 500, date_str);
             }
@@ -150,7 +156,7 @@ define(function(require, exports, module) {
             },
             idField: "days",
             sortName: "days",
-            sortOrder: sort_order,
+            sortOrder: "desc",
             pageNumber:1,      //初始化加载第一页，默认第一页
             pageList: [10, 25, 50, 100],  //可供选择的每页的行数（*）
             columns: require('./columns_day'),
@@ -162,7 +168,7 @@ define(function(require, exports, module) {
             showToggle: true,
             showColumns: true,
             minimumCountColumns: 2,
-            showPaginationSwitch: true,
+            showPaginationSwitch: false,
             clickToSelect: true,
             detailView: false,
             detailFormatter: 'detailFormatter',
@@ -240,7 +246,7 @@ define(function(require, exports, module) {
             showToggle: true,
             showColumns: true,
             minimumCountColumns: 2,
-            showPaginationSwitch: true,
+            showPaginationSwitch: false,
             clickToSelect: true,
             detailView: false,
             detailFormatter: 'detailFormatter',
@@ -304,6 +310,7 @@ define(function(require, exports, module) {
 
     // 搜索
     function f_search() {
+        $table.bootstrapTable('selectPage', 1);
         $table.bootstrapTable('refresh', {});
     }
 

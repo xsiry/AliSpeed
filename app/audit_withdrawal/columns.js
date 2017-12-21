@@ -14,7 +14,7 @@ define([
 ]);
 
 function statusFormatter(value) {
-    var key = {2: '申请提现', 3: '审核通过', 4: '审核失败', 8: '已打款'};
+    var key = {2: '待审核', 3: '已审核，待付款', 4: '审核失败', 8: '已打款'};
     return key[value];
 }
 

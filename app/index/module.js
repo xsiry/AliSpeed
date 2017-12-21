@@ -285,7 +285,7 @@ define(function (require, exports, module) {
                 $('.s-profile .sp-info span').text(result.rolename+' '+result.relname + '，你好！');
                 $('.s-profile .sp-info span').append('<input type="hidden" class="x-rolename-hidden" value="'+ result.rolename +'"/>');
                 if (result.rolename === "超级管理员") {
-                    $('#x-index').text("欢迎登陆-阿里体育Beyond电竞平台管理后台");
+                    loadIndex("admin");
                     var dropbox = '<li class="dropdown">'
                     + '<a class="waves-effect waves-light x-tooltip x-dropbox-tooltip" data-toggle="tooltip" href="javascript:;" data-placement="bottom" title="配置打包">'
                     + '<i class="him-icon zmdi zmdi-dropbox"></i></a></li>';
@@ -295,15 +295,12 @@ define(function (require, exports, module) {
                     $('.x-avtools').prepend(sysset);
                     $('.x-avtools').prepend(dropbox);
                 }else if (result.rolename === "阿里体育推广员") {
-                    myIndexModule._loadMyIndex();
-                    $('#iframe_home #x-index .user_code').text(result.agent_id);
-                    $('#iframe_home #x-index .user_code').append("<input type='hidden' class='x-user-id' value='"+ result.user_id +"'/>");
+                    loadIndex("agent");
+                    $('#sidebar .s-profile').append("<input type='hidden' class='x-agent-id' value='"+ result.agent_id +"'/><input type='hidden' class='x-user-id' value='"+ result.user_id +"'/>");
                     var dropbox = '<li class="dropdown">'
                         + '<a class="waves-effect waves-light x-tooltip x-download-tooltip" data-toggle="tooltip" href="javascript:;" data-placement="bottom" title="推广下载">'
                         + '<i class="him-icon zmdi zmdi-download"></i></a></li>'
                     $('.x-avtools').prepend(dropbox);
-                }else if(result.rolename === "渠道部" || result.rolename === "财务部") {
-                    $('#x-index').text("欢迎登陆-阿里体育Beyond电竞菜单管理后台");
                 }
                 $('#x-index').show();
                 $('.x-tooltip').tooltip();
@@ -529,6 +526,38 @@ define(function (require, exports, module) {
 
         var now = [year, p(month), p(date)].join('-') + " " + [p(h), p(m), p(s)].join(':');
         return now;
+    }
+
+    function loadIndex(page) {
+        var b = $('#iframe_home');
+        var url = "app/"+page+"_index.html";
+        $.ajax({
+            "type": "GET",
+            "url": url,
+            "dataType": "html",
+            "cache": !0,
+            "beforeSend": function () {
+                b.removeData().html(""),
+                    b.html('<div class="dropload-load"><div class="sk-folding-cube"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div></div>'),
+                b[0] == $("#content")[0] && ($("body").find("> *").filter(":not(" + ignore_key_elms + ")").empty().remove(),
+                    $("html").animate({
+                        "scrollTop": 0
+                    }, "fast"))
+            },
+            "success": function (url) {
+                b.css({
+                    "opacity": "0.0"
+                }).html(url).delay(50).animate({
+                    "opacity": "1.0"
+                }, 300),
+                    url = null,
+                    b = null
+            },
+            "error": function (c, d, e) {
+                b.html('<h4 class="ajax-loading-error"><i class="fa fa-warning txt-color-orangeDark"></i> Error requesting <span class="txt-color-red">' + url + "</span>: " + c.status + ' <span style="text-transform: capitalize;">' + e + "</span></h4>")
+            },
+            "async": !0
+        })
     }
 
     /*

@@ -53,9 +53,30 @@ define(function(require, exports, module) {
         },
         _loadMain: function() {
             bsTable();
+            initDays();
             $('select').select2();
         }
     };
+
+    function initDays() {
+        $('#started_time').datetimepicker({
+            format: 'YYYY-MM-DD HH:mm:ss',
+            locale: 'zh-cn',
+
+        }).on('dp.change', function(e) {
+            $('#ended_time').data("DateTimePicker").minDate(e.date);
+            f_search();
+        });
+
+        $('#ended_time').datetimepicker({
+            format: 'YYYY-MM-DD HH:mm:ss',
+            locale: 'zh-cn',
+            useCurrent: false,
+        }).on('dp.change', function(e) {
+            $('#started_time').data("DateTimePicker").maxDate(e.date);
+            f_search();
+        });
+    }
 
     // bootstrap table初始化
     // http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
@@ -65,20 +86,35 @@ define(function(require, exports, module) {
         $table.bootstrapTable({
             url: url,
             queryParams: function(params) {
-                var qjson = {};
-                qjson[self_.find('select[name="searchWhere"]').val()] = self_.find('input[name="searchText"]').val();
-                var qjsonkeytype = {};
-                qjsonkeytype[self_.find('select[name="searchWhere"]').val()] = "LIKE_ALL";
-
                 var pay_status = self_.find('select[name="pay_status"]').val();
-
                 var order_type = self_.find('select[name="order_type"]').val();
+
+                var qjson = [{pay_status: pay_status}, {order_type: order_type}];
+                var qjsonkeydatetype = [];
+
+                if ($('#started_time').val() && $('#ended_time').val()) {
+                    var moment = require('moment');
+                    var startedat = $('#started_time').data("DateTimePicker").date();
+                    var endedat = $('#ended_time').data("DateTimePicker").date();
+                    var startedatStr = moment(startedat._d).format('YYYY-MM-DD HH:mm:ss');
+                    var endedatStr = moment(endedat._d).format('YYYY-MM-DD HH:mm:ss');
+                    qjson.push({order_time: startedatStr+"~"+endedatStr});
+                    qjsonkeydatetype.push({order_time: "BetweenEqual"})
+                }
+
+                var whash = {};
+                var vhash = {};
+                whash[self_.find('select[name="searchWhere"]').val()] = self_.find('input[name="searchText"]').val();
+                vhash[self_.find('select[name="searchWhere"]').val()] = "LIKE_ALL";
+
+                qjson.push(whash);
+                qjsonkeydatetype.push(vhash);
 
                 var x_params = {};
                 x_params.source = table;
                 x_params.qhstr = JSON.stringify({
-                    qjson: [qjson, {pay_status: pay_status}, {order_type: order_type}],
-                    qjsonkeytype: [qjsonkeytype]
+                    qjson: qjson,
+                    qjsonkeytype: qjsonkeydatetype
                 });
 
                 if(params.offset!==null&&params.limit) {
@@ -105,7 +141,7 @@ define(function(require, exports, module) {
             showToggle: true,
             showColumns: true,
             minimumCountColumns: 2,
-            showPaginationSwitch: true,
+            showPaginationSwitch: false,
             clickToSelect: true,
             detailView: false,
             detailFormatter: 'detailFormatter',
@@ -125,6 +161,7 @@ define(function(require, exports, module) {
     }
     // 搜索
     function f_search() {
+        $table.bootstrapTable('selectPage', 1);
         $table.bootstrapTable('refresh', {});
     }
     // bs表格按钮事件

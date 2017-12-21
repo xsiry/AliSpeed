@@ -89,6 +89,17 @@ define(function(require, exports, module) {
                         message: '用户角色不能为空'
                     }
                 }
+            },
+            email: {
+                validators: {
+                    notEmpty: {
+                        message: '邮箱不能为空'
+                    },
+                    regexp: {
+                        regexp: /^([a-zA-Z0-9]+[_|_|.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|_|.]?)*[a-zA-Z0-9]+\.(?:com|cn)$/,
+                        message: '邮箱格式不正确'
+                    }
+                }
             }
         };
 
@@ -156,6 +167,8 @@ define(function(require, exports, module) {
                         } else if (key === 'pwd') {
                             self.$content.find('label[for="' + key + '"]').parent().remove();
                             self.$content.find('label[for="confirm_pwd"]').parent().remove();
+                        } else if (key === 'account') {
+                            self.$content.find('label[for="' + key + '"]').parent().remove();
                         } else {
                             self.$content.find('label[for="' + key + '"]').addClass('active');
                             self.$content.find('input[name="' + key + '"]').val(val)
@@ -176,7 +189,7 @@ define(function(require, exports, module) {
                             params[o.name] = o.value;
                         });
 
-                        $.post(url , params, function (result) {
+                        $.post(url+"/edit", params, function (result) {
                             var msg;
                             toastr.options = {
                                 closeButton: true,
@@ -370,7 +383,7 @@ define(function(require, exports, module) {
             showToggle: true,
             showColumns: true,
             minimumCountColumns: 2,
-            showPaginationSwitch: true,
+            showPaginationSwitch: false,
             clickToSelect: true,
             detailView: false,
             detailFormatter: 'detailFormatter',
@@ -390,6 +403,7 @@ define(function(require, exports, module) {
     }
     // 搜索
     function f_search() {
+        $table.bootstrapTable('selectPage', 1);
         $table.bootstrapTable('refresh', {});
     }
     // bs表格按钮事件

@@ -1,0 +1,137 @@
+<!--管理员首页-->
+<style type="text/css">
+    .panel-heading.x-heading {
+        position: relative;
+    }
+    .x-index-time {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 130px;
+    }
+    .x-agent-sum-btn {
+        text-decoration: none !important;
+    }
+
+    .x-agent-sum-btn:hover {
+        text-decoration: underline !important;
+    }
+</style>
+<div id="x-index">
+    <div class="panel panel-default survey_table_block">
+        <div class="panel-heading x-heading">
+            <h3 class="panel-title">数据概况</h3>
+            <input id="index_time" class="form-control x-index-time">
+        </div>
+        <div class="panel-body">
+            <table class="table table-bordered text-center">
+                <tbody class="x-data-statistics-detail">
+                    <tr>
+                        <td>数据统计</td>
+                        <td>日活</td>
+                        <td>周活</td>
+                        <td>月活</td>
+                        <td>总数</td>
+                    </tr>
+                    <tr>
+                        <td>用户</td>
+                        <td>
+                            <span data-toggle="tooltip" data-placement="top" title="昨日注册用户总数">新增:</span>
+                            <span class="x-new day_new_user">0</span> |
+                            <span data-toggle="tooltip" data-placement="top" title="昨日登录的用户总数(含注册)">活跃:</span>
+                            <span class="x-active day_active_user">0</span> |
+                            <span data-toggle="tooltip" data-placement="top" title="昨日活跃用户与总数比值">比例:</span>
+                            <span class="x-rate">0</span></td>
+                        <td>
+                            <span data-toggle="tooltip" data-placement="top" title="统计之日往前推7天的注册用户总和">新增:</span>
+                            <span class="x-new week_new_user">0</span> |
+                            <span data-toggle="tooltip" data-placement="top" title="统计之日往前推7天的登录用户数据（含注册）去重结果">活跃:</span>
+                            <span class="x-active week_active_user">0</span> |
+                            <span data-toggle="tooltip" data-placement="top" title="统计之日往前推7天的活跃用户与总数比值">比例:</span>
+                            <span class="x-rate">0</span></td>
+                        <td>
+                            <span data-toggle="tooltip" data-placement="top" title="统计之日往前推30天的注册用户总和">新增:</span>
+                            <span class="x-new month_new_user">0</span> |
+                            <span data-toggle="tooltip" data-placement="top" title="统计之日往前推30天的登陆用户数据（含注册）去重结果">活跃:</span>
+                            <span class="x-active month_active_user">0</span> |
+                            <span data-toggle="tooltip" data-placement="top" title="统计之日往前推30天的活跃用户与总数比值">比例:</span>
+                            <span class="x-rate">0</span></td>
+                        <td><span class="x-total total_user">0</span></td>
+                    </tr>
+                    <tr>
+                        <td>终端</td>
+                        <td>
+                            <span data-toggle="tooltip" data-placement="top" title="昨日新安装终端总数">新增:</span>
+                            <span class="x-new day_new_mac">0</span> |
+                            <span data-toggle="tooltip" data-placement="top" title="昨日上线的终端总数">活跃:</span>
+                            <span class="x-active day_active_mac">0</span> |
+                            <span data-toggle="tooltip" data-placement="top" title="昨日活跃终端与总数比值">比例:</span>
+                            <span class="x-rate">0</span></td>
+                        <td>
+                            <span data-toggle="tooltip" data-placement="top" title="统计之日往前推7天的新安装终端总和">新增:</span>
+                            <span class="x-new week_new_mac">0</span> |
+                            <span data-toggle="tooltip" data-placement="top" title="统计之日往前推7天的上线终端去重结果">活跃:</span>
+                            <span class="x-active week_active_mac">0</span> |
+                            <span data-toggle="tooltip" data-placement="top" title="统计之日往前推7天的活跃终端与总数比值">比例:</span>
+                            <span class="x-rate">0</span></td>
+                        <td>
+                            <span data-toggle="tooltip" data-placement="top" title="统计之日往前推30天的新安装终端总和">新增:</span>
+                            <span class="x-new month_new_mac">0</span> |
+                            <span data-toggle="tooltip" data-placement="top" title="统计之日往前推30天的上线终端去重结果">活跃:</span>
+                            <span class="x-active month_active_mac">0</span> |
+                            <span data-toggle="tooltip" data-placement="top" title="统计之日往前推30天的活跃终端与总数比值">比例:</span>
+                            <span class="x-rate">0</span></td>
+                        <td><span class="x-total total_user">0</span></td>
+                    </tr>
+                    <tr>
+                        <td>消费用户</td>
+                        <td><span class="x-data day_consume_user">0</span></td>
+                        <td><span class="x-data week_consume_user">0</span></td>
+                        <td><span class="x-data month_consume_user">0</span></td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>收益金额</td>
+                        <td><span class="x-data day_profit">0</span></td>
+                        <td><span class="x-data week_profit">0</span></td>
+                        <td><span class="x-data month_profit">0</span>
+                        </td><td>-</td>
+                    </tr>
+                    <tr>
+                        <td>渠道</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td><span class="x-data total_agent">0</span></td>
+                    </tr>
+                    <tr>
+                        <td>渠道分成</td>
+                        <td><a href="javascript:;" class="x-agent-sum-btn" data-range="1"><span class="x-data day_agent_profit">0</span></a></td>
+                        <td><a href="javascript:;" class="x-agent-sum-btn" data-range="7"><span class="x-data week_agent_profit">0</span></a></td>
+                        <td><a href="javascript:;" class="x-agent-sum-btn" data-range="30"><span class="x-data month_agent_profit">0</span></a></td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-default x-all-map" style="width: 100%;">
+        <div class="panel-heading x-heading">
+            <h3 class="panel-title">全国终端分布图</h3>
+        </div>
+        <div class="panel-body">
+            <div id="map_main" style="float:left;width:100%;padding:0"></div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    seajs.use("./app/index/module_adminindex", function(module) {
+        module.init();
+        module._bindUI();
+    });
+    if ($('#x-index').parent().attr('id') !== "iframe_home") {
+        $('#x-index').parent().css({'margin-top': '0', 'overflow': 'auto'});
+        $('#x-index').css({'padding-top': '15px'});
+    }
+</script>

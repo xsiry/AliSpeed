@@ -285,10 +285,6 @@ a:focus {
     outline-offset: 0;
 }
 
-#x-index {
-    display: none;
-}
-
 .x-error {
     color: red;
 }
@@ -306,4 +302,8 @@ a:focus {
 .x-uploader-title>span {
     font-size: 12px;
     color: red;
+}
+
+.x-new, .x-active, .x-total, .x-rate {
+    color: #4cf752;
 }

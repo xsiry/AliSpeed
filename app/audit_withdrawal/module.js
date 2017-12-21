@@ -12,6 +12,7 @@ define(function(require, exports, module) {
 
     require('select2');
     // require('select2_zh_CN');
+    require('bootstrap-touchspin');
 
     var self_ = $('.audit_withdrawal');
     var $table = self_.find('#table');
@@ -53,6 +54,41 @@ define(function(require, exports, module) {
         }
     };
 
+    function initTouchspin() {
+        $("input[name='tallage']").TouchSpin({
+            prefix: "代扣税",
+            min: 0,
+            max: 1000000000,
+            step: 0.01,
+            decimals: 2,
+            boostat: 5,
+            maxboostedstep: 100,
+            postfix: '元'
+        });
+
+        $("input[name='cash_costs']").TouchSpin({
+            prefix: "手续费",
+            min: 0,
+            max: 1000000000,
+            step: 0.01,
+            decimals: 2,
+            boostat: 5,
+            maxboostedstep: 100,
+            postfix: '元'
+        });
+
+        $("input[name='last_money']").TouchSpin({
+            prefix: "实际提现",
+            min: 0,
+            max: 1000000000,
+            step: 0.01,
+            decimals: 2,
+            boostat: 5,
+            maxboostedstep: 100,
+            postfix: '元'
+        });
+    }
+
     // 创建或修改
     function createAsUpdateAction(row) {
         var rolename = $('.x-rolename-hidden').val();
@@ -67,9 +103,9 @@ define(function(require, exports, module) {
                 '<div class="form-group" style="margin-top: 15px"><label for="agent_audit">审核备注(失败必填)<span class="x-error"></span></label><input id="agent_audit" type="text" class="form-control x-agent-audit-remarks"></div>';
         }else if (rolename==="财务部") {
             title = '提现打款';
-            content = '<div class="form-group" style="margin-top: 15px"><label for="tallage">代扣税(元)<span class="x-error"></span></label><input id="tallage" type="text" name="tallage" class="form-control x-intfloat"></div>' +
-                '<div class="form-group" style="margin-top: 15px"><label for="cash_costs">手续费(元)</label><span class="x-error"></span><input id="cash_costs" type="text" name="cash_costs" class="form-control x-intfloat"></div>' +
-                '<div class="form-group" style="margin-top: 15px"><label for="last_money">实际提现(元)<span class="x-error"></span></label><input id="last_money" type="text" name="last_money" class="form-control x-intfloat"></div>';
+            content = '<div class="form-group" style="margin-top: 15px"><input id="tallage" type="text" name="tallage" class="form-control x-intfloat" value="0.00" style="padding-left: 10px;"></div>' +
+                '<div class="form-group" style="margin-top: 15px"><input id="cash_costs" type="text" name="cash_costs" class="form-control x-intfloat" value="0.00" style="padding-left: 10px;"></div>' +
+                '<div class="form-group" style="margin-top: 15px"></label><input id="last_money" type="text" name="last_money" class="form-control x-intfloat" value="0.00" style="padding-left: 10px;"></div>';
         }
         $.confirm({
             type: 'blue',
@@ -137,20 +173,10 @@ define(function(require, exports, module) {
             onOpen: function () {
                 setTimeout(function () {
                     $('select').select2();
-                    $('.x-intfloat').on('keyup', function() {
-                        CheckInputIntFloat(this);
-                    })
+                    initTouchspin();
                 }, 500);
             }
         });
-    }
-
-    function CheckInputIntFloat(oInput)
-    {
-        if('' != oInput.value.replace(/\d{1,}\.{0,1}\d{0,2}/,''))
-        {
-            oInput.value = oInput.value.match(/\d{1,}\.{0,1}\d{0,2}/) == null ? '' :oInput.value.match(/\d{1,}\.{0,1}\d{0,2}/);
-        }
     }
 
     // bootstrap table初始化
@@ -159,7 +185,14 @@ define(function(require, exports, module) {
         require('bootstrap-table');
         require('bootstrap-table-zh-CN');
         var rolename = $('.x-rolename-hidden').val();
-        // var status = rolename === "财务部"? {status: [3,8]} : {status: [2,3,4]};
+        var status = 0;
+        if (rolename === "财务部") {
+            status = "3@8";
+        } else if (rolename === "渠道部") {
+            status = "2@3@4";
+        } else if (rolename === "超级管理员") {
+            status = "2@3@4@8";
+        }
         $table.bootstrapTable({
             url: url,
             queryParams: function(params) {
@@ -171,8 +204,8 @@ define(function(require, exports, module) {
                 var x_params = {};
                 x_params.source = table;
                 x_params.qhstr = JSON.stringify({
-                    qjson: [qjson, {status: 1}],
-                    qjsonkeytype: [qjsonkeytype, {status: "NotEquery"}]
+                    qjson: [qjson, {status: status}],
+                    qjsonkeytype: [qjsonkeytype, {status: "OR"}]
                 });
 
                 if(params.offset!==null&&params.limit) {
@@ -199,7 +232,7 @@ define(function(require, exports, module) {
             showToggle: true,
             showColumns: true,
             minimumCountColumns: 2,
-            showPaginationSwitch: true,
+            showPaginationSwitch: false,
             clickToSelect: true,
             detailView: false,
             detailFormatter: 'detailFormatter',
@@ -219,6 +252,7 @@ define(function(require, exports, module) {
     }
     // 搜索
     function f_search() {
+        $table.bootstrapTable('selectPage', 1);
         $table.bootstrapTable('refresh', {});
     }
     // bs表格按钮事件
