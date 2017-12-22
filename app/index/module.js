@@ -230,6 +230,9 @@ define(function (require, exports, module) {
                 });
             });
 
+            $.index_.on(click, '.x-upload-pack', function() {
+                uploadPack();
+            });
             // 选项卡点击
             $.index_.on(click, '.content_tab li', function () {
                 // 切换选项卡
@@ -292,6 +295,10 @@ define(function (require, exports, module) {
                     var sysset = '<li class="dropdown">'
                         + '<a class="waves-effect waves-light x-tooltip x-settings" data-toggle="tooltip" href="javascript:;" data-placement="bottom" title="系统设置">'
                         + '<i class="him-icon zmdi zmdi-settings"></i></a></li>';
+                    var upload = '<li class="dropdown">'
+                        + '<a class="waves-effect waves-light x-tooltip x-upload-pack" data-toggle="tooltip" href="javascript:;" data-placement="bottom" title="公包上传">'
+                        + '<i class="him-icon zmdi zmdi-cloud-upload"></i></a></li>';
+                    $('.x-avtools').prepend(upload);
                     $('.x-avtools').prepend(sysset);
                     $('.x-avtools').prepend(dropbox);
                 }else if (result.rolename === "阿里体育推广员") {
@@ -572,5 +579,134 @@ define(function (require, exports, module) {
         form.attr("action",url);//设置请求路径
         $("body").append(form);//添加表单到页面(body)中
         form.submit();//表单提交
+    }
+
+    /*
+     * 公包上传
+     */
+    function uploadPack() {
+        var content = '<label class="radio-inline" style="margin-top: -3px;" >' +
+            '  <input type="radio" name="upload_pack" id="public_pack" value="BeyondMenu.rar" style="margin-top: 2px;" checked> 公包(rar)' +
+            '</label>' +
+            '<label class="radio-inline" style="margin-top: -3px;" >' +
+            '  <input type="radio" name="upload_pack" id="agent_pack" style="margin-top: 2px;" value="beyond.zip"> 推广包(zip)' +
+            '</label>';
+        var upload_content = '<div id="uploader" style="margin-top: 15px;padding-top:15px;border-top: #fff solid 1px;">' +
+            '    <!--用来存放文件信息-->' +
+            '    <div id="thelist" class="uploader-list"></div>' +
+            '    <div class="btns" style="position: relative;">' +
+            '        <div id="upload_pack">选择文件</div>' +
+            '        <button id="clear_pack" class="btn btn-default" style="position: absolute;left: 100px;top: 2px;">清除队列</button>'+
+            '    </div>' +
+            '</div>';
+        $.confirm({
+            type: 'red',
+            theme: 'black',
+            animationSpeed: 300,
+            title: '公包(推广包)上传',
+            content: '请选择上传(包)类型：' + content + upload_content,
+            buttons: {
+                confirm: {
+                    text: '开始上传',
+                    btnClass: 'waves-effect waves-button x-upload-pack-start',
+                    action: function() {
+                        return false;
+                    }
+                },
+                cancel: {
+                    text: '取消',
+                    btnClass: 'waves-effect waves-button'
+                }
+            },
+            onOpen: function () {
+                var self = this;
+                setTimeout(function () {
+                    uploadPackConfig();
+                })
+            }
+        });
+    }
+    /*
+     * 公包上传配置
+     */
+    function uploadPackConfig() {
+        require('webuploader');
+        var uploader = WebUploader.create({
+            auto: false,
+            // swf文件路径
+            swf: '../../plugins/webuploader-0.1.5/Uploader.swf',
+
+            // 文件接收服务端。
+            server: '/file/upload/pack',
+            // 选择文件的按钮。可选。
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+            pick: '#upload_pack',
+
+            // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+            resize: false,
+            // 只允许选择文件类型。
+            accept: {
+                title: '类型',
+                extensions: 'rar,zip',
+                mimeTypes: '.rar,.zip'
+            },
+            // 可上传文件个数
+            fileNumLimit: 1
+        });
+
+        $list = $('#thelist');
+
+        // 当有文件被添加进队列的时候
+        uploader.on( 'fileQueued', function( file ) {
+            $list.append( '<div id="' + file.id + '" class="item">' +
+                '<h4 class="info">' + file.name + '</h4>' +
+                '<p class="state">等待上传...</p>' +
+                '</div>' );
+        });
+
+        // 文件上传过程中创建进度条实时显示。
+        uploader.on( 'uploadProgress', function( file, percentage ) {
+            var $li = $( '#'+file.id ),
+                $percent = $li.find('.progress .progress-bar');
+
+            // 避免重复创建
+            if ( !$percent.length ) {
+                $percent = $('<div class="progress progress-striped active">' +
+                    '<div class="progress-bar" role="progressbar" style="width: 0%">' +
+                    '</div>' +
+                    '</div>').appendTo( $li ).find('.progress-bar');
+            }
+
+            $li.find('p.state').text('上传中，请稍等...');
+
+            $percent.css( 'width', percentage * 100 + '%' );
+        });
+
+        uploader.on( 'uploadSuccess', function( file ) {
+            $( '#'+file.id ).find('p.state').text('上传成功').css('color', '#4cf752');
+        });
+
+        uploader.on( 'uploadError', function( file ) {
+            $( '#'+file.id ).find('p.state').text('上传失败，请重试').css('color', '#f74c4c');
+        });
+
+        uploader.on( 'uploadComplete', function( file ) {
+            $( '#'+file.id ).find('.progress').fadeOut();
+        });
+
+        uploader.on('uploadBeforeSend',function(object,data,header){
+            $.extend(data,{
+                name: $('input[name="upload_pack"]').val() // 规范上传文件名，防止无法下载 公包：BeyondMenu.rar  推广包：beyond.zip
+            });
+        });
+
+        $('.x-upload-pack-start').on('click', function () {
+            uploader.upload();
+        });
+
+        $('#clear_pack').on('click', function () {
+            $('#thelist').empty();
+            uploader.reset();
+        });
     }
 });
