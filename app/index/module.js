@@ -604,7 +604,7 @@ define(function (require, exports, module) {
             theme: 'black',
             animationSpeed: 300,
             title: '公包(推广包)上传',
-            content: '请选择上传(包)类型：' + content + upload_content,
+            content: '<span style="color:red;font-size: 16px;">请选择上传(包)类型：</span>' + content + upload_content,
             buttons: {
                 confirm: {
                     text: '开始上传',
@@ -614,7 +614,7 @@ define(function (require, exports, module) {
                     }
                 },
                 cancel: {
-                    text: '取消',
+                    text: '关闭',
                     btnClass: 'waves-effect waves-button'
                 }
             },
@@ -637,7 +637,7 @@ define(function (require, exports, module) {
             swf: '../../plugins/webuploader-0.1.5/Uploader.swf',
 
             // 文件接收服务端。
-            server: '/file/upload/pack',
+            server: '/file/upload/pack_chunk',
             // 选择文件的按钮。可选。
             // 内部根据当前运行是创建，可能是input元素，也可能是flash.
             pick: '#upload_pack',
@@ -651,7 +651,15 @@ define(function (require, exports, module) {
                 mimeTypes: '.rar,.zip'
             },
             // 可上传文件个数
-            fileNumLimit: 1
+            fileNumLimit: 1,
+            chunked: true,//开始分片上传
+            chunkSize: 2*1048*1000, //每一片的大小,
+            // chunkRetry: true, // 分片是否允许自动重传，默认2
+            threads: 1, // 是否允许分片并发上传, 目前只能支持同时1个分片上传
+            // fileVal: // 设置文件上传域的name
+            formData: {
+                guid: guid()
+            }
         });
 
         $list = $('#thelist');
@@ -659,7 +667,7 @@ define(function (require, exports, module) {
         // 当有文件被添加进队列的时候
         uploader.on( 'fileQueued', function( file ) {
             $list.append( '<div id="' + file.id + '" class="item">' +
-                '<h4 class="info">' + file.name + '</h4>' +
+                '<h4 class="info">' + file.name+ '（'+ WebUploader.formatSize( file.size, 2, ['B', 'KB', 'MB'] )+'）' + '</h4>' +
                 '<p class="state">等待上传...</p>' +
                 '</div>' );
         });
@@ -677,7 +685,7 @@ define(function (require, exports, module) {
                     '</div>').appendTo( $li ).find('.progress-bar');
             }
 
-            $li.find('p.state').text('上传中，请稍等...');
+            $li.find('p.state').text('上传中('+(percentage * 100).toFixed(2)+'%'+')，请稍等...');
 
             $percent.css( 'width', percentage * 100 + '%' );
         });
@@ -695,9 +703,9 @@ define(function (require, exports, module) {
         });
 
         uploader.on('uploadBeforeSend',function(object,data,header){
-            $.extend(data,{
-                name: $('input[name="upload_pack"]').val() // 规范上传文件名，防止无法下载 公包：BeyondMenu.rar  推广包：beyond.zip
-            });
+            $.extend(data, {
+                bname: $('input[name="upload_pack"]:checked').val() // 规范上传文件名，防止无法下载 公包：BeyondMenu.rar  推广包：beyond.zip
+            })
         });
 
         $('.x-upload-pack-start').on('click', function () {
@@ -708,5 +716,15 @@ define(function (require, exports, module) {
             $('#thelist').empty();
             uploader.reset();
         });
+    }
+
+    function guid() {
+        /**
+         * @return {string}
+         */
+        function S4() {
+            return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+        }
+        return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
     }
 });

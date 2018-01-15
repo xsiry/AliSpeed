@@ -1,43 +1,44 @@
 <link href="../app/order/style.css" rel="stylesheet"/>
 <div id="main" class="order">
     <div id="toolbar">
-        <div class="pull-right">
-            <input id="ended_time" class="form-control" style="height: 28px;margin-top: 5px;width: 160px;" placeholder="结束时间"/>
+        <div class="clearfix">
+            <div class="pull-left">
+                <select name="order_type" title="订单类型" style="width:150px">
+                    <option value="">全部(订单类型)</option>
+                    <option value="1">购买</option>
+                    <option value="2">抽奖</option>
+                    <option value="3">赠送</option>
+                </select>
+            </div>
+            <div class="pull-left">
+                <select name="pay_status" title="交易状态" style="width:150px">
+                    <option value="">全部(交易状态)</option>
+                    <option value="T">交易成功</option>
+                    <option value="E">交易失败</option>
+                    <option value="P">处理中</option>
+                    <option value="N">未付款</option>
+                </select>
+            </div>
+            <div class="pull-left">
+                <select name="searchWhere" title="搜索条件" style="width:150px">
+                    <option value="product">商品名称</option>
+                    <option value="order_code">订单号</option>
+                </select>
+            </div>
+            <div class="pull-left">
+                <input type="text" class="form-control" name="searchText" style="height: 28px;margin-top: 5px;" placeholder="搜索">
+            </div>
         </div>
-        <div class="pull-right">
-            <span>-</span>
-        </div>
-        <div class="pull-right">
-            <input id="started_time" class="form-control" style="height: 28px;margin-top: 5px;width: 160px;" placeholder="开始时间"/>
-        </div>
-        <div class="pull-right">
-            <span>|</span>
-        </div>
-        <div class="pull-right">
-            <input type="text" class="form-control" name="searchText" style="height: 28px;margin-top: 5px;" placeholder="搜索">
-        </div>
-        <div class="pull-right">
-            <select name="searchWhere" title="搜索条件" style="width:150px">
-                <option value="product">商品名称</option>
-                <option value="order_code">订单号</option>
-            </select>
-        </div>
-        <div class="pull-right">
-            <select name="pay_status" title="交易状态" style="width:150px">
-                <option value="">全部(交易状态)</option>
-                <option value="T">交易成功</option>
-                <option value="E">交易失败</option>
-                <option value="P">处理中</option>
-                <option value="N">未付款</option>
-            </select>
-        </div>
-        <div class="pull-right">
-            <select name="order_type" title="订单类型" style="width:150px">
-                <option value="">全部(订单类型)</option>
-                <option value="1">购买</option>
-                <option value="2">抽奖</option>
-                <option value="3">赠送</option>
-            </select>
+        <div class="clearfix">
+            <div class="pull-left">
+                <input id="started_time" class="form-control" style="height: 28px;margin-top: 5px;width: 160px;" placeholder="开始时间"/>
+            </div>
+            <div class="pull-left">
+                <span>-</span>
+            </div>
+            <div class="pull-left">
+                <input id="ended_time" class="form-control" style="height: 28px;margin-top: 5px;width: 160px;" placeholder="结束时间"/>
+            </div>
         </div>
     </div>
     <table id="table"></table>

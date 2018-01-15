@@ -1,4 +1,4 @@
-#toolbar .pull-right {  margin-left: 10px;  }
+#toolbar .pull-left {  margin-right: 10px;  }
 
 legend {
     display: block;

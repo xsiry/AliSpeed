@@ -212,15 +212,15 @@ define(function (require, exports, module) {
         require('bootstrap-table');
         require('bootstrap-table-zh-CN');
         self_.$content.find('#mamTable').bootstrapTable({
-            url: "/month_agent_mac",
+            url: "/agent_cashapply",
             queryParams: function(params) {
                 var qjson = {};
-                qjson['months'] = self_.$content.find('#month_time').data("DateTimePicker").date()._d.getFullYear();
+                qjson['cash_month'] = self_.$content.find('#month_time').data("DateTimePicker").date()._d.getFullYear();
                 var qjsonkeytype = {};
-                qjsonkeytype['months'] = "LIKE_ALL";
+                qjsonkeytype['cash_month'] = "LIKE_ALL";
 
                 var x_params = {};
-                x_params.source = "rep_agent_mac_month";
+                x_params.source = "rep_agent_cashapply";
                 x_params.qhstr = JSON.stringify({
                     qjson: [qjson, {agent_id: $('#iframe_home .user_code').text()}],
                     qjsonkeytype: [qjsonkeytype]
@@ -236,8 +236,8 @@ define(function (require, exports, module) {
                 x_params.sortorder = params.order;
                 return x_params;
             },
-            idField: "months",
-            sortName: "months",
+            idField: "cash_month",
+            sortName: "cash_month",
             sortOrder: "asc",
             pageNumber:1,      //初始化加载第一页，默认第一页
             pageList: [10, 25, 50, 100],  //可供选择的每页的行数（*）
